@@ -1,0 +1,3 @@
+# Design
+
+The archive keeps content-addressed objects and per-branch manifests.

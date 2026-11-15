@@ -1,0 +1,596 @@
+vanadium-report test run
+date      : 2026-11-15T13:54:48+08:00
+java      : C:\Program Files\Java\jdk-25.0.3\bin\java.exe
+jar       : D:\dev\Infinity File Version Control System\java\out\vanadium-report.jar
+flags     : -Xmx192m -XX:ReservedCodeCacheSize=32m -XX:TieredStopAtLevel=1 -Xshare:auto
+powershell: 5.1.26100.9818
+PASS  jar exists
+
+--- fixture
+    fixture   : D:\dev\Infinity File Version Control System\java\tests\fixture
+    objects   : 8
+    bytes     : 355
+    FIXTURE OK
+PASS  fixture generator succeeds
+PASS  fixture has meta.json
+PASS  fixture has 8 objects
+
+--- version
+$ C:\Program Files\Java\jdk-25.0.3\bin\java.exe -Xmx192m -XX:ReservedCodeCacheSize=32m -XX:TieredStopAtLevel=1 -Xshare:auto -jar vanadium-report.jar version
+    vanadium-report 1.0.0 (java 25.0.3, Java HotSpot(TM) 64-Bit Server VM)
+    [exit 0]
+PASS  version exits 0
+PASS  version names the tool
+PASS  version reports the JVM
+$ C:\Program Files\Java\jdk-25.0.3\bin\java.exe -Xmx192m -XX:ReservedCodeCacheSize=32m -XX:TieredStopAtLevel=1 -Xshare:auto -jar vanadium-report.jar version --json
+    {"tool":"vanadium-report","version":"1.0.0","java":"25.0.3","vm":"Java HotSpot(TM) 64-Bit Server VM","lang":"en"}
+    [exit 0]
+PASS  version --json exits 0
+PASS  version --json is one line
+PASS  version --json tool
+PASS  version --json version
+
+--- report
+$ C:\Program Files\Java\jdk-25.0.3\bin\java.exe -Xmx192m -XX:ReservedCodeCacheSize=32m -XX:TieredStopAtLevel=1 -Xshare:auto -jar vanadium-report.jar report --archive D:\dev\Infinity File Version Control System\java\tests\fixture
+    Archive report
+      root        : D:\dev\Infinity File Version Control System\java\tests\fixture
+      metadata    : D:\dev\Infinity File Version Control System\java\tests\fixture\.inv
+      name        : demo-archive
+      id          : e6ceee6b574ff7b37dae757afbe4e9e6acba3d97d99ef4a0b7c1025ebaa24570
+      type        : nodeonly
+      created     : 2025-11-15T09:46:40Z
+      branches    : 4
+    
+    Branch tree
+    /branches/feature-x
+    /branches/main
+        +-- /branches/main/dev
+    /releases/tag/v1.0
+    
+    Branch stats
+      BRANCH                 HEAD  FILES  DIRS       BYTES  MANIFEST
+      /branches/main            2      5     2         269  ok
+      /branches/main/dev        1      3     0         136  ok
+      /branches/feature-x       1      3     0          74  ok
+      /releases/tag/v1.0        1      2     0          39  ok
+    
+    Object store
+      objects     : 8
+      object bytes: 355 B (355 B)
+      referenced  : 8 objects, 13 references
+      dedup rate  : 31.47%  (1 - 355 B stored / 518 B referenced)
+    [exit 0]
+PASS  report exits 0
+PASS  report prints the title
+PASS  report prints the branch tree
+PASS  report prints the archive type
+PASS  report prints the dedup rate
+PASS  report lists all four branches
+$ C:\Program Files\Java\jdk-25.0.3\bin\java.exe -Xmx192m -XX:ReservedCodeCacheSize=32m -XX:TieredStopAtLevel=1 -Xshare:auto -jar vanadium-report.jar report --archive D:\dev\Infinity File Version Control System\java\tests\fixture --json
+    {"tool":"vanadium-report","version":"1.0.0","command":"report","archive":{"root":"D:\\dev\\Infinity File Version Control System\\java\\tests\\fixture","metadata":"D:\\dev\\Infinity File Version Control System\\java\\tests\\fixture\\.inv","name":"demo-archive","id":"e6ceee6b574ff7b37dae757afbe4e9e6acba3d97d99ef4a0b7c1025ebaa24570","type":"nodeonly","created_ms":1763200000000,"created":"2025-11-15T09:46:40Z"},"branches":[{"path":"/branches/main","id":"b-main","name":"main","parent":"/","head_seq":2,"is_node":true,"system":false,"files":5,"dirs":2,"entries":7,"bytes":269,"objects":4,"manifest":"ok"},{"path":"/branches/main/dev","id":"b-main-dev","name":"dev","parent":"/branches/main","head_seq":1,"is_node":false,"system":false,"files":3,"dirs":0,"entries":3,"bytes":136,"objects":3,"manifest":"ok"},{"path":"/branches/feature-x","id":"b-feature","name":"feature-x","parent":"/","head_seq":1,"is_node":false,"system":false,"files":3,"dirs":0,"entries":3,"bytes":74,"objects":3,"manifest":"ok"},{"path":"/releases/tag/v1.0","id":"b-rel-tag","name":"v1.0","parent":"/","head_seq":1,"is_node":false,"system":true,"files":2,"dirs":0,"entries":2,"bytes":39,"objects":2,"manifest":"ok"}],"totals":{"branches":4,"files":13,"dirs":2,"entries":15,"bytes":518,"referenced_objects":8,"objects":8,"object_bytes":355,"dedup_ratio":0.3146718146718147},"tree":[{"path":"/branches/feature-x","children":[]},{"path":"/branches/main","children":[{"path":"/branches/main/dev","children":[]}]},{"path":"/releases/tag/v1.0","children":[]}],"warnings":[]}
+    [exit 0]
+PASS  report --json exits 0
+PASS  report --json is one line
+PASS  report --json branch count
+PASS  report --json totals.files
+PASS  report --json totals.entries
+PASS  report --json dedup_ratio
+PASS  report --json tree roots
+$ C:\Program Files\Java\jdk-25.0.3\bin\java.exe -Xmx192m -XX:ReservedCodeCacheSize=32m -XX:TieredStopAtLevel=1 -Xshare:auto -jar vanadium-report.jar report --archive D:\dev\Infinity File Version Control System\java\tests\fixture --json --pretty
+    {
+      "tool": "vanadium-report",
+      "version": "1.0.0",
+      "command": "report",
+      "archive": {
+        "root": "D:\\dev\\Infinity File Version Control System\\java\\tests\\fixture",
+        "metadata": "D:\\dev\\Infinity File Version Control System\\java\\tests\\fixture\\.inv",
+        "name": "demo-archive",
+        "id": "e6ceee6b574ff7b37dae757afbe4e9e6acba3d97d99ef4a0b7c1025ebaa24570",
+        "type": "nodeonly",
+        "created_ms": 1763200000000,
+        "created": "2025-11-15T09:46:40Z"
+      },
+      "branches": [
+        {
+          "path": "/branches/main",
+          "id": "b-main",
+          "name": "main",
+          "parent": "/",
+          "head_seq": 2,
+          "is_node": true,
+          "system": false,
+          "files": 5,
+          "dirs": 2,
+          "entries": 7,
+          "bytes": 269,
+          "objects": 4,
+          "manifest": "ok"
+        },
+        {
+          "path": "/branches/main/dev",
+          "id": "b-main-dev",
+          "name": "dev",
+          "parent": "/branches/main",
+          "head_seq": 1,
+          "is_node": false,
+          "system": false,
+          "files": 3,
+          "dirs": 0,
+          "entries": 3,
+          "bytes": 136,
+          "objects": 3,
+          "manifest": "ok"
+        },
+        {
+          "path": "/branches/feature-x",
+          "id": "b-feature",
+          "name": "feature-x",
+          "parent": "/",
+          "head_seq": 1,
+          "is_node": false,
+          "system": false,
+          "files": 3,
+          "dirs": 0,
+          "entries": 3,
+          "bytes": 74,
+          "objects": 3,
+          "manifest": "ok"
+        },
+        {
+          "path": "/releases/tag/v1.0",
+          "id": "b-rel-tag",
+          "name": "v1.0",
+          "parent": "/",
+          "head_seq": 1,
+          "is_node": false,
+          "system": true,
+          "files": 2,
+          "dirs": 0,
+          "entries": 2,
+          "bytes": 39,
+          "objects": 2,
+          "manifest": "ok"
+        }
+      ],
+      "totals": {
+        "branches": 4,
+        "files": 13,
+        "dirs": 2,
+        "entries": 15,
+        "bytes": 518,
+        "referenced_objects": 8,
+        "objects": 8,
+        "object_bytes": 355,
+        "dedup_ratio": 0.3146718146718147
+      },
+      "tree": [
+        {
+          "path": "/branches/feature-x",
+          "children": []
+        },
+        {
+          "path": "/branches/main",
+          "children": [
+            {
+              "path": "/branches/main/dev",
+              "children": []
+            }
+          ]
+        },
+        {
+          "path": "/releases/tag/v1.0",
+          "children": []
+        }
+      ],
+      "warnings": []
+    }
+    [exit 0]
+PASS  report --json --pretty is multi-line
+PASS  report --pretty parses
+
+--- audit
+$ C:\Program Files\Java\jdk-25.0.3\bin\java.exe -Xmx192m -XX:ReservedCodeCacheSize=32m -XX:TieredStopAtLevel=1 -Xshare:auto -jar vanadium-report.jar audit --archive D:\dev\Infinity File Version Control System\java\tests\fixture
+    Archive audit
+      root              : D:\dev\Infinity File Version Control System\java\tests\fixture
+    
+      branches          : 4
+      manifests         : 4
+      entries           : 15 (files 13, dirs 2)
+      objects           : 8 (355 B)
+      referenced objects: 8
+      missing objects   : 0
+      orphan objects    : 0
+      bad sha256        : 0
+      bad paths         : 0
+      duplicate entries : 0
+    
+    Checks
+      manifests readable  ok
+      objects present     ok
+      sha256 format       ok
+      entry paths         ok
+      duplicate entries   ok
+      orphan objects      ok
+    
+    RESULT: PASS
+    [exit 0]
+PASS  audit exits 0
+PASS  audit prints PASS
+PASS  audit has no missing objects
+PASS  audit has no orphans
+PASS  audit counts 15 entries
+$ C:\Program Files\Java\jdk-25.0.3\bin\java.exe -Xmx192m -XX:ReservedCodeCacheSize=32m -XX:TieredStopAtLevel=1 -Xshare:auto -jar vanadium-report.jar audit --archive D:\dev\Infinity File Version Control System\java\tests\fixture --json
+    {"tool":"vanadium-report","version":"1.0.0","command":"audit","pass":true,"strict":false,"counts":{"branches":4,"manifests":4,"entries":15,"files":13,"dirs":2,"objects":8,"object_bytes":355,"referenced":8,"missing":0,"orphans":0,"bad_sha256":0,"bad_paths":0,"duplicates":0},"checks":[{"name":"manifests","label":"manifests readable","status":"ok","problems":0},{"name":"objects","label":"objects present","status":"ok","problems":0},{"name":"sha","label":"sha256 format","status":"ok","problems":0},{"name":"paths","label":"entry paths","status":"ok","problems":0},{"name":"duplicates","label":"duplicate entries","status":"ok","problems":0},{"name":"orphans","label":"orphan objects","status":"ok","problems":0}],"issues":[],"warnings":[]}
+    [exit 0]
+PASS  audit --json exits 0
+PASS  audit --json pass
+PASS  audit --json counts.missing
+PASS  audit --json counts.orphans
+PASS  audit --json has six checks
+
+--- inspect
+$ C:\Program Files\Java\jdk-25.0.3\bin\java.exe -Xmx192m -XX:ReservedCodeCacheSize=32m -XX:TieredStopAtLevel=1 -Xshare:auto -jar vanadium-report.jar inspect --archive D:\dev\Infinity File Version Control System\java\tests\fixture --branch /branches/main --limit 3
+    Snapshot
+      branch      : /branches/main
+      seq         : 2
+      id          : 1fafcea015668678f3ef309c1e9b71d9e40aa2598b30ecb45423e06c3dcd94dc
+      time        : 2025-11-15T09:48:20Z
+      message     : add docs
+      parent      : c33d4609f5a555782d8f2e5f6dea33061d00f1f340b5e798dbd48b53b23eba20
+      entries     : 7
+    
+      MODE    SIZE       SHA256            PATH
+      040755          -  dir               src
+      000644       79 B  9731869a333461ae  src/main.c
+      000644       69 B  37071452567b0ca5  src/util.c
+    
+      showing 1-3 of 7
+    [exit 0]
+PASS  inspect exits 0
+PASS  inspect prints the snapshot
+PASS  inspect prints a page footer
+PASS  inspect prints entry rows
+$ C:\Program Files\Java\jdk-25.0.3\bin\java.exe -Xmx192m -XX:ReservedCodeCacheSize=32m -XX:TieredStopAtLevel=1 -Xshare:auto -jar vanadium-report.jar inspect --archive D:\dev\Infinity File Version Control System\java\tests\fixture --branch /branches/main --limit 2 --offset 3
+    Snapshot
+      branch      : /branches/main
+      seq         : 2
+      id          : 1fafcea015668678f3ef309c1e9b71d9e40aa2598b30ecb45423e06c3dcd94dc
+      time        : 2025-11-15T09:48:20Z
+      message     : add docs
+      parent      : c33d4609f5a555782d8f2e5f6dea33061d00f1f340b5e798dbd48b53b23eba20
+      entries     : 7
+    
+      MODE    SIZE       SHA256            PATH
+      000644       21 B  5d1d515200c7e1a9  README.md
+      040755          -  dir               docs
+    
+      showing 4-5 of 7
+    [exit 0]
+PASS  inspect paging offsets
+$ C:\Program Files\Java\jdk-25.0.3\bin\java.exe -Xmx192m -XX:ReservedCodeCacheSize=32m -XX:TieredStopAtLevel=1 -Xshare:auto -jar vanadium-report.jar inspect --archive D:\dev\Infinity File Version Control System\java\tests\fixture --branch /branches/main --limit 2 --json
+    {"tool":"vanadium-report","version":"1.0.0","command":"inspect","branch":{"path":"/branches/main","id":"b-main","name":"main"},"snapshot":{"seq":2,"id":"1fafcea015668678f3ef309c1e9b71d9e40aa2598b30ecb45423e06c3dcd94dc","time_ms":1763200100000,"time":"2025-11-15T09:48:20Z","message":"add docs","parent_sha":"c33d4609f5a555782d8f2e5f6dea33061d00f1f340b5e798dbd48b53b23eba20","entries":7},"entries":[{"path":"src","dir":true,"size":0,"sha":"","mode":"040755","mtime":1763200000000},{"path":"src/main.c","dir":false,"size":79,"sha":"9731869a333461aef5c2b78383e7115125c0d336469be52fb7452cf965494423","mode":"000644","mtime":1763200000000}],"page":{"offset":0,"limit":2,"from":0,"to":2,"total":7}}
+    [exit 0]
+PASS  inspect --json exits 0
+PASS  inspect --json page.total
+PASS  inspect --json entry count
+PASS  inspect --json snapshot seq
+PASS  inspect --json branch path
+
+--- legacy metadata name
+$ C:\Program Files\Java\jdk-25.0.3\bin\java.exe -Xmx192m -XX:ReservedCodeCacheSize=32m -XX:TieredStopAtLevel=1 -Xshare:auto -jar vanadium-report.jar report --archive C:\Users\REDMI\AppData\Local\Temp\vd-tests-bb63d21c\legacy
+    Archive report
+      root        : C:\Users\REDMI\AppData\Local\Temp\vd-tests-bb63d21c\legacy
+      metadata    : C:\Users\REDMI\AppData\Local\Temp\vd-tests-bb63d21c\legacy\.inv
+      name        : demo-archive
+      id          : e6ceee6b574ff7b37dae757afbe4e9e6acba3d97d99ef4a0b7c1025ebaa24570
+      type        : nodeonly
+      created     : 2025-11-15T09:46:40Z
+      branches    : 4
+    
+    Branch tree
+    /branches/feature-x
+    /branches/main
+        +-- /branches/main/dev
+    /releases/tag/v1.0
+    
+    Branch stats
+      BRANCH                 HEAD  FILES  DIRS       BYTES  MANIFEST
+      /branches/main            2      5     2         269  ok
+      /branches/main/dev        1      3     0         136  ok
+      /branches/feature-x       1      3     0          74  ok
+      /releases/tag/v1.0        1      2     0          39  ok
+    
+    Object store
+      objects     : 8
+      object bytes: 355 B (355 B)
+      referenced  : 8 objects, 13 references
+      dedup rate  : 31.47%  (1 - 355 B stored / 518 B referenced)
+    [exit 0]
+PASS  report accepts archive.json
+
+--- i18n
+$ C:\Program Files\Java\jdk-25.0.3\bin\java.exe -Xmx192m -XX:ReservedCodeCacheSize=32m -XX:TieredStopAtLevel=1 -Xshare:auto -jar vanadium-report.jar report --archive D:\dev\Infinity File Version Control System\java\tests\fixture --lang zh-cn
+    存档报告
+      根目录         : D:\dev\Infinity File Version Control System\java\tests\fixture
+      元数据         : D:\dev\Infinity File Version Control System\java\tests\fixture\.inv
+      名称          : demo-archive
+      标识          : e6ceee6b574ff7b37dae757afbe4e9e6acba3d97d99ef4a0b7c1025ebaa24570
+      类型          : nodeonly
+      创建时间        : 2025-11-15T09:46:40Z
+      分支          : 4
+    
+    分支树
+    /branches/feature-x
+    /branches/main
+        +-- /branches/main/dev
+    /releases/tag/v1.0
+    
+    分支统计
+      分支                     最新序号     文件    目录          字节  清单
+      /branches/main            2      5     2         269  正常
+      /branches/main/dev        1      3     0         136  正常
+      /branches/feature-x       1      3     0          74  正常
+      /releases/tag/v1.0        1      2     0          39  正常
+    
+    对象库
+      对象数         : 8
+      对象字节        : 355 B (355 B)
+      引用          : 8 个对象，13 次引用
+      去重率         : 31.47%  (1 - 已存 355 B / 引用 518 B)
+    [exit 0]
+PASS  zh-cn report title
+$ C:\Program Files\Java\jdk-25.0.3\bin\java.exe -Xmx192m -XX:ReservedCodeCacheSize=32m -XX:TieredStopAtLevel=1 -Xshare:auto -jar vanadium-report.jar audit --archive D:\dev\Infinity File Version Control System\java\tests\fixture --lang tr-cn
+    存檔審計
+      根目錄               : D:\dev\Infinity File Version Control System\java\tests\fixture
+    
+      分支                : 4
+      清單                : 4
+      項目                : 15 (檔案 13, 目錄 2)
+      物件                : 8 (355 B)
+      被參照物件             : 8
+      遺失物件              : 0
+      孤兒物件              : 0
+      sha256 異常         : 0
+      路徑異常              : 0
+      重複項目              : 0
+    
+    檢查項
+      清單可讀       通過
+      物件存在       通過
+      sha256 格式  通過
+      項目路徑       通過
+      重複項目       通過
+      孤兒物件       通過
+    
+    結果: PASS
+    [exit 0]
+PASS  tr-cn audit title
+$ C:\Program Files\Java\jdk-25.0.3\bin\java.exe -Xmx192m -XX:ReservedCodeCacheSize=32m -XX:TieredStopAtLevel=1 -Xshare:auto -jar vanadium-report.jar report --archive D:\dev\Infinity File Version Control System\java\tests\fixture --lang am-en
+    Archive Report
+      root        : D:\dev\Infinity File Version Control System\java\tests\fixture
+      metadata    : D:\dev\Infinity File Version Control System\java\tests\fixture\.inv
+      name        : demo-archive
+      id          : e6ceee6b574ff7b37dae757afbe4e9e6acba3d97d99ef4a0b7c1025ebaa24570
+      type        : nodeonly
+      created     : 2025-11-15T09:46:40Z
+      branches    : 4
+    
+    Branch Tree
+    /branches/feature-x
+    /branches/main
+        +-- /branches/main/dev
+    /releases/tag/v1.0
+    
+    Branch Stats
+      BRANCH                 HEAD  FILES  DIRS       BYTES  MANIFEST
+      /branches/main            2      5     2         269  OK
+      /branches/main/dev        1      3     0         136  OK
+      /branches/feature-x       1      3     0          74  OK
+      /releases/tag/v1.0        1      2     0          39  OK
+    
+    Object Store
+      objects     : 8
+      object bytes: 355 B (355 B)
+      referenced  : 8 objects, 13 references
+      dedup rate  : 31.47%  (1 - 355 B stored / 518 B referenced)
+    [exit 0]
+PASS  am-en report title
+PASS  default output is ASCII-only
+$ C:\Program Files\Java\jdk-25.0.3\bin\java.exe -Xmx192m -XX:ReservedCodeCacheSize=32m -XX:TieredStopAtLevel=1 -Xshare:auto -jar vanadium-report.jar report --archive D:\dev\Infinity File Version Control System\java\tests\fixture --lang xx
+    [error] unknown language: xx (expected en, zh-cn, tr-cn, am-en)
+    [exit 1]
+PASS  unknown language is rejected
+
+--- error paths
+$ C:\Program Files\Java\jdk-25.0.3\bin\java.exe -Xmx192m -XX:ReservedCodeCacheSize=32m -XX:TieredStopAtLevel=1 -Xshare:auto -jar vanadium-report.jar report --archive C:\Users\REDMI\AppData\Local\Temp\vd-tests-bb63d21c\does-not-exist
+    [error] archive not found: C:\Users\REDMI\AppData\Local\Temp\vd-tests-bb63d21c\does-not-exist
+    [exit 1]
+PASS  missing archive exits 1
+PASS  missing archive message
+$ C:\Program Files\Java\jdk-25.0.3\bin\java.exe -Xmx192m -XX:ReservedCodeCacheSize=32m -XX:TieredStopAtLevel=1 -Xshare:auto -jar vanadium-report.jar report
+    [error] --archive <root> is required
+    [exit 1]
+PASS  missing --archive exits 1
+PASS  missing --archive message
+$ C:\Program Files\Java\jdk-25.0.3\bin\java.exe -Xmx192m -XX:ReservedCodeCacheSize=32m -XX:TieredStopAtLevel=1 -Xshare:auto -jar vanadium-report.jar inspect --archive D:\dev\Infinity File Version Control System\java\tests\fixture --branch /nope
+    [error] branch not found: /nope
+    [exit 1]
+PASS  unknown branch exits 1
+PASS  unknown branch message
+$ C:\Program Files\Java\jdk-25.0.3\bin\java.exe -Xmx192m -XX:ReservedCodeCacheSize=32m -XX:TieredStopAtLevel=1 -Xshare:auto -jar vanadium-report.jar inspect --archive D:\dev\Infinity File Version Control System\java\tests\fixture --branch /branches/main --limit 0
+    [error] --limit expects a positive integer
+    [exit 1]
+PASS  bad --limit exits 1
+$ C:\Program Files\Java\jdk-25.0.3\bin\java.exe -Xmx192m -XX:ReservedCodeCacheSize=32m -XX:TieredStopAtLevel=1 -Xshare:auto -jar vanadium-report.jar report --archive D:\dev\Infinity File Version Control System\java\tests\fixture --bogus
+    [error] unknown option: --bogus
+    [exit 1]
+PASS  unknown option exits 1
+$ C:\Program Files\Java\jdk-25.0.3\bin\java.exe -Xmx192m -XX:ReservedCodeCacheSize=32m -XX:TieredStopAtLevel=1 -Xshare:auto -jar vanadium-report.jar frobnicate --archive D:\dev\Infinity File Version Control System\java\tests\fixture
+    [error] unknown or missing command; run with --help
+    [exit 1]
+PASS  unknown command exits 1
+$ C:\Program Files\Java\jdk-25.0.3\bin\java.exe -Xmx192m -XX:ReservedCodeCacheSize=32m -XX:TieredStopAtLevel=1 -Xshare:auto -jar vanadium-report.jar report --archive C:\Users\REDMI\AppData\Local\Temp\vd-tests-bb63d21c\corrupt
+    [error] invalid JSON in C:\Users\REDMI\AppData\Local\Temp\vd-tests-bb63d21c\corrupt\.inv\meta.json: line 1, column 16: expected object key string
+    [exit 1]
+PASS  corrupt metadata exits 1
+PASS  corrupt metadata message
+PASS  corrupt metadata has no stack trace
+$ C:\Program Files\Java\jdk-25.0.3\bin\java.exe -Xmx192m -XX:ReservedCodeCacheSize=32m -XX:TieredStopAtLevel=1 -Xshare:auto -jar vanadium-report.jar --help
+    Usage:
+      java -jar vanadium-report.jar <command> [options]
+    
+    Commands:
+      report    --archive <root> [--json]                  archive summary, branch tree, dedup rate
+      audit     --archive <root> [--json] [--strict]      integrity check: objects, sha256, orphans
+      inspect   --archive <root> --branch <path> [--limit N] [--offset N] [--json]
+      version   [--json]                                  print version
+    
+    Options:
+      -h, --help                                          show this help
+      --lang <en|zh-cn|tr-cn|am-en>                       output language (default en, env INV_LANG)
+      --pretty                                            indent --json output (default: one line)
+    
+    Exit codes: 0 ok, 1 error or audit failure.
+    [exit 0]
+PASS  help exits 0
+PASS  help lists the commands
+
+--- audit failures
+$ C:\Program Files\Java\jdk-25.0.3\bin\java.exe -Xmx192m -XX:ReservedCodeCacheSize=32m -XX:TieredStopAtLevel=1 -Xshare:auto -jar vanadium-report.jar audit --archive C:\Users\REDMI\AppData\Local\Temp\vd-tests-bb63d21c\missing-object
+    Archive audit
+      root              : C:\Users\REDMI\AppData\Local\Temp\vd-tests-bb63d21c\missing-object
+    
+      branches          : 4
+      manifests         : 4
+      entries           : 15 (files 13, dirs 2)
+      objects           : 7 (276 B)
+      referenced objects: 8
+      missing objects   : 1
+      orphan objects    : 0
+      bad sha256        : 0
+      bad paths         : 0
+      duplicate entries : 0
+    
+    Checks
+      manifests readable  ok
+      objects present     1 problem(s)
+      sha256 format       ok
+      entry paths         ok
+      duplicate entries   ok
+      orphan objects      ok
+    
+    Issues
+      objects: 0dc8e6bffcbcbf919597c4e807277c5ff02eb3e38396fe9ef9ce8c558610a3d3 (object missing from store)
+    
+    RESULT: FAIL
+    [exit 1]
+PASS  missing object fails the audit
+PASS  missing object is reported
+$ C:\Program Files\Java\jdk-25.0.3\bin\java.exe -Xmx192m -XX:ReservedCodeCacheSize=32m -XX:TieredStopAtLevel=1 -Xshare:auto -jar vanadium-report.jar audit --archive C:\Users\REDMI\AppData\Local\Temp\vd-tests-bb63d21c\missing-object --json
+    {"tool":"vanadium-report","version":"1.0.0","command":"audit","pass":false,"strict":false,"counts":{"branches":4,"manifests":4,"entries":15,"files":13,"dirs":2,"objects":7,"object_bytes":276,"referenced":8,"missing":1,"orphans":0,"bad_sha256":0,"bad_paths":0,"duplicates":0},"checks":[{"name":"manifests","label":"manifests readable","status":"ok","problems":0},{"name":"objects","label":"objects present","status":"fail","problems":1},{"name":"sha","label":"sha256 format","status":"ok","problems":0},{"name":"paths","label":"entry paths","status":"ok","problems":0},{"name":"duplicates","label":"duplicate entries","status":"ok","problems":0},{"name":"orphans","label":"orphan objects","status":"ok","problems":0}],"issues":[{"check":"objects","subject":"0dc8e6bffcbcbf919597c4e807277c5ff02eb3e38396fe9ef9ce8c558610a3d3","detail":"object missing from store"}],"warnings":[]}
+    [exit 1]
+PASS  missing object --json pass=false
+PASS  missing object --json count
+$ C:\Program Files\Java\jdk-25.0.3\bin\java.exe -Xmx192m -XX:ReservedCodeCacheSize=32m -XX:TieredStopAtLevel=1 -Xshare:auto -jar vanadium-report.jar audit --archive C:\Users\REDMI\AppData\Local\Temp\vd-tests-bb63d21c\bad-sha
+    Archive audit
+      root              : C:\Users\REDMI\AppData\Local\Temp\vd-tests-bb63d21c\bad-sha
+    
+      branches          : 4
+      manifests         : 4
+      entries           : 15 (files 13, dirs 2)
+      objects           : 8 (355 B)
+      referenced objects: 6
+      missing objects   : 0
+      orphan objects    : 2
+      bad sha256        : 3
+      bad paths         : 0
+      duplicate entries : 0
+    
+    Checks
+      manifests readable  ok
+      objects present     ok
+      sha256 format       3 problem(s)
+      entry paths         ok
+      duplicate entries   ok
+      orphan objects      2 warning(s)
+    
+    Issues
+      sha: /branches/feature-x (entry 'README.md' sha256 'not-a-sha')
+      sha: /branches/feature-x (entry 'feature/x.txt' sha256 'not-a-sha')
+      sha: /branches/feature-x (entry 'feature/notes.txt' sha256 'not-a-sha')
+      orphans: 717d8b9af04ae8e66fcf7e1bc69ca9a8e1911be34f8fecd62fc5419d11d42688 (object not referenced by any manifest or history)
+      orphans: b641f830a0a086dd71f897065961995979a9780aeac5b50cf55d177535fcfcaa (object not referenced by any manifest or history)
+    
+    RESULT: FAIL
+    [exit 1]
+PASS  bad sha256 fails the audit
+PASS  bad sha256 is counted
+$ C:\Program Files\Java\jdk-25.0.3\bin\java.exe -Xmx192m -XX:ReservedCodeCacheSize=32m -XX:TieredStopAtLevel=1 -Xshare:auto -jar vanadium-report.jar audit --archive C:\Users\REDMI\AppData\Local\Temp\vd-tests-bb63d21c\orphan
+    Archive audit
+      root              : C:\Users\REDMI\AppData\Local\Temp\vd-tests-bb63d21c\orphan
+    
+      branches          : 4
+      manifests         : 4
+      entries           : 15 (files 13, dirs 2)
+      objects           : 9 (369 B)
+      referenced objects: 8
+      missing objects   : 0
+      orphan objects    : 1
+      bad sha256        : 0
+      bad paths         : 0
+      duplicate entries : 0
+    
+    Checks
+      manifests readable  ok
+      objects present     ok
+      sha256 format       ok
+      entry paths         ok
+      duplicate entries   ok
+      orphan objects      1 warning(s)
+    
+    Issues
+      orphans: abcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc (object not referenced by any manifest or history)
+    
+    RESULT: PASS
+    [exit 0]
+PASS  orphan object does not fail the audit
+PASS  orphan object is counted
+$ C:\Program Files\Java\jdk-25.0.3\bin\java.exe -Xmx192m -XX:ReservedCodeCacheSize=32m -XX:TieredStopAtLevel=1 -Xshare:auto -jar vanadium-report.jar audit --archive C:\Users\REDMI\AppData\Local\Temp\vd-tests-bb63d21c\orphan --strict
+    Archive audit
+      root              : C:\Users\REDMI\AppData\Local\Temp\vd-tests-bb63d21c\orphan
+      strict mode: orphan objects fail the audit: 
+    
+      branches          : 4
+      manifests         : 4
+      entries           : 15 (files 13, dirs 2)
+      objects           : 9 (369 B)
+      referenced objects: 8
+      missing objects   : 0
+      orphan objects    : 1
+      bad sha256        : 0
+      bad paths         : 0
+      duplicate entries : 0
+    
+    Checks
+      manifests readable  ok
+      objects present     ok
+      sha256 format       ok
+      entry paths         ok
+      duplicate entries   ok
+      orphan objects      1 problem(s)
+    
+    Issues
+      orphans: abcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc (object not referenced by any manifest or history)
+    
+    RESULT: FAIL
+    [exit 1]
+PASS  strict mode fails on orphans
+
+--- jlink runtime
+$ D:\dev\Infinity File Version Control System\java\runtime\bin\java.exe -Xmx192m -XX:ReservedCodeCacheSize=32m -XX:TieredStopAtLevel=1 -Xshare:auto -jar vanadium-report.jar version
+    vanadium-report 1.0.0 (java 25.0.3, Java HotSpot(TM) 64-Bit Server VM)
+    [exit 0]
+PASS  runtime java runs the jar
+
+checks: 76, failures: 0
+PASS

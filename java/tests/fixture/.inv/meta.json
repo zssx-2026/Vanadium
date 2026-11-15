@@ -1,0 +1,61 @@
+{
+    "format":  1,
+    "id":  "e6ceee6b574ff7b37dae757afbe4e9e6acba3d97d99ef4a0b7c1025ebaa24570",
+    "name":  "demo-archive",
+    "type":  "nodeonly",
+    "created_ms":  1763200000000,
+    "branches":  [
+                     {
+                         "id":  "b-main",
+                         "path":  "/branches/main",
+                         "name":  "main",
+                         "parent":  "/",
+                         "created_ms":  1763200000000,
+                         "head_seq":  2,
+                         "is_node":  true,
+                         "children":  [
+                                          "/branches/main/dev"
+                                      ],
+                         "system":  false
+                     },
+                     {
+                         "id":  "b-main-dev",
+                         "path":  "/branches/main/dev",
+                         "name":  "dev",
+                         "parent":  "/branches/main",
+                         "created_ms":  1763200200000,
+                         "head_seq":  1,
+                         "is_node":  false,
+                         "children":  [
+
+                                      ],
+                         "system":  false
+                     },
+                     {
+                         "id":  "b-feature",
+                         "path":  "/branches/feature-x",
+                         "name":  "feature-x",
+                         "parent":  "/",
+                         "created_ms":  1763200300000,
+                         "head_seq":  1,
+                         "is_node":  false,
+                         "children":  [
+
+                                      ],
+                         "system":  false
+                     },
+                     {
+                         "id":  "b-rel-tag",
+                         "path":  "/releases/tag/v1.0",
+                         "name":  "v1.0",
+                         "parent":  "/",
+                         "created_ms":  1763200400000,
+                         "head_seq":  1,
+                         "is_node":  false,
+                         "children":  [
+
+                                      ],
+                         "system":  true
+                     }
+                 ]
+}

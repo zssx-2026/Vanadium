@@ -1,0 +1,37 @@
+{
+    "seq":  1,
+    "branch":  "/branches/feature-x",
+    "time_ms":  1763200300000,
+    "message":  "feature x",
+    "parent_sha":  "",
+    "id":  "e63652de5530f21633989bc42ae8c2f62a030ae49419e7eba6f3c852be4d2705",
+    "entries":  [
+                    {
+                        "path":  "README.md",
+                        "dir":  false,
+                        "size":  21,
+                        "sha":  "5d1d515200c7e1a9245d9a1c97ac088511dae6efc05f0e044de8df0bda05300a",
+                        "crc":  "0000000000000000",
+                        "mtime":  1763200000000,
+                        "mode":  420
+                    },
+                    {
+                        "path":  "feature/x.txt",
+                        "dir":  false,
+                        "size":  17,
+                        "sha":  "717d8b9af04ae8e66fcf7e1bc69ca9a8e1911be34f8fecd62fc5419d11d42688",
+                        "crc":  "0000000000000000",
+                        "mtime":  1763200000000,
+                        "mode":  420
+                    },
+                    {
+                        "path":  "feature/notes.txt",
+                        "dir":  false,
+                        "size":  36,
+                        "sha":  "b641f830a0a086dd71f897065961995979a9780aeac5b50cf55d177535fcfcaa",
+                        "crc":  "0000000000000000",
+                        "mtime":  1763200000000,
+                        "mode":  420
+                    }
+                ]
+}

@@ -1,0 +1,17 @@
+build/
+dist/
+temp/
+*.o
+*.obj
+*.dll
+*.exe
+*.pdb
+*.ilk
+node_modules/
+shell/target/
+java/runtime/
+reports/
+.vs/
+out/
+*.zip
+*.7z

@@ -1,0 +1,1 @@
+unsigned long vd_crc64(const unsigned char *data, unsigned long len);

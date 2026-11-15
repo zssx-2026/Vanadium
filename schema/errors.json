@@ -1,0 +1,2172 @@
+{
+ "version": 1,
+ "languages": [
+  "en",
+  "zh-cn",
+  "tr-cn",
+  "am-en"
+ ],
+ "comment": "Single source of truth for gen::error_text",
+ "errors": [
+  {
+   "code": 1000,
+   "text": {
+    "en": "cannot open file",
+    "zh-cn": "无法打开文件",
+    "tr-cn": "无法打開文件",
+    "am-en": "cannot open file"
+   }
+  },
+  {
+   "code": 1001,
+   "text": {
+    "en": "cannot read file",
+    "zh-cn": "无法读取文件",
+    "tr-cn": "无法讀取文件",
+    "am-en": "cannot read file"
+   }
+  },
+  {
+   "code": 1002,
+   "text": {
+    "en": "cannot write file",
+    "zh-cn": "无法写入文件",
+    "tr-cn": "无法寫入文件",
+    "am-en": "cannot write file"
+   }
+  },
+  {
+   "code": 1003,
+   "text": {
+    "en": "cannot rename file",
+    "zh-cn": "无法重命名文件",
+    "tr-cn": "无法重命名文件",
+    "am-en": "cannot rename file"
+   }
+  },
+  {
+   "code": 1004,
+   "text": {
+    "en": "cannot delete file",
+    "zh-cn": "无法删除文件",
+    "tr-cn": "无法刪除文件",
+    "am-en": "cannot delete file"
+   }
+  },
+  {
+   "code": 1005,
+   "text": {
+    "en": "cannot create directory",
+    "zh-cn": "无法创建目录",
+    "tr-cn": "无法創建目錄",
+    "am-en": "cannot create directory"
+   }
+  },
+  {
+   "code": 1006,
+   "text": {
+    "en": "cannot remove directory",
+    "zh-cn": "无法删除目录",
+    "tr-cn": "无法刪除目錄",
+    "am-en": "cannot remove directory"
+   }
+  },
+  {
+   "code": 1007,
+   "text": {
+    "en": "cannot stat path",
+    "zh-cn": "无法获取路径信息",
+    "tr-cn": "无法獲取路徑信息",
+    "am-en": "cannot stat path"
+   }
+  },
+  {
+   "code": 1008,
+   "text": {
+    "en": "disk is full",
+    "zh-cn": "磁盘已满",
+    "tr-cn": "磁盤已滿",
+    "am-en": "disk is full"
+   }
+  },
+  {
+   "code": 1009,
+   "text": {
+    "en": "permission denied on path",
+    "zh-cn": "路径权限不足",
+    "tr-cn": "路徑權限不足",
+    "am-en": "permission denied on path"
+   }
+  },
+  {
+   "code": 1010,
+   "text": {
+    "en": "path is too long",
+    "zh-cn": "路径过长",
+    "tr-cn": "路徑过長",
+    "am-en": "path is too long"
+   }
+  },
+  {
+   "code": 1011,
+   "text": {
+    "en": "invalid path name",
+    "zh-cn": "路径名称无效",
+    "tr-cn": "路徑名稱无效",
+    "am-en": "invalid path name"
+   }
+  },
+  {
+   "code": 1012,
+   "text": {
+    "en": "file is locked by another process",
+    "zh-cn": "文件被其他进程占用",
+    "tr-cn": "文件被其他進程占用",
+    "am-en": "file is locked by another process"
+   }
+  },
+  {
+   "code": 1013,
+   "text": {
+    "en": "path escapes archive root",
+    "zh-cn": "路径超出存档根目录",
+    "tr-cn": "路徑超出存档根目錄",
+    "am-en": "path escapes archive root"
+   }
+  },
+  {
+   "code": 1014,
+   "text": {
+    "en": "too many symbolic links",
+    "zh-cn": "符号链接层数过多",
+    "tr-cn": "符號鏈接層数过多",
+    "am-en": "too many symbolic links"
+   }
+  },
+  {
+   "code": 1015,
+   "text": {
+    "en": "file changed while reading",
+    "zh-cn": "读取期间文件已改变",
+    "tr-cn": "讀取期間文件已改變",
+    "am-en": "file changed while reading"
+   }
+  },
+  {
+   "code": 1016,
+   "text": {
+    "en": "temporary file cannot be created",
+    "zh-cn": "无法创建临时文件",
+    "tr-cn": "无法創建臨時文件",
+    "am-en": "temporary file cannot be created"
+   }
+  },
+  {
+   "code": 1017,
+   "text": {
+    "en": "atomic rename failed",
+    "zh-cn": "原子重命名失败",
+    "tr-cn": "原子重命名失敗",
+    "am-en": "atomic rename failed"
+   }
+  },
+  {
+   "code": 1018,
+   "text": {
+    "en": "drive is not ready",
+    "zh-cn": "驱动器未就绪",
+    "tr-cn": "驅動器未就緒",
+    "am-en": "drive is not ready"
+   }
+  },
+  {
+   "code": 1019,
+   "text": {
+    "en": "filesystem does not support operation",
+    "zh-cn": "文件系统不支持该操作",
+    "tr-cn": "文件系統不支持該操作",
+    "am-en": "filesystem does not support operation"
+   }
+  },
+  {
+   "code": 1020,
+   "text": {
+    "en": "connection failed",
+    "zh-cn": "连接失败",
+    "tr-cn": "連接失敗",
+    "am-en": "connection failed"
+   }
+  },
+  {
+   "code": 1021,
+   "text": {
+    "en": "connection timed out",
+    "zh-cn": "连接超时",
+    "tr-cn": "連接超時",
+    "am-en": "connection timed out"
+   }
+  },
+  {
+   "code": 1022,
+   "text": {
+    "en": "connection refused",
+    "zh-cn": "连接被拒绝",
+    "tr-cn": "連接被拒绝",
+    "am-en": "connection refused"
+   }
+  },
+  {
+   "code": 1023,
+   "text": {
+    "en": "host name cannot be resolved",
+    "zh-cn": "无法解析主机名",
+    "tr-cn": "无法解析主機名",
+    "am-en": "host name cannot be resolved"
+   }
+  },
+  {
+   "code": 1024,
+   "text": {
+    "en": "TLS handshake failed",
+    "zh-cn": "TLS 握手失败",
+    "tr-cn": "TLS 握手失敗",
+    "am-en": "TLS handshake failed"
+   }
+  },
+  {
+   "code": 1025,
+   "text": {
+    "en": "server certificate is invalid",
+    "zh-cn": "服务器证书无效",
+    "tr-cn": "服务器證書无效",
+    "am-en": "server certificate is invalid"
+   }
+  },
+  {
+   "code": 1026,
+   "text": {
+    "en": "proxy requires authentication",
+    "zh-cn": "代理需要身份验证",
+    "tr-cn": "代理需要身份驗證",
+    "am-en": "proxy requires authentication"
+   }
+  },
+  {
+   "code": 1027,
+   "text": {
+    "en": "request was rate limited",
+    "zh-cn": "请求被限流",
+    "tr-cn": "请求被限流",
+    "am-en": "request was rate limited"
+   }
+  },
+  {
+   "code": 1028,
+   "text": {
+    "en": "remote returned malformed response",
+    "zh-cn": "远程返回格式错误",
+    "tr-cn": "遠程返回格式錯誤",
+    "am-en": "remote returned malformed response"
+   }
+  },
+  {
+   "code": 1029,
+   "text": {
+    "en": "remote closed the connection early",
+    "zh-cn": "远程提前关闭连接",
+    "tr-cn": "遠程提前關閉連接",
+    "am-en": "remote closed the connection early"
+   }
+  },
+  {
+   "code": 1030,
+   "text": {
+    "en": "HTTP status indicates failure",
+    "zh-cn": "HTTP 状态表示失败",
+    "tr-cn": "HTTP 狀態表示失敗",
+    "am-en": "HTTP status indicates failure"
+   }
+  },
+  {
+   "code": 1031,
+   "text": {
+    "en": "response body is too large",
+    "zh-cn": "响应体过大",
+    "tr-cn": "響應體过大",
+    "am-en": "response body is too large"
+   }
+  },
+  {
+   "code": 1032,
+   "text": {
+    "en": "range request was rejected",
+    "zh-cn": "范围请求被拒绝",
+    "tr-cn": "範圍请求被拒绝",
+    "am-en": "range request was rejected"
+   }
+  },
+  {
+   "code": 1033,
+   "text": {
+    "en": "download was interrupted",
+    "zh-cn": "下载被中断",
+    "tr-cn": "下載被中斷",
+    "am-en": "download was interrupted"
+   }
+  },
+  {
+   "code": 1034,
+   "text": {
+    "en": "checksum of downloaded data differs",
+    "zh-cn": "下载数据摘要不一致",
+    "tr-cn": "下載数據摘要不一致",
+    "am-en": "checksum of downloaded data differs"
+   }
+  },
+  {
+   "code": 1035,
+   "text": {
+    "en": "downloaded size differs from expected",
+    "zh-cn": "下载大小与预期不一致",
+    "tr-cn": "下載大小與預期不一致",
+    "am-en": "downloaded size differs from expected"
+   }
+  },
+  {
+   "code": 1036,
+   "text": {
+    "en": "too many redirects",
+    "zh-cn": "重定向次数过多",
+    "tr-cn": "重定向次数过多",
+    "am-en": "too many redirects"
+   }
+  },
+  {
+   "code": 1037,
+   "text": {
+    "en": "network is offline",
+    "zh-cn": "网络已离线",
+    "tr-cn": "網絡已离线",
+    "am-en": "network is offline"
+   }
+  },
+  {
+   "code": 1038,
+   "text": {
+    "en": "request body encoding failed",
+    "zh-cn": "请求体编码失败",
+    "tr-cn": "请求體編碼失敗",
+    "am-en": "request body encoding failed"
+   }
+  },
+  {
+   "code": 1039,
+   "text": {
+    "en": "server is unavailable",
+    "zh-cn": "服务器不可用",
+    "tr-cn": "服务器不可用",
+    "am-en": "server is unavailable"
+   }
+  },
+  {
+   "code": 1040,
+   "text": {
+    "en": "authentication is required",
+    "zh-cn": "需要身份验证",
+    "tr-cn": "需要身份驗證",
+    "am-en": "authentication is required"
+   }
+  },
+  {
+   "code": 1041,
+   "text": {
+    "en": "token is invalid",
+    "zh-cn": "令牌无效",
+    "tr-cn": "令牌无效",
+    "am-en": "token is invalid"
+   }
+  },
+  {
+   "code": 1042,
+   "text": {
+    "en": "token has expired",
+    "zh-cn": "令牌已过期",
+    "tr-cn": "令牌已过期",
+    "am-en": "token has expired"
+   }
+  },
+  {
+   "code": 1043,
+   "text": {
+    "en": "token scope is insufficient",
+    "zh-cn": "令牌权限不足",
+    "tr-cn": "令牌權限不足",
+    "am-en": "token scope is insufficient"
+   }
+  },
+  {
+   "code": 1044,
+   "text": {
+    "en": "credentials were not found",
+    "zh-cn": "未找到凭据",
+    "tr-cn": "未找到憑據",
+    "am-en": "credentials were not found"
+   }
+  },
+  {
+   "code": 1045,
+   "text": {
+    "en": "credentials file is corrupt",
+    "zh-cn": "凭据文件损坏",
+    "tr-cn": "憑據文件損壞",
+    "am-en": "credentials file is corrupt"
+   }
+  },
+  {
+   "code": 1046,
+   "text": {
+    "en": "device authorization was denied",
+    "zh-cn": "设备授权被拒绝",
+    "tr-cn": "設備授權被拒绝",
+    "am-en": "device authorization was denied"
+   }
+  },
+  {
+   "code": 1047,
+   "text": {
+    "en": "device authorization timed out",
+    "zh-cn": "设备授权超时",
+    "tr-cn": "設備授權超時",
+    "am-en": "device authorization timed out"
+   }
+  },
+  {
+   "code": 1048,
+   "text": {
+    "en": "sign-in was cancelled",
+    "zh-cn": "登录已取消",
+    "tr-cn": "登錄已取消",
+    "am-en": "sign-in was canceled"
+   }
+  },
+  {
+   "code": 1049,
+   "text": {
+    "en": "write permission is required",
+    "zh-cn": "需要写入权限",
+    "tr-cn": "需要寫入權限",
+    "am-en": "write permission is required"
+   }
+  },
+  {
+   "code": 1050,
+   "text": {
+    "en": "account is suspended",
+    "zh-cn": "账户已被暂停",
+    "tr-cn": "帳戶已被暫停",
+    "am-en": "account is suspended"
+   }
+  },
+  {
+   "code": 1051,
+   "text": {
+    "en": "two-factor confirmation failed",
+    "zh-cn": "双因素确认失败",
+    "tr-cn": "雙因素確認失敗",
+    "am-en": "two-factor confirmation failed"
+   }
+  },
+  {
+   "code": 1052,
+   "text": {
+    "en": "token cannot be stored securely",
+    "zh-cn": "令牌无法安全保存",
+    "tr-cn": "令牌无法安全保存",
+    "am-en": "token cannot be stored securely"
+   }
+  },
+  {
+   "code": 1053,
+   "text": {
+    "en": "remote rejected the credentials",
+    "zh-cn": "远程拒绝了凭据",
+    "tr-cn": "遠程拒绝了憑據",
+    "am-en": "remote rejected the credentials"
+   }
+  },
+  {
+   "code": 1054,
+   "text": {
+    "en": "no remote is configured",
+    "zh-cn": "未配置远程地址",
+    "tr-cn": "未配置遠程地址",
+    "am-en": "no remote is configured"
+   }
+  },
+  {
+   "code": 1055,
+   "text": {
+    "en": "remote URL is invalid",
+    "zh-cn": "远程地址无效",
+    "tr-cn": "遠程地址无效",
+    "am-en": "remote URL is invalid"
+   }
+  },
+  {
+   "code": 1056,
+   "text": {
+    "en": "remote repository was not found",
+    "zh-cn": "未找到远程仓库",
+    "tr-cn": "未找到遠程倉庫",
+    "am-en": "remote repository was not found"
+   }
+  },
+  {
+   "code": 1057,
+   "text": {
+    "en": "release tag is not allowed",
+    "zh-cn": "发布标签不被允许",
+    "tr-cn": "发布標签不被允許",
+    "am-en": "release tag is not allowed"
+   }
+  },
+  {
+   "code": 1058,
+   "text": {
+    "en": "release already exists",
+    "zh-cn": "发布已存在",
+    "tr-cn": "发布已存在",
+    "am-en": "release already exists"
+   }
+  },
+  {
+   "code": 1059,
+   "text": {
+    "en": "asset upload was rejected",
+    "zh-cn": "资源上传被拒绝",
+    "tr-cn": "資源上传被拒绝",
+    "am-en": "asset upload was rejected"
+   }
+  },
+  {
+   "code": 1060,
+   "text": {
+    "en": "object was not found",
+    "zh-cn": "未找到对象",
+    "tr-cn": "未找到對象",
+    "am-en": "object was not found"
+   }
+  },
+  {
+   "code": 1061,
+   "text": {
+    "en": "object hash mismatch",
+    "zh-cn": "对象哈希不一致",
+    "tr-cn": "對象哈希不一致",
+    "am-en": "object hash mismatch"
+   }
+  },
+  {
+   "code": 1062,
+   "text": {
+    "en": "object is corrupt",
+    "zh-cn": "对象已损坏",
+    "tr-cn": "對象已損壞",
+    "am-en": "object is corrupt"
+   }
+  },
+  {
+   "code": 1063,
+   "text": {
+    "en": "object size exceeds limit",
+    "zh-cn": "对象大小超出限制",
+    "tr-cn": "對象大小超出限制",
+    "am-en": "object size exceeds limit"
+   }
+  },
+  {
+   "code": 1064,
+   "text": {
+    "en": "object already exists",
+    "zh-cn": "对象已存在",
+    "tr-cn": "對象已存在",
+    "am-en": "object already exists"
+   }
+  },
+  {
+   "code": 1065,
+   "text": {
+    "en": "object cannot be written",
+    "zh-cn": "无法写入对象",
+    "tr-cn": "无法寫入對象",
+    "am-en": "object cannot be written"
+   }
+  },
+  {
+   "code": 1066,
+   "text": {
+    "en": "object store is not initialized",
+    "zh-cn": "对象库未初始化",
+    "tr-cn": "對象庫未初始化",
+    "am-en": "object store is not initialized"
+   }
+  },
+  {
+   "code": 1067,
+   "text": {
+    "en": "object store is read only",
+    "zh-cn": "对象库为只读",
+    "tr-cn": "對象庫為只讀",
+    "am-en": "object store is read only"
+   }
+  },
+  {
+   "code": 1068,
+   "text": {
+    "en": "compression failed",
+    "zh-cn": "压缩失败",
+    "tr-cn": "壓縮失敗",
+    "am-en": "compression failed"
+   }
+  },
+  {
+   "code": 1069,
+   "text": {
+    "en": "decompression failed",
+    "zh-cn": "解压失败",
+    "tr-cn": "解壓失敗",
+    "am-en": "decompression failed"
+   }
+  },
+  {
+   "code": 1070,
+   "text": {
+    "en": "compressed block header is invalid",
+    "zh-cn": "压缩块头无效",
+    "tr-cn": "壓縮塊頭无效",
+    "am-en": "compressed block header is invalid"
+   }
+  },
+  {
+   "code": 1071,
+   "text": {
+    "en": "compressed block is truncated",
+    "zh-cn": "压缩块被截断",
+    "tr-cn": "壓縮塊被截斷",
+    "am-en": "compressed block is truncated"
+   }
+  },
+  {
+   "code": 1072,
+   "text": {
+    "en": "compressed block checksum differs",
+    "zh-cn": "压缩块校验不一致",
+    "tr-cn": "壓縮塊校驗不一致",
+    "am-en": "compressed block checksum differs"
+   }
+  },
+  {
+   "code": 1073,
+   "text": {
+    "en": "garbage collection refused",
+    "zh-cn": "垃圾回收被拒绝",
+    "tr-cn": "垃圾回收被拒绝",
+    "am-en": "garbage collection refused"
+   }
+  },
+  {
+   "code": 1074,
+   "text": {
+    "en": "object is referenced by a snapshot",
+    "zh-cn": "对象被快照引用",
+    "tr-cn": "對象被快照引用",
+    "am-en": "object is referenced by a snapshot"
+   }
+  },
+  {
+   "code": 1075,
+   "text": {
+    "en": "index file is corrupt",
+    "zh-cn": "索引文件损坏",
+    "tr-cn": "索引文件損壞",
+    "am-en": "index file is corrupt"
+   }
+  },
+  {
+   "code": 1076,
+   "text": {
+    "en": "index file version is unsupported",
+    "zh-cn": "索引文件版本不受支持",
+    "tr-cn": "索引文件版本不受支持",
+    "am-en": "index file version is unsupported"
+   }
+  },
+  {
+   "code": 1077,
+   "text": {
+    "en": "object path does not match hash",
+    "zh-cn": "对象路径与哈希不匹配",
+    "tr-cn": "對象路徑與哈希不匹配",
+    "am-en": "object path does not match hash"
+   }
+  },
+  {
+   "code": 1078,
+   "text": {
+    "en": "store lock is held by another process",
+    "zh-cn": "对象库锁被其他进程持有",
+    "tr-cn": "對象庫鎖被其他進程持有",
+    "am-en": "store lock is held by another process"
+   }
+  },
+  {
+   "code": 1079,
+   "text": {
+    "en": "store quota was exceeded",
+    "zh-cn": "对象库配额超限",
+    "tr-cn": "對象庫配額超限",
+    "am-en": "store quota was exceeded"
+   }
+  },
+  {
+   "code": 1080,
+   "text": {
+    "en": "archive is not initialized",
+    "zh-cn": "存档未初始化",
+    "tr-cn": "存档未初始化",
+    "am-en": "archive is not initialized"
+   }
+  },
+  {
+   "code": 1081,
+   "text": {
+    "en": "archive metadata is corrupt",
+    "zh-cn": "存档元数据损坏",
+    "tr-cn": "存档元数據損壞",
+    "am-en": "archive metadata is corrupt"
+   }
+  },
+  {
+   "code": 1082,
+   "text": {
+    "en": "archive version is unsupported",
+    "zh-cn": "存档版本不受支持",
+    "tr-cn": "存档版本不受支持",
+    "am-en": "archive version is unsupported"
+   }
+  },
+  {
+   "code": 1083,
+   "text": {
+    "en": "branch was not found",
+    "zh-cn": "未找到分支",
+    "tr-cn": "未找到分支",
+    "am-en": "branch was not found"
+   }
+  },
+  {
+   "code": 1084,
+   "text": {
+    "en": "branch already exists",
+    "zh-cn": "分支已存在",
+    "tr-cn": "分支已存在",
+    "am-en": "branch already exists"
+   }
+  },
+  {
+   "code": 1085,
+   "text": {
+    "en": "branch name is invalid",
+    "zh-cn": "分支名称无效",
+    "tr-cn": "分支名稱无效",
+    "am-en": "branch name is invalid"
+   }
+  },
+  {
+   "code": 1086,
+   "text": {
+    "en": "branch has child branches",
+    "zh-cn": "分支存在子分支",
+    "tr-cn": "分支存在子分支",
+    "am-en": "branch has child branches"
+   }
+  },
+  {
+   "code": 1087,
+   "text": {
+    "en": "snapshot was not found",
+    "zh-cn": "未找到快照",
+    "tr-cn": "未找到快照",
+    "am-en": "snapshot was not found"
+   }
+  },
+  {
+   "code": 1088,
+   "text": {
+    "en": "snapshot sequence is out of range",
+    "zh-cn": "快照序号超出范围",
+    "tr-cn": "快照序號超出範圍",
+    "am-en": "snapshot sequence is out of range"
+   }
+  },
+  {
+   "code": 1089,
+   "text": {
+    "en": "snapshot has no parent",
+    "zh-cn": "快照没有父节点",
+    "tr-cn": "快照沒有父節點",
+    "am-en": "snapshot has no parent"
+   }
+  },
+  {
+   "code": 1090,
+   "text": {
+    "en": "delta file is missing",
+    "zh-cn": "增量文件缺失",
+    "tr-cn": "增量文件缺失",
+    "am-en": "delta file is missing"
+   }
+  },
+  {
+   "code": 1091,
+   "text": {
+    "en": "delta chain is broken",
+    "zh-cn": "增量链断裂",
+    "tr-cn": "增量鏈斷裂",
+    "am-en": "delta chain is broken"
+   }
+  },
+  {
+   "code": 1092,
+   "text": {
+    "en": "delta cannot be applied",
+    "zh-cn": "无法应用增量",
+    "tr-cn": "无法應用增量",
+    "am-en": "delta cannot be applied"
+   }
+  },
+  {
+   "code": 1093,
+   "text": {
+    "en": "rollback target is invalid",
+    "zh-cn": "回滚目标无效",
+    "tr-cn": "回滾目標无效",
+    "am-en": "rollback target is invalid"
+   }
+  },
+  {
+   "code": 1094,
+   "text": {
+    "en": "rollback would lose local changes",
+    "zh-cn": "回滚将丢失本地改动",
+    "tr-cn": "回滾將丟失本地改動",
+    "am-en": "rollback would lose local changes"
+   }
+  },
+  {
+   "code": 1095,
+   "text": {
+    "en": "archive type does not allow operation",
+    "zh-cn": "存档类型不允许该操作",
+    "tr-cn": "存档類型不允許該操作",
+    "am-en": "archive type does not allow operation"
+   }
+  },
+  {
+   "code": 1096,
+   "text": {
+    "en": "archive is busy",
+    "zh-cn": "存档正忙",
+    "tr-cn": "存档正忙",
+    "am-en": "archive is busy"
+   }
+  },
+  {
+   "code": 1097,
+   "text": {
+    "en": "archive root is not a directory",
+    "zh-cn": "存档根不是目录",
+    "tr-cn": "存档根不是目錄",
+    "am-en": "archive root is not a directory"
+   }
+  },
+  {
+   "code": 1098,
+   "text": {
+    "en": "archive is on a different volume",
+    "zh-cn": "存档位于不同卷",
+    "tr-cn": "存档位於不同卷",
+    "am-en": "archive is on a different volume"
+   }
+  },
+  {
+   "code": 1099,
+   "text": {
+    "en": "release branch is protected",
+    "zh-cn": "发布分支受保护",
+    "tr-cn": "发布分支受保護",
+    "am-en": "release branch is protected"
+   }
+  },
+  {
+   "code": 1100,
+   "text": {
+    "en": "manifest is missing",
+    "zh-cn": "清单缺失",
+    "tr-cn": "清單缺失",
+    "am-en": "manifest is missing"
+   }
+  },
+  {
+   "code": 1101,
+   "text": {
+    "en": "manifest is corrupt",
+    "zh-cn": "清单损坏",
+    "tr-cn": "清單損壞",
+    "am-en": "manifest is corrupt"
+   }
+  },
+  {
+   "code": 1102,
+   "text": {
+    "en": "manifest entry is duplicated",
+    "zh-cn": "清单条目重复",
+    "tr-cn": "清單條目重復",
+    "am-en": "manifest entry is duplicated"
+   }
+  },
+  {
+   "code": 1103,
+   "text": {
+    "en": "manifest entry path is invalid",
+    "zh-cn": "清单条目路径无效",
+    "tr-cn": "清單條目路徑无效",
+    "am-en": "manifest entry path is invalid"
+   }
+  },
+  {
+   "code": 1104,
+   "text": {
+    "en": "manifest entry has no hash",
+    "zh-cn": "清单条目缺少哈希",
+    "tr-cn": "清單條目缺少哈希",
+    "am-en": "manifest entry has no hash"
+   }
+  },
+  {
+   "code": 1105,
+   "text": {
+    "en": "manifest entry size mismatch",
+    "zh-cn": "清单条目大小不一致",
+    "tr-cn": "清單條目大小不一致",
+    "am-en": "manifest entry size mismatch"
+   }
+  },
+  {
+   "code": 1106,
+   "text": {
+    "en": "manifest CRC64 mismatch",
+    "zh-cn": "清单 CRC64 不一致",
+    "tr-cn": "清單 CRC64 不一致",
+    "am-en": "manifest CRC64 mismatch"
+   }
+  },
+  {
+   "code": 1107,
+   "text": {
+    "en": "manifest parent reference is invalid",
+    "zh-cn": "清单父引用无效",
+    "tr-cn": "清單父引用无效",
+    "am-en": "manifest parent reference is invalid"
+   }
+  },
+  {
+   "code": 1108,
+   "text": {
+    "en": "manifest ordering is inconsistent",
+    "zh-cn": "清单顺序不一致",
+    "tr-cn": "清單順序不一致",
+    "am-en": "manifest ordering is inconsistent"
+   }
+  },
+  {
+   "code": 1109,
+   "text": {
+    "en": "manifest field is unknown",
+    "zh-cn": "清单字段未知",
+    "tr-cn": "清單字段未知",
+    "am-en": "manifest field is unknown"
+   }
+  },
+  {
+   "code": 1110,
+   "text": {
+    "en": "manifest field type is wrong",
+    "zh-cn": "清单字段类型错误",
+    "tr-cn": "清單字段類型錯誤",
+    "am-en": "manifest field type is wrong"
+   }
+  },
+  {
+   "code": 1111,
+   "text": {
+    "en": "manifest is too large",
+    "zh-cn": "清单过大",
+    "tr-cn": "清單过大",
+    "am-en": "manifest is too large"
+   }
+  },
+  {
+   "code": 1112,
+   "text": {
+    "en": "manifest has too many entries",
+    "zh-cn": "清单条目过多",
+    "tr-cn": "清單條目过多",
+    "am-en": "manifest has too many entries"
+   }
+  },
+  {
+   "code": 1113,
+   "text": {
+    "en": "manifest encoding is not UTF-8",
+    "zh-cn": "清单编码不是 UTF-8",
+    "tr-cn": "清單編碼不是 UTF-8",
+    "am-en": "manifest encoding is not UTF-8"
+   }
+  },
+  {
+   "code": 1114,
+   "text": {
+    "en": "manifest path is not normalized",
+    "zh-cn": "清单路径未规范化",
+    "tr-cn": "清單路徑未規範化",
+    "am-en": "manifest path is not normalized"
+   }
+  },
+  {
+   "code": 1115,
+   "text": {
+    "en": "manifest conflicts with index",
+    "zh-cn": "清单与索引冲突",
+    "tr-cn": "清單與索引衝突",
+    "am-en": "manifest conflicts with index"
+   }
+  },
+  {
+   "code": 1116,
+   "text": {
+    "en": "manifest was written by a newer version",
+    "zh-cn": "清单由更新版本写入",
+    "tr-cn": "清單由更新版本寫入",
+    "am-en": "manifest was written by a newer version"
+   }
+  },
+  {
+   "code": 1117,
+   "text": {
+    "en": "manifest checksum file is missing",
+    "zh-cn": "清单校验文件缺失",
+    "tr-cn": "清單校驗文件缺失",
+    "am-en": "manifest checksum file is missing"
+   }
+  },
+  {
+   "code": 1118,
+   "text": {
+    "en": "manifest mode bits are invalid",
+    "zh-cn": "清单权限位无效",
+    "tr-cn": "清單權限位无效",
+    "am-en": "manifest mode bits are invalid"
+   }
+  },
+  {
+   "code": 1119,
+   "text": {
+    "en": "manifest symlink target escapes root",
+    "zh-cn": "清单符号链接目标越界",
+    "tr-cn": "清單符號鏈接目標越界",
+    "am-en": "manifest symlink target escapes root"
+   }
+  },
+  {
+   "code": 1120,
+   "text": {
+    "en": "protocol message is malformed",
+    "zh-cn": "协议消息格式错误",
+    "tr-cn": "协议消息格式錯誤",
+    "am-en": "protocol message is malformed"
+   }
+  },
+  {
+   "code": 1121,
+   "text": {
+    "en": "protocol version is unsupported",
+    "zh-cn": "协议版本不受支持",
+    "tr-cn": "协议版本不受支持",
+    "am-en": "protocol version is unsupported"
+   }
+  },
+  {
+   "code": 1122,
+   "text": {
+    "en": "protocol field is missing",
+    "zh-cn": "协议字段缺失",
+    "tr-cn": "协议字段缺失",
+    "am-en": "protocol field is missing"
+   }
+  },
+  {
+   "code": 1123,
+   "text": {
+    "en": "protocol field type is unexpected",
+    "zh-cn": "协议字段类型不符",
+    "tr-cn": "协议字段類型不符",
+    "am-en": "protocol field type is unexpected"
+   }
+  },
+  {
+   "code": 1124,
+   "text": {
+    "en": "protocol field value is out of range",
+    "zh-cn": "协议字段值超出范围",
+    "tr-cn": "协议字段值超出範圍",
+    "am-en": "protocol field value is out of range"
+   }
+  },
+  {
+   "code": 1125,
+   "text": {
+    "en": "protocol frame is truncated",
+    "zh-cn": "协议帧被截断",
+    "tr-cn": "协议幀被截斷",
+    "am-en": "protocol frame is truncated"
+   }
+  },
+  {
+   "code": 1126,
+   "text": {
+    "en": "protocol frame checksum differs",
+    "zh-cn": "协议帧校验不一致",
+    "tr-cn": "协议幀校驗不一致",
+    "am-en": "protocol frame checksum differs"
+   }
+  },
+  {
+   "code": 1127,
+   "text": {
+    "en": "protocol frame is too large",
+    "zh-cn": "协议帧过大",
+    "tr-cn": "协议幀过大",
+    "am-en": "protocol frame is too large"
+   }
+  },
+  {
+   "code": 1128,
+   "text": {
+    "en": "protocol magic does not match",
+    "zh-cn": "协议魔数不匹配",
+    "tr-cn": "协议魔数不匹配",
+    "am-en": "protocol magic does not match"
+   }
+  },
+  {
+   "code": 1129,
+   "text": {
+    "en": "protocol chunk order is wrong",
+    "zh-cn": "协议分块顺序错误",
+    "tr-cn": "协议分塊順序錯誤",
+    "am-en": "protocol chunk order is wrong"
+   }
+  },
+  {
+   "code": 1130,
+   "text": {
+    "en": "protocol stream ended unexpectedly",
+    "zh-cn": "协议流意外结束",
+    "tr-cn": "协议流意外結束",
+    "am-en": "protocol stream ended unexpectedly"
+   }
+  },
+  {
+   "code": 1131,
+   "text": {
+    "en": "ivpack header is invalid",
+    "zh-cn": "ivpack 头无效",
+    "tr-cn": "ivpack 頭无效",
+    "am-en": "ivpack header is invalid"
+   }
+  },
+  {
+   "code": 1132,
+   "text": {
+    "en": "ivpack block index is invalid",
+    "zh-cn": "ivpack 块索引无效",
+    "tr-cn": "ivpack 塊索引无效",
+    "am-en": "ivpack block index is invalid"
+   }
+  },
+  {
+   "code": 1133,
+   "text": {
+    "en": "ivpack block count is zero",
+    "zh-cn": "ivpack 块数为零",
+    "tr-cn": "ivpack 塊数為零",
+    "am-en": "ivpack block count is zero"
+   }
+  },
+  {
+   "code": 1134,
+   "text": {
+    "en": "ivpack flags are unsupported",
+    "zh-cn": "ivpack 标志不受支持",
+    "tr-cn": "ivpack 標志不受支持",
+    "am-en": "ivpack flags are unsupported"
+   }
+  },
+  {
+   "code": 1135,
+   "text": {
+    "en": "JSON document is malformed",
+    "zh-cn": "JSON 文档格式错误",
+    "tr-cn": "JSON 文档格式錯誤",
+    "am-en": "JSON document is malformed"
+   }
+  },
+  {
+   "code": 1136,
+   "text": {
+    "en": "JSON value has the wrong type",
+    "zh-cn": "JSON 值类型错误",
+    "tr-cn": "JSON 值類型錯誤",
+    "am-en": "JSON value has the wrong type"
+   }
+  },
+  {
+   "code": 1137,
+   "text": {
+    "en": "JSON nesting is too deep",
+    "zh-cn": "JSON 嵌套过深",
+    "tr-cn": "JSON 嵌套过深",
+    "am-en": "JSON nesting is too deep"
+   }
+  },
+  {
+   "code": 1138,
+   "text": {
+    "en": "JSON number is out of range",
+    "zh-cn": "JSON 数字超出范围",
+    "tr-cn": "JSON 数字超出範圍",
+    "am-en": "JSON number is out of range"
+   }
+  },
+  {
+   "code": 1139,
+   "text": {
+    "en": "JSON string is not valid UTF-8",
+    "zh-cn": "JSON 字符串不是有效 UTF-8",
+    "tr-cn": "JSON 字符串不是有效 UTF-8",
+    "am-en": "JSON string is not valid UTF-8"
+   }
+  },
+  {
+   "code": 1140,
+   "text": {
+    "en": "settings file is corrupt",
+    "zh-cn": "设置文件损坏",
+    "tr-cn": "設置文件損壞",
+    "am-en": "settings file is corrupt"
+   }
+  },
+  {
+   "code": 1141,
+   "text": {
+    "en": "settings key is unknown",
+    "zh-cn": "设置键未知",
+    "tr-cn": "設置鍵未知",
+    "am-en": "settings key is unknown"
+   }
+  },
+  {
+   "code": 1142,
+   "text": {
+    "en": "settings value is invalid",
+    "zh-cn": "设置值无效",
+    "tr-cn": "設置值无效",
+    "am-en": "settings value is invalid"
+   }
+  },
+  {
+   "code": 1143,
+   "text": {
+    "en": "settings value type is wrong",
+    "zh-cn": "设置值类型错误",
+    "tr-cn": "設置值類型錯誤",
+    "am-en": "settings value type is wrong"
+   }
+  },
+  {
+   "code": 1144,
+   "text": {
+    "en": "settings value is out of range",
+    "zh-cn": "设置值超出范围",
+    "tr-cn": "設置值超出範圍",
+    "am-en": "settings value is out of range"
+   }
+  },
+  {
+   "code": 1145,
+   "text": {
+    "en": "settings cannot be saved",
+    "zh-cn": "设置无法保存",
+    "tr-cn": "設置无法保存",
+    "am-en": "settings cannot be saved"
+   }
+  },
+  {
+   "code": 1146,
+   "text": {
+    "en": "settings language is unsupported",
+    "zh-cn": "设置语言不受支持",
+    "tr-cn": "設置語言不受支持",
+    "am-en": "settings language is unsupported"
+   }
+  },
+  {
+   "code": 1147,
+   "text": {
+    "en": "settings migration failed",
+    "zh-cn": "设置迁移失败",
+    "tr-cn": "設置遷移失敗",
+    "am-en": "settings migration failed"
+   }
+  },
+  {
+   "code": 1148,
+   "text": {
+    "en": "settings file is read only",
+    "zh-cn": "设置文件只读",
+    "tr-cn": "設置文件只讀",
+    "am-en": "settings file is read only"
+   }
+  },
+  {
+   "code": 1149,
+   "text": {
+    "en": "URL setting name is invalid",
+    "zh-cn": "URL 设置名无效",
+    "tr-cn": "URL 設置名无效",
+    "am-en": "URL setting name is invalid"
+   }
+  },
+  {
+   "code": 1150,
+   "text": {
+    "en": "settings lock is held by another process",
+    "zh-cn": "设置锁被其他进程持有",
+    "tr-cn": "設置鎖被其他進程持有",
+    "am-en": "settings lock is held by another process"
+   }
+  },
+  {
+   "code": 1151,
+   "text": {
+    "en": "setting is required but missing",
+    "zh-cn": "必需设置缺失",
+    "tr-cn": "必需設置缺失",
+    "am-en": "setting is required but missing"
+   }
+  },
+  {
+   "code": 1152,
+   "text": {
+    "en": "setting conflicts with environment variable",
+    "zh-cn": "设置与环境变量冲突",
+    "tr-cn": "設置與環境變量衝突",
+    "am-en": "setting conflicts with environment variable"
+   }
+  },
+  {
+   "code": 1153,
+   "text": {
+    "en": "settings directory cannot be created",
+    "zh-cn": "无法创建设置目录",
+    "tr-cn": "无法創建設置目錄",
+    "am-en": "settings directory cannot be created"
+   }
+  },
+  {
+   "code": 1154,
+   "text": {
+    "en": "settings backup is corrupt",
+    "zh-cn": "设置备份损坏",
+    "tr-cn": "設置備份損壞",
+    "am-en": "settings backup is corrupt"
+   }
+  },
+  {
+   "code": 1155,
+   "text": {
+    "en": "setting was removed in this version",
+    "zh-cn": "该设置在此版本已移除",
+    "tr-cn": "該設置在此版本已移除",
+    "am-en": "setting was removed in this version"
+   }
+  },
+  {
+   "code": 1156,
+   "text": {
+    "en": "setting name is too long",
+    "zh-cn": "设置名过长",
+    "tr-cn": "設置名过長",
+    "am-en": "setting name is too long"
+   }
+  },
+  {
+   "code": 1157,
+   "text": {
+    "en": "setting string is too long",
+    "zh-cn": "设置字符串过长",
+    "tr-cn": "設置字符串过長",
+    "am-en": "setting string is too long"
+   }
+  },
+  {
+   "code": 1158,
+   "text": {
+    "en": "boolean setting expects true or false",
+    "zh-cn": "布尔设置只接受 true 或 false",
+    "tr-cn": "布爾設置只接受 true 或 false",
+    "am-en": "boolean setting expects true or false"
+   }
+  },
+  {
+   "code": 1159,
+   "text": {
+    "en": "numeric setting is not a number",
+    "zh-cn": "数值设置不是数字",
+    "tr-cn": "数值設置不是数字",
+    "am-en": "numeric setting is not a number"
+   }
+  },
+  {
+   "code": 1160,
+   "text": {
+    "en": "UTF-8 sequence is invalid",
+    "zh-cn": "UTF-8 序列无效",
+    "tr-cn": "UTF-8 序列无效",
+    "am-en": "UTF-8 sequence is invalid"
+   }
+  },
+  {
+   "code": 1161,
+   "text": {
+    "en": "UTF-8 sequence is truncated",
+    "zh-cn": "UTF-8 序列被截断",
+    "tr-cn": "UTF-8 序列被截斷",
+    "am-en": "UTF-8 sequence is truncated"
+   }
+  },
+  {
+   "code": 1162,
+   "text": {
+    "en": "UTF-8 sequence is overlong",
+    "zh-cn": "UTF-8 序列过长编码",
+    "tr-cn": "UTF-8 序列过長編碼",
+    "am-en": "UTF-8 sequence is overlong"
+   }
+  },
+  {
+   "code": 1163,
+   "text": {
+    "en": "UTF-8 code point is a surrogate",
+    "zh-cn": "UTF-8 码位是代理项",
+    "tr-cn": "UTF-8 碼位是代理項",
+    "am-en": "UTF-8 code point is a surrogate"
+   }
+  },
+  {
+   "code": 1164,
+   "text": {
+    "en": "code point is out of range",
+    "zh-cn": "码位超出范围",
+    "tr-cn": "碼位超出範圍",
+    "am-en": "code point is out of range"
+   }
+  },
+  {
+   "code": 1165,
+   "text": {
+    "en": "text is not valid UTF-8",
+    "zh-cn": "文本不是有效 UTF-8",
+    "tr-cn": "文本不是有效 UTF-8",
+    "am-en": "text is not valid UTF-8"
+   }
+  },
+  {
+   "code": 1166,
+   "text": {
+    "en": "normalization form is unsupported",
+    "zh-cn": "规范化形式不受支持",
+    "tr-cn": "規範化形式不受支持",
+    "am-en": "normalization form is unsupported"
+   }
+  },
+  {
+   "code": 1167,
+   "text": {
+    "en": "message key was not found",
+    "zh-cn": "未找到消息键",
+    "tr-cn": "未找到消息鍵",
+    "am-en": "message key was not found"
+   }
+  },
+  {
+   "code": 1168,
+   "text": {
+    "en": "language code is unknown",
+    "zh-cn": "语言代码未知",
+    "tr-cn": "語言代碼未知",
+    "am-en": "language code is unknown"
+   }
+  },
+  {
+   "code": 1169,
+   "text": {
+    "en": "translation is missing",
+    "zh-cn": "翻译缺失",
+    "tr-cn": "翻譯缺失",
+    "am-en": "translation is missing"
+   }
+  },
+  {
+   "code": 1170,
+   "text": {
+    "en": "width table is inconsistent",
+    "zh-cn": "宽度表不一致",
+    "tr-cn": "寬度表不一致",
+    "am-en": "width table is inconsistent"
+   }
+  },
+  {
+   "code": 1171,
+   "text": {
+    "en": "character has no assigned name",
+    "zh-cn": "字符没有名称",
+    "tr-cn": "字符沒有名稱",
+    "am-en": "character has no assigned name"
+   }
+  },
+  {
+   "code": 1172,
+   "text": {
+    "en": "case folding is ambiguous",
+    "zh-cn": "大小写折叠存在歧义",
+    "tr-cn": "大小寫折疊存在歧義",
+    "am-en": "case folding is ambiguous"
+   }
+  },
+  {
+   "code": 1173,
+   "text": {
+    "en": "text contains an unpaired surrogate",
+    "zh-cn": "文本包含孤立代理项",
+    "tr-cn": "文本包含孤立代理項",
+    "am-en": "text contains an unpaired surrogate"
+   }
+  },
+  {
+   "code": 1174,
+   "text": {
+    "en": "text contains a null byte",
+    "zh-cn": "文本包含空字节",
+    "tr-cn": "文本包含空字節",
+    "am-en": "text contains a null byte"
+   }
+  },
+  {
+   "code": 1175,
+   "text": {
+    "en": "text is too long to format",
+    "zh-cn": "文本过长无法格式化",
+    "tr-cn": "文本过長无法格式化",
+    "am-en": "text is too long to format"
+   }
+  },
+  {
+   "code": 1176,
+   "text": {
+    "en": "format placeholder count differs",
+    "zh-cn": "格式占位符数量不一致",
+    "tr-cn": "格式占位符数量不一致",
+    "am-en": "format placeholder count differs"
+   }
+  },
+  {
+   "code": 1177,
+   "text": {
+    "en": "format placeholder is invalid",
+    "zh-cn": "格式占位符无效",
+    "tr-cn": "格式占位符无效",
+    "am-en": "format placeholder is invalid"
+   }
+  },
+  {
+   "code": 1178,
+   "text": {
+    "en": "locale data is missing",
+    "zh-cn": "区域数据缺失",
+    "tr-cn": "區域数據缺失",
+    "am-en": "locale data is missing"
+   }
+  },
+  {
+   "code": 1179,
+   "text": {
+    "en": "console encoding is not UTF-8",
+    "zh-cn": "控制台编码不是 UTF-8",
+    "tr-cn": "控制台編碼不是 UTF-8",
+    "am-en": "console encoding is not UTF-8"
+   }
+  },
+  {
+   "code": 1180,
+   "text": {
+    "en": "hash algorithm is unsupported",
+    "zh-cn": "哈希算法不受支持",
+    "tr-cn": "哈希算法不受支持",
+    "am-en": "hash algorithm is unsupported"
+   }
+  },
+  {
+   "code": 1181,
+   "text": {
+    "en": "hash input is empty",
+    "zh-cn": "哈希输入为空",
+    "tr-cn": "哈希輸入為空",
+    "am-en": "hash input is empty"
+   }
+  },
+  {
+   "code": 1182,
+   "text": {
+    "en": "hash digest length is wrong",
+    "zh-cn": "哈希摘要长度错误",
+    "tr-cn": "哈希摘要長度錯誤",
+    "am-en": "hash digest length is wrong"
+   }
+  },
+  {
+   "code": 1183,
+   "text": {
+    "en": "hex string is invalid",
+    "zh-cn": "十六进制字符串无效",
+    "tr-cn": "十六進制字符串无效",
+    "am-en": "hex string is invalid"
+   }
+  },
+  {
+   "code": 1184,
+   "text": {
+    "en": "base64 string is invalid",
+    "zh-cn": "Base64 字符串无效",
+    "tr-cn": "Base64 字符串无效",
+    "am-en": "base64 string is invalid"
+   }
+  },
+  {
+   "code": 1185,
+   "text": {
+    "en": "random source failed",
+    "zh-cn": "随机源失败",
+    "tr-cn": "隨機源失敗",
+    "am-en": "random source failed"
+   }
+  },
+  {
+   "code": 1186,
+   "text": {
+    "en": "signature verification failed",
+    "zh-cn": "签名校验失败",
+    "tr-cn": "签名校驗失敗",
+    "am-en": "signature verification failed"
+   }
+  },
+  {
+   "code": 1187,
+   "text": {
+    "en": "key file is missing",
+    "zh-cn": "密钥文件缺失",
+    "tr-cn": "密鑰文件缺失",
+    "am-en": "key file is missing"
+   }
+  },
+  {
+   "code": 1188,
+   "text": {
+    "en": "key format is invalid",
+    "zh-cn": "密钥格式无效",
+    "tr-cn": "密鑰格式无效",
+    "am-en": "key format is invalid"
+   }
+  },
+  {
+   "code": 1189,
+   "text": {
+    "en": "CRC64 table is inconsistent",
+    "zh-cn": "CRC64 表不一致",
+    "tr-cn": "CRC64 表不一致",
+    "am-en": "CRC64 table is inconsistent"
+   }
+  },
+  {
+   "code": 1190,
+   "text": {
+    "en": "CRC64 value differs",
+    "zh-cn": "CRC64 值不一致",
+    "tr-cn": "CRC64 值不一致",
+    "am-en": "CRC64 value differs"
+   }
+  },
+  {
+   "code": 1191,
+   "text": {
+    "en": "SHA256 value differs",
+    "zh-cn": "SHA256 值不一致",
+    "tr-cn": "SHA256 值不一致",
+    "am-en": "SHA256 value differs"
+   }
+  },
+  {
+   "code": 1192,
+   "text": {
+    "en": "nonce was reused",
+    "zh-cn": "随机数被重用",
+    "tr-cn": "隨機数被重用",
+    "am-en": "nonce was reused"
+   }
+  },
+  {
+   "code": 1193,
+   "text": {
+    "en": "cipher text is truncated",
+    "zh-cn": "密文被截断",
+    "tr-cn": "密文被截斷",
+    "am-en": "cipher text is truncated"
+   }
+  },
+  {
+   "code": 1194,
+   "text": {
+    "en": "authenticated tag does not match",
+    "zh-cn": "认证标签不匹配",
+    "tr-cn": "認證標签不匹配",
+    "am-en": "authenticated tag does not match"
+   }
+  },
+  {
+   "code": 1195,
+   "text": {
+    "en": "entropy pool is not ready",
+    "zh-cn": "熵池未就绪",
+    "tr-cn": "熵池未就緒",
+    "am-en": "entropy pool is not ready"
+   }
+  },
+  {
+   "code": 1196,
+   "text": {
+    "en": "key derivation failed",
+    "zh-cn": "密钥派生失败",
+    "tr-cn": "密鑰派生失敗",
+    "am-en": "key derivation failed"
+   }
+  },
+  {
+   "code": 1197,
+   "text": {
+    "en": "hash streaming state is invalid",
+    "zh-cn": "哈希流状态无效",
+    "tr-cn": "哈希流狀態无效",
+    "am-en": "hash streaming state is invalid"
+   }
+  },
+  {
+   "code": 1198,
+   "text": {
+    "en": "digest is not a canonical hex string",
+    "zh-cn": "摘要不是规范十六进制字符串",
+    "tr-cn": "摘要不是規範十六進制字符串",
+    "am-en": "digest is not a canonical hex string"
+   }
+  },
+  {
+   "code": 1199,
+   "text": {
+    "en": "checksum manifest cannot be parsed",
+    "zh-cn": "校验清单无法解析",
+    "tr-cn": "校驗清單无法解析",
+    "am-en": "checksum manifest cannot be parsed"
+   }
+  },
+  {
+   "code": 1200,
+   "text": {
+    "en": "self-test case failed",
+    "zh-cn": "自测用例失败",
+    "tr-cn": "自測用例失敗",
+    "am-en": "self-test case failed"
+   }
+  },
+  {
+   "code": 1201,
+   "text": {
+    "en": "self-test case was skipped",
+    "zh-cn": "自测用例被跳过",
+    "tr-cn": "自測用例被跳过",
+    "am-en": "self-test case was skipped"
+   }
+  },
+  {
+   "code": 1202,
+   "text": {
+    "en": "self-test expected value is missing",
+    "zh-cn": "自测期望值缺失",
+    "tr-cn": "自測期望值缺失",
+    "am-en": "self-test expected value is missing"
+   }
+  },
+  {
+   "code": 1203,
+   "text": {
+    "en": "self-test vector table is empty",
+    "zh-cn": "自测向量表为空",
+    "tr-cn": "自測向量表為空",
+    "am-en": "self-test vector table is empty"
+   }
+  },
+  {
+   "code": 1204,
+   "text": {
+    "en": "self-test filter matched nothing",
+    "zh-cn": "自测过滤未匹配任何用例",
+    "tr-cn": "自測过濾未匹配任何用例",
+    "am-en": "self-test filter matched nothing"
+   }
+  },
+  {
+   "code": 1205,
+   "text": {
+    "en": "self-test run was aborted",
+    "zh-cn": "自测运行被中止",
+    "tr-cn": "自測運行被中止",
+    "am-en": "self-test run was aborted"
+   }
+  },
+  {
+   "code": 1206,
+   "text": {
+    "en": "self-test index is out of range",
+    "zh-cn": "自测索引超出范围",
+    "tr-cn": "自測索引超出範圍",
+    "am-en": "self-test index is out of range"
+   }
+  },
+  {
+   "code": 1207,
+   "text": {
+    "en": "benchmark sample is unstable",
+    "zh-cn": "基准样本不稳定",
+    "tr-cn": "基准樣本不穩定",
+    "am-en": "benchmark sample is unstable"
+   }
+  },
+  {
+   "code": 1208,
+   "text": {
+    "en": "benchmark was interrupted",
+    "zh-cn": "基准测试被中断",
+    "tr-cn": "基准測試被中斷",
+    "am-en": "benchmark was interrupted"
+   }
+  },
+  {
+   "code": 1209,
+   "text": {
+    "en": "benchmark duration is too short",
+    "zh-cn": "基准测试时长过短",
+    "tr-cn": "基准測試時長过短",
+    "am-en": "benchmark duration is too short"
+   }
+  },
+  {
+   "code": 1210,
+   "text": {
+    "en": "assertion failed",
+    "zh-cn": "断言失败",
+    "tr-cn": "斷言失敗",
+    "am-en": "assertion failed"
+   }
+  },
+  {
+   "code": 1211,
+   "text": {
+    "en": "unexpected exception was thrown",
+    "zh-cn": "抛出未预期的异常",
+    "tr-cn": "拋出未預期的異常",
+    "am-en": "unexpected exception was thrown"
+   }
+  },
+  {
+   "code": 1212,
+   "text": {
+    "en": "generated table size differs",
+    "zh-cn": "生成表大小不一致",
+    "tr-cn": "生成表大小不一致",
+    "am-en": "generated table size differs"
+   }
+  },
+  {
+   "code": 1213,
+   "text": {
+    "en": "generated file is out of date",
+    "zh-cn": "生成文件已过期",
+    "tr-cn": "生成文件已过期",
+    "am-en": "generated file is out of date"
+   }
+  },
+  {
+   "code": 1214,
+   "text": {
+    "en": "schema file is missing",
+    "zh-cn": "schema 文件缺失",
+    "tr-cn": "schema 文件缺失",
+    "am-en": "schema file is missing"
+   }
+  },
+  {
+   "code": 1215,
+   "text": {
+    "en": "schema entry is duplicated",
+    "zh-cn": "schema 条目重复",
+    "tr-cn": "schema 條目重復",
+    "am-en": "schema entry is duplicated"
+   }
+  },
+  {
+   "code": 1216,
+   "text": {
+    "en": "schema entry id is out of range",
+    "zh-cn": "schema 条目编号超出范围",
+    "tr-cn": "schema 條目編號超出範圍",
+    "am-en": "schema entry id is out of range"
+   }
+  },
+  {
+   "code": 1217,
+   "text": {
+    "en": "generator produced an empty file",
+    "zh-cn": "生成器产出了空文件",
+    "tr-cn": "生成器產出了空文件",
+    "am-en": "generator produced an empty file"
+   }
+  },
+  {
+   "code": 1218,
+   "text": {
+    "en": "generator output was not idempotent",
+    "zh-cn": "生成器输出不幂等",
+    "tr-cn": "生成器輸出不幂等",
+    "am-en": "generator output was not idempotent"
+   }
+  },
+  {
+   "code": 1219,
+   "text": {
+    "en": "generator aborted before writing",
+    "zh-cn": "生成器在写入前中止",
+    "tr-cn": "生成器在寫入前中止",
+    "am-en": "generator aborted before writing"
+   }
+  },
+  {
+   "code": 1220,
+   "text": {
+    "en": "archive is not registered",
+    "zh-cn": "存档未注册",
+    "tr-cn": "存档未注冊",
+    "am-en": "archive is not registered"
+   }
+  },
+  {
+   "code": 1221,
+   "text": {
+    "en": "archive is already registered",
+    "zh-cn": "存档已注册",
+    "tr-cn": "存档已注冊",
+    "am-en": "archive is already registered"
+   }
+  },
+  {
+   "code": 1222,
+   "text": {
+    "en": "registry file is corrupt",
+    "zh-cn": "注册表文件损坏",
+    "tr-cn": "注冊表文件損壞",
+    "am-en": "registry file is corrupt"
+   }
+  },
+  {
+   "code": 1223,
+   "text": {
+    "en": "registry alias is already used",
+    "zh-cn": "注册表别名已被使用",
+    "tr-cn": "注冊表別名已被使用",
+    "am-en": "registry alias is already used"
+   }
+  },
+  {
+   "code": 1224,
+   "text": {
+    "en": "registry alias is invalid",
+    "zh-cn": "注册表别名无效",
+    "tr-cn": "注冊表別名无效",
+    "am-en": "registry alias is invalid"
+   }
+  },
+  {
+   "code": 1225,
+   "text": {
+    "en": "registry entry path is missing",
+    "zh-cn": "注册表条目路径缺失",
+    "tr-cn": "注冊表條目路徑缺失",
+    "am-en": "registry entry path is missing"
+   }
+  },
+  {
+   "code": 1226,
+   "text": {
+    "en": "registry cannot be saved",
+    "zh-cn": "注册表无法保存",
+    "tr-cn": "注冊表无法保存",
+    "am-en": "registry cannot be saved"
+   }
+  },
+  {
+   "code": 1227,
+   "text": {
+    "en": "registry entry was not found",
+    "zh-cn": "未找到注册表条目",
+    "tr-cn": "未找到注冊表條目",
+    "am-en": "registry entry was not found"
+   }
+  },
+  {
+   "code": 1228,
+   "text": {
+    "en": "registry has too many entries",
+    "zh-cn": "注册表条目过多",
+    "tr-cn": "注冊表條目过多",
+    "am-en": "registry has too many entries"
+   }
+  },
+  {
+   "code": 1229,
+   "text": {
+    "en": "registry entry is stale",
+    "zh-cn": "注册表条目已失效",
+    "tr-cn": "注冊表條目已失效",
+    "am-en": "registry entry is stale"
+   }
+  },
+  {
+   "code": 1230,
+   "text": {
+    "en": "command name is unknown",
+    "zh-cn": "命令名未知",
+    "tr-cn": "命令名未知",
+    "am-en": "command name is unknown"
+   }
+  },
+  {
+   "code": 1231,
+   "text": {
+    "en": "command is not available in this mode",
+    "zh-cn": "该命令在此模式下不可用",
+    "tr-cn": "該命令在此模式下不可用",
+    "am-en": "command is not available in this mode"
+   }
+  },
+  {
+   "code": 1232,
+   "text": {
+    "en": "command requires a terminal",
+    "zh-cn": "命令需要终端",
+    "tr-cn": "命令需要終端",
+    "am-en": "command requires a terminal"
+   }
+  },
+  {
+   "code": 1233,
+   "text": {
+    "en": "command was cancelled",
+    "zh-cn": "命令已取消",
+    "tr-cn": "命令已取消",
+    "am-en": "command was canceled"
+   }
+  },
+  {
+   "code": 1234,
+   "text": {
+    "en": "command is already running",
+    "zh-cn": "命令已在运行",
+    "tr-cn": "命令已在運行",
+    "am-en": "command is already running"
+   }
+  },
+  {
+   "code": 1235,
+   "text": {
+    "en": "argument count is wrong",
+    "zh-cn": "参数数量错误",
+    "tr-cn": "參数数量錯誤",
+    "am-en": "argument count is wrong"
+   }
+  },
+  {
+   "code": 1236,
+   "text": {
+    "en": "flag is unknown",
+    "zh-cn": "标志未知",
+    "tr-cn": "標志未知",
+    "am-en": "flag is unknown"
+   }
+  },
+  {
+   "code": 1237,
+   "text": {
+    "en": "option requires a value",
+    "zh-cn": "选项需要一个值",
+    "tr-cn": "選項需要一個值",
+    "am-en": "option requires a value"
+   }
+  },
+  {
+   "code": 1238,
+   "text": {
+    "en": "option value was rejected",
+    "zh-cn": "选项值被拒绝",
+    "tr-cn": "選項值被拒绝",
+    "am-en": "option value was rejected"
+   }
+  },
+  {
+   "code": 1239,
+   "text": {
+    "en": "operation is not supported on this platform",
+    "zh-cn": "此平台不支持该操作",
+    "tr-cn": "此平台不支持該操作",
+    "am-en": "operation is not supported on this platform"
+   }
+  }
+ ]
+}

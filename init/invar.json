@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "name": "init",
+  "type": "nodeonly",
+  "id": "c81e9e0842567c2e4198cc9b933475ae",
+  "created": 1794722425161,
+  "branches": [
+    {
+      "id": "8a5edab28263",
+      "path": "/",
+      "name": "root",
+      "parent": "",
+      "created": 1794722425161,
+      "head_seq": 0,
+      "is_node": true,
+      "system": true,
+      "children": []
+    }
+  ]
+}

@@ -1,0 +1,656 @@
+{
+ "version": 1,
+ "comment": "Single source of truth for gen::proto_* codecs",
+ "field_types": [
+  {
+   "id": 1,
+   "name": "u8",
+   "kind": "uint",
+   "bytes": 1,
+   "desc": "unsigned 8 bit integer"
+  },
+  {
+   "id": 2,
+   "name": "u16le",
+   "kind": "uint",
+   "bytes": 2,
+   "desc": "unsigned 16 bit little endian"
+  },
+  {
+   "id": 3,
+   "name": "u32le",
+   "kind": "uint",
+   "bytes": 4,
+   "desc": "unsigned 32 bit little endian"
+  },
+  {
+   "id": 4,
+   "name": "u64le",
+   "kind": "uint",
+   "bytes": 8,
+   "desc": "unsigned 64 bit little endian"
+  },
+  {
+   "id": 5,
+   "name": "i64le",
+   "kind": "int",
+   "bytes": 8,
+   "desc": "signed 64 bit little endian"
+  },
+  {
+   "id": 6,
+   "name": "f64le",
+   "kind": "float",
+   "bytes": 8,
+   "desc": "IEEE 754 double little endian"
+  },
+  {
+   "id": 7,
+   "name": "bool8",
+   "kind": "bool",
+   "bytes": 1,
+   "desc": "0 or 1"
+  },
+  {
+   "id": 8,
+   "name": "utf8",
+   "kind": "string",
+   "bytes": 0,
+   "desc": "raw UTF-8 bytes, no length prefix"
+  },
+  {
+   "id": 9,
+   "name": "lp_utf8",
+   "kind": "string",
+   "bytes": 0,
+   "desc": "u32 length prefix followed by UTF-8 bytes"
+  },
+  {
+   "id": 10,
+   "name": "sha256",
+   "kind": "hash",
+   "bytes": 32,
+   "desc": "64 hex characters decoded to 32 bytes"
+  },
+  {
+   "id": 11,
+   "name": "sha1",
+   "kind": "hash",
+   "bytes": 20,
+   "desc": "40 hex characters decoded to 20 bytes"
+  },
+  {
+   "id": 12,
+   "name": "crc64le",
+   "kind": "hash",
+   "bytes": 8,
+   "desc": "16 hex characters decoded to 8 bytes"
+  },
+  {
+   "id": 13,
+   "name": "ms_time",
+   "kind": "time",
+   "bytes": 8,
+   "desc": "unix epoch milliseconds as u64le"
+  },
+  {
+   "id": 14,
+   "name": "semver",
+   "kind": "version",
+   "bytes": 6,
+   "desc": "major minor patch as three u16le"
+  },
+  {
+   "id": 15,
+   "name": "leb128",
+   "kind": "varint",
+   "bytes": 0,
+   "desc": "unsigned LEB128"
+  },
+  {
+   "id": 16,
+   "name": "sleb128",
+   "kind": "varint",
+   "bytes": 0,
+   "desc": "signed LEB128 (zigzag)"
+  },
+  {
+   "id": 17,
+   "name": "b64_lp",
+   "kind": "bytes",
+   "bytes": 0,
+   "desc": "base64 text decoded then length prefixed"
+  },
+  {
+   "id": 18,
+   "name": "path_lp",
+   "kind": "string",
+   "bytes": 0,
+   "desc": "normalized slash path, length prefixed"
+  },
+  {
+   "id": 19,
+   "name": "url_lp",
+   "kind": "string",
+   "bytes": 0,
+   "desc": "url text, length prefixed"
+  },
+  {
+   "id": 20,
+   "name": "lz4_block",
+   "kind": "block",
+   "bytes": 9,
+   "desc": "raw u32, compressed u32, flags u8"
+  },
+  {
+   "id": 21,
+   "name": "json_lp",
+   "kind": "json",
+   "bytes": 0,
+   "desc": "compact JSON text, length prefixed"
+  },
+  {
+   "id": 22,
+   "name": "enum_u8",
+   "kind": "enum",
+   "bytes": 1,
+   "desc": "enum ordinal as u8"
+  },
+  {
+   "id": 23,
+   "name": "kv_lp",
+   "kind": "string",
+   "bytes": 0,
+   "desc": "key=value text, length prefixed"
+  },
+  {
+   "id": 24,
+   "name": "uuid",
+   "kind": "uuid",
+   "bytes": 16,
+   "desc": "32 hex characters decoded to 16 bytes"
+  },
+  {
+   "id": 25,
+   "name": "unix_sec",
+   "kind": "time",
+   "bytes": 4,
+   "desc": "unix epoch seconds as u32le"
+  },
+  {
+   "id": 26,
+   "name": "bool_text",
+   "kind": "bool",
+   "bytes": 0,
+   "desc": "ascii true or false, length prefixed"
+  }
+ ],
+ "objects": [
+  {
+   "name": "github_user",
+   "fields": [
+    {
+     "name": "login",
+     "type": 9
+    },
+    {
+     "name": "id",
+     "type": 4
+    },
+    {
+     "name": "node_id",
+     "type": 9
+    },
+    {
+     "name": "avatar_url",
+     "type": 19
+    },
+    {
+     "name": "type",
+     "type": 9
+    }
+   ]
+  },
+  {
+   "name": "github_repo",
+   "fields": [
+    {
+     "name": "id",
+     "type": 4
+    },
+    {
+     "name": "name",
+     "type": 9
+    },
+    {
+     "name": "full_name",
+     "type": 9
+    },
+    {
+     "name": "private",
+     "type": 7
+    },
+    {
+     "name": "default_branch",
+     "type": 9
+    },
+    {
+     "name": "size",
+     "type": 4
+    },
+    {
+     "name": "updated_at",
+     "type": 9
+    }
+   ]
+  },
+  {
+   "name": "github_release",
+   "fields": [
+    {
+     "name": "id",
+     "type": 4
+    },
+    {
+     "name": "tag_name",
+     "type": 9
+    },
+    {
+     "name": "target_commitish",
+     "type": 9
+    },
+    {
+     "name": "name",
+     "type": 9
+    },
+    {
+     "name": "draft",
+     "type": 7
+    },
+    {
+     "name": "prerelease",
+     "type": 7
+    },
+    {
+     "name": "created_at",
+     "type": 13
+    },
+    {
+     "name": "published_at",
+     "type": 13
+    },
+    {
+     "name": "body",
+     "type": 9
+    }
+   ]
+  },
+  {
+   "name": "github_asset",
+   "fields": [
+    {
+     "name": "id",
+     "type": 4
+    },
+    {
+     "name": "name",
+     "type": 9
+    },
+    {
+     "name": "size",
+     "type": 4
+    },
+    {
+     "name": "state",
+     "type": 9
+    },
+    {
+     "name": "content_type",
+     "type": 9
+    },
+    {
+     "name": "browser_download_url",
+     "type": 19
+    },
+    {
+     "name": "digest",
+     "type": 9
+    }
+   ]
+  },
+  {
+   "name": "github_branch",
+   "fields": [
+    {
+     "name": "name",
+     "type": 9
+    },
+    {
+     "name": "commit_sha",
+     "type": 11
+    },
+    {
+     "name": "protected",
+     "type": 7
+    }
+   ]
+  },
+  {
+   "name": "github_commit",
+   "fields": [
+    {
+     "name": "sha",
+     "type": 11
+    },
+    {
+     "name": "message",
+     "type": 9
+    },
+    {
+     "name": "author_login",
+     "type": 9
+    },
+    {
+     "name": "committed_at",
+     "type": 13
+    },
+    {
+     "name": "tree_sha",
+     "type": 11
+    }
+   ]
+  },
+  {
+   "name": "github_tree_entry",
+   "fields": [
+    {
+     "name": "path",
+     "type": 18
+    },
+    {
+     "name": "mode",
+     "type": 9
+    },
+    {
+     "name": "type",
+     "type": 9
+    },
+    {
+     "name": "sha",
+     "type": 11
+    },
+    {
+     "name": "size",
+     "type": 4
+    }
+   ]
+  },
+  {
+   "name": "github_git_ref",
+   "fields": [
+    {
+     "name": "ref",
+     "type": 9
+    },
+    {
+     "name": "object_sha",
+     "type": 11
+    },
+    {
+     "name": "object_type",
+     "type": 9
+    }
+   ]
+  },
+  {
+   "name": "github_rate_limit",
+   "fields": [
+    {
+     "name": "limit",
+     "type": 4
+    },
+    {
+     "name": "remaining",
+     "type": 4
+    },
+    {
+     "name": "reset",
+     "type": 25
+    },
+    {
+     "name": "used",
+     "type": 4
+    }
+   ]
+  },
+  {
+   "name": "github_error",
+   "fields": [
+    {
+     "name": "message",
+     "type": 9
+    },
+    {
+     "name": "documentation_url",
+     "type": 19
+    },
+    {
+     "name": "status",
+     "type": 3
+    }
+   ]
+  },
+  {
+   "name": "ivpack_header",
+   "fields": [
+    {
+     "name": "magic",
+     "type": 8
+    },
+    {
+     "name": "version",
+     "type": 2
+    },
+    {
+     "name": "flags",
+     "type": 1
+    },
+    {
+     "name": "block_size",
+     "type": 3
+    },
+    {
+     "name": "block_count",
+     "type": 3
+    },
+    {
+     "name": "raw_size",
+     "type": 4
+    },
+    {
+     "name": "payload_crc64",
+     "type": 12
+    },
+    {
+     "name": "manifest_sha256",
+     "type": 10
+    }
+   ]
+  },
+  {
+   "name": "ivpack_block",
+   "fields": [
+    {
+     "name": "index",
+     "type": 3
+    },
+    {
+     "name": "offset",
+     "type": 4
+    },
+    {
+     "name": "raw_size",
+     "type": 3
+    },
+    {
+     "name": "comp_size",
+     "type": 3
+    },
+    {
+     "name": "flags",
+     "type": 1
+    },
+    {
+     "name": "crc64",
+     "type": 12
+    }
+   ]
+  },
+  {
+   "name": "manifest_entry",
+   "fields": [
+    {
+     "name": "path",
+     "type": 18
+    },
+    {
+     "name": "sha256",
+     "type": 10
+    },
+    {
+     "name": "crc64",
+     "type": 12
+    },
+    {
+     "name": "size",
+     "type": 4
+    },
+    {
+     "name": "mode",
+     "type": 3
+    },
+    {
+     "name": "mtime_ms",
+     "type": 13
+    }
+   ]
+  },
+  {
+   "name": "manifest_header",
+   "fields": [
+    {
+     "name": "version",
+     "type": 2
+    },
+    {
+     "name": "branch_id",
+     "type": 9
+    },
+    {
+     "name": "seq",
+     "type": 4
+    },
+    {
+     "name": "parent_seq",
+     "type": 4
+    },
+    {
+     "name": "entry_count",
+     "type": 3
+    },
+    {
+     "name": "archive_type",
+     "type": 22
+    },
+    {
+     "name": "created_ms",
+     "type": 13
+    }
+   ]
+  },
+  {
+   "name": "delta_header",
+   "fields": [
+    {
+     "name": "magic",
+     "type": 8
+    },
+    {
+     "name": "version",
+     "type": 2
+    },
+    {
+     "name": "base_seq",
+     "type": 4
+    },
+    {
+     "name": "target_seq",
+     "type": 4
+    },
+    {
+     "name": "op_count",
+     "type": 3
+    },
+    {
+     "name": "crc64",
+     "type": 12
+    }
+   ]
+  },
+  {
+   "name": "index_entry",
+   "fields": [
+    {
+     "name": "path",
+     "type": 18
+    },
+    {
+     "name": "object_slot",
+     "type": 4
+    },
+    {
+     "name": "flags",
+     "type": 1
+    }
+   ]
+  },
+  {
+   "name": "event_envelope",
+   "fields": [
+    {
+     "name": "kind",
+     "type": 1
+    },
+    {
+     "name": "code",
+     "type": 3
+    },
+    {
+     "name": "text",
+     "type": 9
+    },
+    {
+     "name": "detail",
+     "type": 9
+    }
+   ]
+  },
+  {
+   "name": "settings_value",
+   "fields": [
+    {
+     "name": "key",
+     "type": 9
+    },
+    {
+     "name": "type",
+     "type": 22
+    },
+    {
+     "name": "value",
+     "type": 9
+    }
+   ]
+  }
+ ]
+}

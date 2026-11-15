@@ -1,0 +1,20 @@
+[package]
+name = "inv"
+version = "0.1.0"
+edition = "2021"
+description = "inv - thin Rust shell over the Vanadium kernel (vanadium.dll)"
+publish = false
+
+[[bin]]
+name = "inv"
+path = "src/main.rs"
+
+# No third-party crates: pure std + raw Win32 declarations.
+[dependencies]
+
+[profile.release]
+opt-level = "z"
+lto = true
+panic = "abort"
+codegen-units = 1
+strip = true

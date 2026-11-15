@@ -1,0 +1,1 @@
+int vd_dev_probe(void) { return 1; }

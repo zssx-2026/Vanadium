@@ -1,0 +1,28 @@
+{
+    "seq":  1,
+    "branch":  "/releases/tag/v1.0",
+    "time_ms":  1763200400000,
+    "message":  "tag v1.0",
+    "parent_sha":  "",
+    "id":  "96dbc68910dd84f489a8262f3e7c0e721c8befe7311694f630df258a95109a8b",
+    "entries":  [
+                    {
+                        "path":  "README.md",
+                        "dir":  false,
+                        "size":  21,
+                        "sha":  "5d1d515200c7e1a9245d9a1c97ac088511dae6efc05f0e044de8df0bda05300a",
+                        "crc":  "0000000000000000",
+                        "mtime":  1763200000000,
+                        "mode":  420
+                    },
+                    {
+                        "path":  "release-notes.md",
+                        "dir":  false,
+                        "size":  18,
+                        "sha":  "b4eeb047fd9dc96b4eeb74b0ea040ffa96bd4b038a5ded7bb2bd588a57ba1b1b",
+                        "crc":  "0000000000000000",
+                        "mtime":  1763200000000,
+                        "mode":  420
+                    }
+                ]
+}
