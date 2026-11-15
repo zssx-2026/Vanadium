@@ -31,7 +31,7 @@ std::string opt_value(const std::vector<std::string>& args, const std::string& k
 bool has_flag(const std::vector<std::string>& args, const std::string& flag);
 void print_help(App& app, const std::string& command);
 
-/* Individual commands (src/commands/*.cpp) */
+/* Individual commands, one translation unit per family under src/commands. */
 int cmd_help(App&, const std::vector<std::string>&);
 int cmd_version(App&, const std::vector<std::string>&);
 int cmd_set(App&, const std::vector<std::string>&);

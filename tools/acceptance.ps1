@@ -509,14 +509,30 @@ if (-not $step2ok) {
   Show-CliOutput 'inv reg <repo>' $g
   $s = Invoke-Inv -Arguments ('reg "' + (Join-Path $repo 'sub') + '"') -WorkingDirectory $repo
   Show-CliOutput 'inv reg <repo>\sub' $s
+  # kernel contract (rewritten list): plain "list" is a flat branch table
+  #   /  @1  <12 hex>  [system]
+  #   /sub  @1  <12 hex>
+  # "list -tree" keeps the branch tree, "list <branch>" lists that branch's files.
   $l = Invoke-Inv -Arguments 'list' -WorkingDirectory $repo
   Show-CliOutput 'inv list' $l
-  $treeGlyph = ($l.StdOut -match '\|\-\-')
-  if ($i.ExitCode -eq 0 -and $g.ExitCode -eq 0 -and $s.ExitCode -eq 0 -and $l.ExitCode -eq 0 -and $l.StdOut -match 'branches/' -and $l.StdOut -match '\|\-\-\s+sub' -and $treeGlyph) {
-    Add-Result 7 'repo init/reg + list tree' 'PASS' ('repo ' + $repo)
+  $t = Invoke-Inv -Arguments 'list -tree' -WorkingDirectory $repo
+  Show-CliOutput 'inv list -tree' $t
+  $f = Invoke-Inv -Arguments 'list /sub' -WorkingDirectory $repo
+  Show-CliOutput 'inv list /sub' $f
+  # scan_working_tree must not pick up the archive's own branches/ metadata: a fresh
+  # commit has to leave the working tree clean.
+  $d = Invoke-Inv -Arguments 'diff' -WorkingDirectory $repo
+  Show-CliOutput 'inv diff' $d
+  $flatRoot = ($l.StdOut -match '(?m)^/\s+@1\s+[0-9a-f]{12}\s+\[system\]')
+  $flatSub = ($l.StdOut -match '(?m)^/sub\s+@1\s+[0-9a-f]{12}')
+  $treeOk = ($t.StdOut -match 'branches/' -and $t.StdOut -match '\|\-\-\s+sub')
+  $filesOk = ($f.StdOut -match 'beta\.txt')
+  $diffClean = ($d.StdOut -match 'Nothing to do')
+  if ($i.ExitCode -eq 0 -and $g.ExitCode -eq 0 -and $s.ExitCode -eq 0 -and $l.ExitCode -eq 0 -and $t.ExitCode -eq 0 -and $f.ExitCode -eq 0 -and $d.ExitCode -eq 0 -and $flatRoot -and $flatSub -and $treeOk -and $filesOk -and $diffClean) {
+    Add-Result 7 'repo init/reg + list flat/tree + diff clean' 'PASS' ('repo ' + $repo)
     $step7ok = $true
   } else {
-    Add-Result 7 'repo init/reg + list tree' 'FAIL' ('init=' + $i.ExitCode + ' reg=' + $g.ExitCode + ' regsub=' + $s.ExitCode + ' list=' + $l.ExitCode + ' treeGlyph=' + $treeGlyph + ' out=[' + $l.StdOut.Trim() + ']')
+    Add-Result 7 'repo init/reg + list flat/tree + diff clean' 'FAIL' ('init=' + $i.ExitCode + ' reg=' + $g.ExitCode + ' regsub=' + $s.ExitCode + ' list=' + $l.ExitCode + ' tree=' + $t.ExitCode + ' files=' + $f.ExitCode + ' diff=' + $d.ExitCode + ' flatRoot=' + $flatRoot + ' flatSub=' + $flatSub + ' treeOk=' + $treeOk + ' filesOk=' + $filesOk + ' diffClean=' + $diffClean + ' listOut=[' + $l.StdOut.Trim() + '] treeOut=[' + $t.StdOut.Trim() + '] fileOut=[' + $f.StdOut.Trim() + '] diffOut=[' + $d.StdOut.Trim() + ']')
   }
 }
 

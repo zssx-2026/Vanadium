@@ -40,7 +40,7 @@ u32 adler32(const void* data, std::size_t len);
 std::string base64_encode(const std::string& raw);
 bool base64_decode(const std::string& text, std::string& out);
 
-/* Assembler-accelerated primitives (src/asm/*.asm). C++ fallbacks live in crypto.cpp. */
+/* Assembler-accelerated primitives from the src/asm directory. C++ fallbacks live in crypto.cpp. */
 extern "C" {
 std::uint64_t vd_crc64_asm(const void* data, std::size_t len, std::uint64_t seed);
 void vd_sha256_block_asm(std::uint32_t state[8], const std::uint8_t block[64]);

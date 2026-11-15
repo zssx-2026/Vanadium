@@ -22,6 +22,9 @@
 .PARAMETER DistDir
   Directory holding the artifacts. Defaults to <repo>\dist.
 
+.PARAMETER Title
+  Release title. Defaults to "inv <version>".
+
 .PARAMETER DryRun
   Print the plan and local hashes without any network call.
 
@@ -39,6 +42,7 @@ param(
   [string]$Version = '',
   [string]$DistDir = '',
   [string]$Notes = '',
+  [string]$Title = '',
   [switch]$DryRun,
   [switch]$KeepExisting
 )
@@ -164,9 +168,11 @@ function Get-Release {
 }
 
 function New-Release {
+  $releaseName = 'inv ' + $expectedVersion
+  if ($Title) { $releaseName = $Title }
   $payload = @{
     tag_name = $Tag
-    name = 'inv ' + $expectedVersion
+    name = $releaseName
     body = $Notes
     draft = $false
     prerelease = $false

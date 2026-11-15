@@ -11,9 +11,26 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 if(MSVC)
-  add_compile_options(/W3 /utf-8)
+  add_compile_options($<$<COMPILE_LANGUAGE:C,CXX>:/W3> $<$<COMPILE_LANGUAGE:C,CXX>:/utf-8>)
 else()
-  add_compile_options(-Wall -Wextra -Wno-unused-parameter)
+  # Scope warnings to C/C++ so the NASM step does not receive -Wall/-Wextra
+  # (nasm rejects them as unknown warning names).
+  add_compile_options($<$<COMPILE_LANGUAGE:C,CXX>:-Wall> $<$<COMPILE_LANGUAGE:C,CXX>:-Wextra>
+                      $<$<COMPILE_LANGUAGE:C,CXX>:-Wno-unused-parameter>)
+endif()
+
+# ---- optional NASM acceleration (CRC-64 slicing-by-8) ----
+set(VD_HAVE_CRC64_ASM OFF)
+find_program(NASM_EXECUTABLE NAMES nasm)
+if(NASM_EXECUTABLE AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/src/asm/crc64.asm")
+  enable_language(ASM_NASM)
+  set(CMAKE_ASM_NASM_OBJECT_FORMAT win64)
+  set(VD_HAVE_CRC64_ASM ON)
+  add_library(vd_asm OBJECT "${CMAKE_CURRENT_SOURCE_DIR}/src/asm/crc64.asm")
+  target_compile_options(vd_asm PRIVATE -f win64 -w-reloc-rel-dword)
+  message(STATUS "NASM found: ${NASM_EXECUTABLE} (CRC-64 assembly enabled)")
+else()
+  message(STATUS "NASM not found: CRC-64 uses the portable C++ path")
 endif()
 
 # ---- generated code library (unicode tables, catalogs, self-test vectors) ----
@@ -33,11 +50,14 @@ set(VD_CORE_SOURCES
   "${CMAKE_CURRENT_SOURCE_DIR}/src/core/remote/github.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/src/core/remote/auth.cpp")
 
-add_library(vd_core STATIC ${VD_CORE_SOURCES})
+add_library(vd_core STATIC ${VD_CORE_SOURCES} $<TARGET_OBJECTS:vd_asm>)
 target_include_directories(vd_core PUBLIC
   "${CMAKE_CURRENT_SOURCE_DIR}/include"
   "${CMAKE_CURRENT_SOURCE_DIR}/src/gen")
 target_link_libraries(vd_core PUBLIC vd_gen)
+if(VD_HAVE_CRC64_ASM)
+  target_compile_definitions(vd_core PUBLIC VD_HAVE_CRC64_ASM=1)
+endif()
 if(WIN32)
   target_link_libraries(vd_core PUBLIC winhttp)
 endif()
@@ -68,7 +88,7 @@ foreach(t t_crypto t_store)
   if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/${t}.cpp")
     add_executable(${t} "${CMAKE_CURRENT_SOURCE_DIR}/tests/${t}.cpp")
     target_link_libraries(${t} PRIVATE vd_core)
-    set_target_properties(${t} PROPERTIES RUNTIME_OUTPUT_${CMAKE_CURRENT_SOURCE_DIR}ECTORY "${CMAKE_CURRENT_SOURCE_DIR}/build")
+    set_target_properties(${t} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/build")
   endif()
 endforeach()
 
@@ -90,5 +110,5 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/src/core/remote/probe.cpp")
   if(WIN32)
     target_link_libraries(vd_probe PRIVATE winhttp)
   endif()
-  set_target_properties(vd_probe PROPERTIES RUNTIME_OUTPUT_${CMAKE_CURRENT_SOURCE_DIR}ECTORY "${CMAKE_CURRENT_SOURCE_DIR}/build")
+  set_target_properties(vd_probe PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/build")
 endif()

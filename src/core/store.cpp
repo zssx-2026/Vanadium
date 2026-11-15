@@ -16,7 +16,9 @@
 namespace vd {
 namespace {
 
-constexpr const char* kMetaFile = "invar.json";
+constexpr const char* kMetaFile = "meta.json";
+/* v0.1.0 archives were written as invar.json; keep reading them. */
+constexpr const char* kLegacyMetaFile = "invar.json";
 constexpr const char* kObjectsDir = "objects";
 constexpr const char* kBranchesDir = "branches";
 constexpr const char* kHistoryFile = "history.jsonl";
@@ -37,16 +39,6 @@ std::string branch_name_from_path(const std::string& path) {
   if (path == "/") return "root";
   const std::size_t pos = path.find_last_of('/');
   return pos == std::string::npos ? path : path.substr(pos + 1);
-}
-
-std::string join_paths(const std::vector<std::string>& parts) {
-  std::string out;
-  for (const auto& p : parts) {
-    if (p.empty()) continue;
-    if (!out.empty()) out.push_back('/');
-    out += p;
-  }
-  return out;
 }
 
 Json entry_to_json(const Entry& e) {
@@ -288,7 +280,7 @@ Archive Archive::create(const std::string& root, const std::string& name, Archiv
 
 bool Archive::looks_like_archive(const std::string& root) {
   if (!fs::is_dir(root)) return false;
-  if (!fs::is_file(fs::join(root, kMetaFile))) return false;
+  if (!fs::is_file(fs::join(root, kMetaFile)) && !fs::is_file(fs::join(root, kLegacyMetaFile))) return false;
   return fs::is_dir(fs::join(root, kObjectsDir)) || fs::is_dir(fs::join(root, kBranchesDir));
 }
 
@@ -297,7 +289,8 @@ Archive Archive::open(const std::string& root) {
   a.root_ = fs::absolute(root);
   a.objects_ = ObjectStore(a.root_);
   std::string text;
-  if (!fs::read_file_opt(fs::join(a.root_, kMetaFile), text)) {
+  if (!fs::read_file_opt(fs::join(a.root_, kMetaFile), text) &&
+      !fs::read_file_opt(fs::join(a.root_, kLegacyMetaFile), text)) {
     fail(3001, msg("store.not_archive"), a.root_);
   }
   auto parsed = Json::try_parse(text);
@@ -562,8 +555,14 @@ std::vector<Entry> Archive::scan_working_tree(const std::string& root,
   while (!stack.empty()) {
     const std::string dir = stack.back();
     stack.pop_back();
+    const bool at_root = (dir == base);
     for (const auto& name : fs::list_dir(dir)) {
-      if (name == ".git" || name == ".inv" || name == kMetaFile || name == kObjectsDir) continue;
+      if (name == ".git" || name == ".inv" || name == kMetaFile || name == kLegacyMetaFile ||
+          name == kObjectsDir)
+        continue;
+      // Archive metadata lives in <root>/branches; it is not user content, so a
+      // commit must not capture it and diff/status must not report it as changed.
+      if (at_root && name == kBranchesDir) continue;
       const std::string full = fs::join(dir, name);
       std::string rel = full.substr(base.size());
       while (!rel.empty() && (rel.front() == '/' || rel.front() == '\\')) rel.erase(rel.begin());

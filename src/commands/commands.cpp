@@ -2,6 +2,8 @@
 
 #include <algorithm>
 #include <cstdio>
+#include <cstdlib>
+#include <functional>
 #include <map>
 #include <set>
 #include <string>
@@ -18,7 +20,7 @@ namespace {
 
 const char* kVersion = "0.1.0";
 
-/* Walk up from start looking for an archive root (invar.json). */
+/* Walk up from start looking for an archive root (meta.json). */
 std::string find_archive_root(const std::string& start) {
   std::string cur = fs::absolute(start);
   for (int depth = 0; depth < 64; ++depth) {
@@ -59,35 +61,91 @@ void done_line(App& app, const std::string& what, std::size_t count, i64 started
               human_duration(now_ms() - started_ms));
 }
 
-std::string tree_prefix(const std::vector<bool>& last) {
-  std::string out;
-  for (std::size_t i = 0; i < last.size(); ++i) out += last[i] ? "    " : "|   ";
-  return out;
+std::string short_sha(const std::string& sha, std::size_t n = 12) {
+  return sha.size() <= n ? sha : sha.substr(0, n);
 }
 
-void print_branch_tree(App& app, const Archive& a) {
-  app.ui.line("/");
-  app.ui.line("branches/");
+/* File tree of one branch snapshot, indented by depth. */
+void print_file_tree(App& app, const Archive& a, const std::string& branch_path, int max_depth,
+                     bool line_mode) {
+  auto snap = a.head(branch_path);
+  if (!snap) {
+    app.ui.line(msgf("store.no_snapshot", branch_path));
+    return;
+  }
+  // Snapshot entries are stored relative to the branch root, so no prefix filter
+  // is needed here: a branch snapshot already contains only its own subtree.
+  std::map<std::string, std::vector<const Entry*>> kids;
+  for (const auto& e : snap->entries) {
+    const std::size_t slash = e.path.find('/');
+    const std::string key = slash == std::string::npos ? std::string() : e.path.substr(0, slash);
+    kids[key].push_back(&e);
+  }
+  std::function<void(const std::string&, int)> walk = [&](const std::string& dir, int depth) {
+    auto it = kids.find(dir);
+    if (it == kids.end()) return;
+    std::vector<const Entry*> items = it->second;
+    std::sort(items.begin(), items.end(), [](const Entry* x, const Entry* y) {
+      if (x->dir != y->dir) return x->dir;
+      return x->path < y->path;
+    });
+    for (const Entry* e : items) {
+      const std::string& rel = e->path;
+      std::string pad;
+      for (int i = 0; i < depth; ++i) pad += "  ";
+      const std::string leaf = rel.substr(rel.find_last_of('/') + 1);
+      const std::string root_prefix = branch_path == "/" ? std::string("/") : branch_path + "/";
+      const std::string shown = line_mode ? root_prefix + rel : leaf;
+      if (e->dir) {
+        if (max_depth >= 0 && depth >= max_depth) {
+          app.ui.line(pad + shown + "/");
+          continue;
+        }
+        app.ui.line(pad + shown + "/");
+        walk(rel, depth + 1);
+      } else {
+        std::string size = human_size(static_cast<i64>(e->size));
+        app.ui.line(pad + shown + "  " + size + "  " + short_sha(e->sha, 12));
+      }
+    }
+  };
+  app.ui.line(branch_path + (snap->entries.empty() ? "  (empty)" : ""));
+  walk(std::string(), 0);
+}
+
+void print_branch_tree(App& app, const Archive& a, bool tree, bool releases, int max_depth) {
   std::vector<BranchInfo> all = a.branches();
   std::sort(all.begin(), all.end(), [](const BranchInfo& x, const BranchInfo& y) {
     return x.path < y.path;
   });
+  if (!tree) {
+    for (const auto& b : all) {
+      app.ui.line(b.path + "  @" + std::to_string(b.head_seq) + "  " + short_sha(b.id, 12) +
+                  (b.system ? "  [system]" : ""));
+    }
+    if (releases) {
+      app.ui.line("releases/tag/v1.0  [system]");
+      app.ui.line("releases/rawdata/v1.0  [system]");
+    }
+    return;
+  }
+  app.ui.line("/");
+  app.ui.line("branches/");
   for (const auto& b : all) {
     if (b.path == "/") continue;
     const std::string rel = b.path.substr(1);
     const std::size_t depth = static_cast<std::size_t>(std::count(rel.begin(), rel.end(), '/'));
+    if (max_depth >= 0 && static_cast<int>(depth) > max_depth) continue;
     std::string line = "  ";
     for (std::size_t i = 0; i < depth; ++i) line += "|   ";
     line += "|-- " + b.name;
     if (b.head_seq > 0) line += "  @" + std::to_string(b.head_seq);
     app.ui.line(line);
   }
-  app.ui.line("releases/tag/v1.0");
-  app.ui.line("releases/rawdata/v1.0");
-}
-
-std::string short_sha(const std::string& sha, std::size_t n = 12) {
-  return sha.size() <= n ? sha : sha.substr(0, n);
+  if (releases) {
+    app.ui.line("releases/tag/v1.0");
+    app.ui.line("releases/rawdata/v1.0");
+  }
 }
 
 }  // namespace
@@ -346,8 +404,45 @@ int cmd_unreg(App& app, const std::vector<std::string>& args) {
 }
 
 int cmd_list(App& app, const std::vector<std::string>& args) {
-  Archive a = open_here(app, args.size() > 1 && !starts_with(args[1], "-") ? args[1] : std::string());
-  print_branch_tree(app, a);
+  const std::string target = args.size() > 1 && !starts_with(args[1], "-") ? args[1] : std::string();
+  // A leading slash means a branch path, never a filesystem path, so "/" keeps
+  // working as "the root branch" instead of resolving to the drive root.
+  std::string fs_start;
+  if (!target.empty() && target != "/" && !starts_with(target, "/")) {
+    const std::string abs = fs::absolute(target);
+    if (fs::exists(abs)) fs_start = abs;
+  }
+  Archive a = open_here(app, fs_start);
+  const bool tree = has_flag(args, "-tree");
+  const bool releases = has_flag(args, "-releases");
+  int max_depth = -1;
+  if (has_flag(args, "-depth")) {
+    const std::string v = opt_value(args, "-depth", "-1");
+    if (!v.empty()) max_depth = std::atoi(v.c_str());
+  }
+  // A path argument selects one branch/node: list its files instead of the tree
+  // of branches. "/" and "" both mean the archive root branch.
+  std::string branch_path = target;
+  if (!branch_path.empty() && branch_path != "/") {
+    std::string rel = branch_path;
+    if (!starts_with(rel, "/")) {
+      const std::string abs = fs::absolute(rel);
+      rel = abs.size() > a.root().size() ? abs.substr(a.root().size()) : std::string();
+      std::replace(rel.begin(), rel.end(), '\\', '/');
+      if (rel.empty() || rel.front() != '/') rel = "/" + rel;
+    }
+    if (a.branch_exists(rel)) branch_path = rel;
+    else if (a.branch_exists(target)) branch_path = target;
+    else if (!fs_start.empty() && a.branch_exists("/")) branch_path.clear();
+  }
+  if (!branch_path.empty() && a.branch_exists(branch_path)) {
+    print_file_tree(app, a, branch_path, max_depth, has_flag(args, "-line"));
+    return 0;
+  }
+  if (!branch_path.empty() && branch_path != "/") {
+    fail(3013, msg("store.no_branch"), branch_path);
+  }
+  print_branch_tree(app, a, tree, releases, max_depth);
   return 0;
 }
 

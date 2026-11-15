@@ -144,6 +144,10 @@ const Crc64Table kCrc64Table;
 }  // namespace
 
 u64 crc64(const void* data, std::size_t len, u64 seed) {
+#ifdef VD_HAVE_CRC64_ASM
+  // NASM slicing-by-8 implementation; same reflected CRC-64/XZ contract.
+  return vd_crc64_asm(data, len, seed);
+#endif
   u64 crc = ~seed;
   const u8* p = static_cast<const u8*>(data);
   for (std::size_t i = 0; i < len; ++i)

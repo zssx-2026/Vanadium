@@ -14,6 +14,14 @@ $Payload = @(
   @{ Src = "build\cmake\vanadium.dll";              Dst = "vanadium.dll" },
   @{ Src = "java\out\vanadium-report.jar";         Dst = "java\vanadium-report.jar" }
 )
+# Rebuild the tree payloads from scratch: Copy-Item -Recurse into an existing
+# directory nests the source inside it (java\runtime\runtime), so clear the
+# whole java/docs trees BEFORE any file copy (otherwise the jar copied by the
+# payload loop above gets wiped by this cleanup).
+foreach ($dir in @("java", "docs")) {
+  $dst = Join-Path $Dist $dir
+  if (Test-Path $dst) { Remove-Item -Recurse -Force $dst }
+}
 $fail = 0
 foreach ($p in $Payload) {
   $src = Join-Path $Root $p.Src
@@ -31,6 +39,36 @@ if (Test-Path (Join-Path $Root "docs")) {
 Set-Content -Path (Join-Path $Dist "VERSION") -Value $Version -NoNewline
 
 Write-Output ("DIST_VERSION=" + $Version)
+
+# Completeness gate: the payload must contain the jar AND the runtime, or the
+# portable build silently loses the Java sidecar.
+$required = @("inv.exe", "vanadium.dll", "VERSION", "java\vanadium-report.jar", "java\runtime\bin\java.exe")
+foreach ($rel in $required) {
+  if (-not (Test-Path (Join-Path $Dist $rel))) { Write-Output ("MISSING dist\" + $rel); $fail++ }
+}
+$dll = Join-Path $Dist "vanadium.dll"
+if (Test-Path $dll) {
+  Write-Output ("DLL vanadium.dll " + (Get-Item $dll).Length + " " + (Get-FileHash -Algorithm SHA256 $dll).Hash.ToLower())
+}
+
+# Portable archive: everything needed to run inv from a folder (no installer).
+$Zip = Join-Path $Dist "inv-win64.zip"
+if (Test-Path $Zip) { Remove-Item -Force $Zip }
+$Staging = Join-Path $env:TEMP ("inv-zip-" + [guid]::NewGuid().ToString("N"))
+New-Item -ItemType Directory -Force -Path $Staging | Out-Null
+foreach ($item in @("inv.exe", "vanadium.dll", "VERSION")) {
+  Copy-Item -Force (Join-Path $Dist $item) (Join-Path $Staging $item)
+}
+foreach ($dir in @("java", "docs")) {
+  Copy-Item -Recurse -Force (Join-Path $Dist $dir) (Join-Path $Staging $dir)
+}
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+[System.IO.Compression.ZipFile]::CreateFromDirectory($Staging, $Zip, [System.IO.Compression.CompressionLevel]::Optimal, $false)
+Remove-Item -Recurse -Force $Staging
+$zipHash = (Get-FileHash -Algorithm SHA256 $Zip).Hash.ToLower()
+$zipSize = (Get-Item $Zip).Length
+Write-Output ("ZIP inv-win64.zip " + $zipSize + " " + $zipHash)
+
 Get-ChildItem $Dist -Recurse -File | Where-Object { $_.Name -notlike "*.dll" -or $true } |
   Sort-Object FullName | ForEach-Object {
     $rel = $_.FullName.Substring($Dist.Length + 1)
