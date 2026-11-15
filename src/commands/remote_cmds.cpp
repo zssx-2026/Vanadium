@@ -9,6 +9,7 @@
 
 #include "vanadium/core.h"
 #include "vanadium/crypto.h"
+#include "vanadium/gen.h"
 #include "vanadium/remote.h"
 #include "vanadium/store.h"
 
@@ -197,14 +198,25 @@ int cmd_login(App& app, const std::vector<std::string>& args) {
 int cmd_download(App& app, const std::vector<std::string>& args) {
   const i64 started = now_ms();
   const std::string url = need_arg(args, 1, "<url>");
+  std::string clean_url = url;
+  {
+    const std::size_t q = clean_url.find('?');
+    if (q != std::string::npos) clean_url = clean_url.substr(0, q);
+  }
+  std::string url_name = fs::filename(clean_url);
+  if (url_name.empty()) url_name = "download.bin";
   std::string out_path = opt_value(args, "-path", std::string());
   if (out_path.empty()) {
-    std::string clean = url;
-    const std::size_t q = clean.find('?');
-    if (q != std::string::npos) clean = clean.substr(0, q);
-    out_path = fs::filename(clean);
-    if (out_path.empty()) out_path = "download.bin";
-    out_path = fs::join(app.cwd, out_path);
+    out_path = fs::join(app.cwd, url_name);
+  } else {
+    /* -path is either a file name or a directory: normalize it first (so "\dir\..\x"
+       and "./x" resolve predictably) and treat a trailing separator or an existing
+       directory as "put the file inside it". */
+    const bool trailing_sep = out_path.back() == '/' || out_path.back() == '\\';
+    out_path = gen::normalize_path(out_path);
+    if (out_path.empty() || out_path == ".") out_path = app.cwd;
+    if (trailing_sep || fs::is_dir(out_path)) out_path = fs::join(out_path, url_name);
+    out_path = fs::absolute(out_path);
   }
   remote::DownloadReport rep;
   const int threads = threads_from(args);

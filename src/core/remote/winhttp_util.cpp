@@ -58,10 +58,15 @@ HINTERNET session_for(const std::string& user_agent) {
   return h;
 }
 
-void apply_timeouts(HINTERNET req, int timeout_ms) {
+void apply_timeouts(HINTERNET req, int timeout_ms, int resolve_ms, int connect_ms) {
   int total = timeout_ms > 0 ? timeout_ms : 60000;
-  int resolve = std::min(total, 15000);
-  int connect = std::min(total, 30000);
+  /* Weak networks need a patient connect phase; callers raise connect_ms
+     instead of the whole request budget. Clamp to the total so a stray value
+     cannot make a phase outlive the request. */
+  int resolve = resolve_ms > 0 ? resolve_ms : std::min(total, 15000);
+  int connect = connect_ms > 0 ? connect_ms : std::min(total, 30000);
+  if (resolve > total) resolve = total;
+  if (connect > total) connect = total;
   WinHttpSetTimeouts(req, resolve, connect, total, total);
 }
 
@@ -133,7 +138,7 @@ Handle open_request(HINTERNET session, const UrlParts& parts, const HttpOptions&
                                 WINHTTP_NO_REFERER, WINHTTP_DEFAULT_ACCEPT_TYPES,
                                 parts.https ? WINHTTP_FLAG_SECURE : 0));
   if (!req) fail(1, "WinHttpOpenRequest failed", winhttp_error_text(GetLastError()));
-  apply_timeouts(req.h, timeout_ms);
+  apply_timeouts(req.h, timeout_ms, opt.resolve_ms, opt.connect_ms);
   return req;
 }
 
@@ -203,6 +208,50 @@ std::string narrow(const std::wstring& w) {
   WideCharToMultiByte(CP_UTF8, 0, w.data(), static_cast<int>(w.size()), s.data(), n, nullptr,
                       nullptr);
   return s;
+}
+
+unsigned long transport_error_code(const Failure& f) {
+  /* winhttp_error_text renders "text (12002)" when FormatMessage has a string
+     and "error 12002" when it does not, so accept both shapes. */
+  const std::string& text = f.detail;
+  for (size_t i = 0; i < text.size(); ++i) {
+    size_t j = std::string::npos;
+    if (text[i] == '(') {
+      j = i + 1;
+    } else if (text.compare(i, 6, "error ") == 0) {
+      j = i + 6;
+    }
+    if (j == std::string::npos || j >= text.size()) continue;
+    unsigned long value = 0;
+    bool any = false;
+    while (j < text.size() && text[j] >= '0' && text[j] <= '9') {
+      value = value * 10 + static_cast<unsigned long>(text[j] - '0');
+      ++j;
+      any = true;
+    }
+    if (any) return value;
+  }
+  return 0;
+}
+
+bool transport_retryable(const Failure& f) {
+  const unsigned long code = transport_error_code(f);
+  switch (code) {
+    case 12002: /* ERROR_WINHTTP_TIMEOUT */
+    case 12007: /* ERROR_WINHTTP_NAME_NOT_RESOLVED - the resolver itself times out
+                   on a weak link, so one more attempt is worth it */
+    case 12029: /* ERROR_WINHTTP_CANNOT_CONNECT */
+    case 12030: /* ERROR_WINHTTP_CONNECTION_ERROR */
+    case 12031: /* ERROR_WINHTTP_RESEND_REQUEST - the stack itself asks for a retry */
+    case 12152: /* ERROR_WINHTTP_INVALID_SERVER_RESPONSE - an edge closing a
+                   connection mid-headers looks exactly like this (observed on
+                   release-assets.githubusercontent.com) */
+      return true;
+    default:
+      /* Certificate failures (12157/12175), malformed URLs and auth errors are
+         permanent: retrying them only hides the real cause. */
+      return false;
+  }
 }
 
 std::string winhttp_error_text(unsigned long code) {
@@ -288,6 +337,26 @@ UrlParts parse_url(const std::string& url) {
   return p;
 }
 
+std::string resolve_location(const std::string& base_url, const std::string& location) {
+  if (starts_with(location, "http://") || starts_with(location, "https://")) return location;
+  UrlParts parts = parse_url(base_url);
+  std::string origin = parts.to_string();
+  size_t scheme_end = origin.find("://");
+  size_t path_start = origin.find('/', scheme_end == std::string::npos ? 0 : scheme_end + 3);
+  std::string root = path_start == std::string::npos ? origin : origin.substr(0, path_start);
+  if (starts_with(location, "//")) {
+    return (parts.https ? "https:" : "http:") + location;
+  }
+  if (!location.empty() && location[0] == '/') return root + location;
+  /* Relative to the directory of the current target. */
+  std::string target = path_start == std::string::npos ? std::string("/") : origin.substr(path_start);
+  size_t cut = target.find('?');
+  if (cut != std::string::npos) target.resize(cut);
+  size_t slash = target.rfind('/');
+  if (slash != std::string::npos) target.resize(slash + 1);
+  return root + target + location;
+}
+
 RawResponse send_once(const std::string& url, const HttpOptions& opt, int timeout_ms) {
   UrlParts parts = parse_url(url);
   HINTERNET session = session_for(opt.user_agent);
@@ -303,27 +372,39 @@ RawResponse send_once(const std::string& url, const HttpOptions& opt, int timeou
 }
 
 u64 stream_to_file(const std::string& url, const HttpOptions& opt, const std::string& path,
-                   const std::function<void(u64, u64)>& on_chunk) {
-  UrlParts parts = parse_url(url);
-  HINTERNET session = session_for(opt.user_agent);
-  Handle req = open_request(session, parts, opt, opt.timeout_ms);
-  send_request(req.h, opt);
+                   const std::function<void(u64, u64)>& on_chunk, bool append,
+                   StreamMeta* meta) {
+  /* Follow redirects here as well: object stores (GitHub release assets, S3)
+     answer 302 to a signed CDN URL, and a Range header must survive the hop. */
+  std::string current = url;
+  Handle req;
+  int status = 0;
+  std::vector<std::pair<std::string, std::string>> headers;
+  int hop = 0;
+  for (;;) {
+    UrlParts parts = parse_url(current);
+    HINTERNET session = session_for(opt.user_agent);
+    req = open_request(session, parts, opt, opt.timeout_ms);
+    send_request(req.h, opt);
 
-  int status = query_status(req.h);
-  std::string raw = query_raw_headers(req.h);
-  auto headers = parse_headers(raw);
+    status = query_status(req.h);
+    headers = parse_headers(query_raw_headers(req.h));
+    const bool redirect = status == 301 || status == 302 || status == 303 || status == 307 ||
+                          status == 308;
+    const std::string location = header_value(headers, "location");
+    if (!redirect || !opt.follow_redirects || location.empty()) break;
+    if (hop == kMaxRedirects) {
+      fail(3, "too many HTTP redirects", current);
+    }
+    current = resolve_location(current, location);
+    ++hop;
+    req = Handle(); /* close before the next hop */
+  }
   if (!(status == 200 || status == 206)) {
     std::string detail;
     read_body(req.h, detail, 8192);
     fail(1, "HTTP request failed: status " + std::to_string(status),
-         url + " | " + trim(detail).substr(0, 400));
-  }
-
-  std::wstring wpath = widen(path);
-  HANDLE file = CreateFileW(wpath.c_str(), GENERIC_WRITE, FILE_SHARE_READ, nullptr, CREATE_ALWAYS,
-                            FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN, nullptr);
-  if (file == INVALID_HANDLE_VALUE) {
-    fail(1, "cannot create output file", path + " | " + winhttp_error_text(GetLastError()));
+         current + " | " + trim(detail).substr(0, 400));
   }
 
   u64 total = 0;
@@ -333,6 +414,35 @@ u64 stream_to_file(const std::string& url, const HttpOptions& opt, const std::st
       total = std::stoull(cl);
     } catch (...) {
       total = 0;
+    }
+  }
+  if (meta) {
+    meta->status = status;
+    meta->content_length = total;
+    meta->etag = header_value(headers, "etag");
+    meta->last_modified = header_value(headers, "last-modified");
+  }
+
+  /* A 200 answer to a resumed range means the server ignored Range: either the
+     object was replaced (If-Range validator no longer matches) or ranges are
+     unsupported. Write nothing and let the caller restart this part from zero;
+     appending the full object behind the old bytes would corrupt it silently. */
+  if (append && status == 200) return 0;
+
+  const bool resume = append && status == 206;
+  std::wstring wpath = widen(path);
+  HANDLE file = CreateFileW(wpath.c_str(), GENERIC_WRITE, FILE_SHARE_READ, nullptr,
+                            resume ? OPEN_ALWAYS : CREATE_ALWAYS,
+                            FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN, nullptr);
+  if (file == INVALID_HANDLE_VALUE) {
+    fail(1, "cannot create output file", path + " | " + winhttp_error_text(GetLastError()));
+  }
+  if (resume) {
+    LARGE_INTEGER zero;
+    zero.QuadPart = 0;
+    if (!SetFilePointerEx(file, zero, nullptr, FILE_END)) {
+      CloseHandle(file);
+      fail(1, "cannot seek to end of partial file", path);
     }
   }
 
@@ -367,10 +477,12 @@ u64 stream_to_file(const std::string& url, const HttpOptions& opt, const std::st
   return written;
 }
 
-ProbeInfo probe_remote(const std::string& url, int timeout_ms) {
+ProbeInfo probe_remote(const std::string& url, int timeout_ms, int resolve_ms, int connect_ms) {
   UrlParts parts = parse_url(url);
   HttpOptions opt;
   opt.method = "GET";
+  opt.resolve_ms = resolve_ms;
+  opt.connect_ms = connect_ms;
   opt.headers.emplace_back("Range", "bytes=0-0");
   opt.headers.emplace_back("Accept-Encoding", "identity");
   HINTERNET session = session_for(opt.user_agent);
@@ -380,6 +492,11 @@ ProbeInfo probe_remote(const std::string& url, int timeout_ms) {
   ProbeInfo info;
   info.status = query_status(req.h);
   auto headers = parse_headers(query_raw_headers(req.h));
+  /* Validators for If-Range resume. header_value() matches names case
+     insensitively and returns the value verbatim, so a quoted ETag keeps its
+     quotes (If-Range requires the exact entity tag). */
+  info.etag = header_value(headers, "etag");
+  info.last_modified = header_value(headers, "last-modified");
   auto num = [](const std::string& text) -> u64 {
     try {
       return std::stoull(trim(text));

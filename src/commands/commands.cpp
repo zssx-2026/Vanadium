@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <functional>
 #include <map>
+#include <regex>
 #include <set>
 #include <string>
 #include <vector>
@@ -18,7 +19,7 @@
 namespace vd {
 namespace {
 
-const char* kVersion = "0.1.0";
+const char* kVersion = "0.3.0";
 
 /* Walk up from start looking for an archive root (meta.json). */
 std::string find_archive_root(const std::string& start) {
@@ -81,6 +82,16 @@ void print_file_tree(App& app, const Archive& a, const std::string& branch_path,
     const std::string key = slash == std::string::npos ? std::string() : e.path.substr(0, slash);
     kids[key].push_back(&e);
   }
+  /* Collect first, then pad: column alignment has to use the terminal display
+     width (generated width tables) instead of byte counts, otherwise CJK names
+     shift the size column. */
+  struct Row {
+    std::string label;
+    std::string size;
+    std::string sha;
+    bool dir = false;
+  };
+  std::vector<Row> rows;
   std::function<void(const std::string&, int)> walk = [&](const std::string& dir, int depth) {
     auto it = kids.find(dir);
     if (it == kids.end()) return;
@@ -97,20 +108,31 @@ void print_file_tree(App& app, const Archive& a, const std::string& branch_path,
       const std::string root_prefix = branch_path == "/" ? std::string("/") : branch_path + "/";
       const std::string shown = line_mode ? root_prefix + rel : leaf;
       if (e->dir) {
-        if (max_depth >= 0 && depth >= max_depth) {
-          app.ui.line(pad + shown + "/");
-          continue;
-        }
-        app.ui.line(pad + shown + "/");
+        rows.push_back(Row{pad + shown + "/", std::string(), std::string(), true});
+        if (max_depth >= 0 && depth >= max_depth) continue;
         walk(rel, depth + 1);
       } else {
-        std::string size = human_size(static_cast<i64>(e->size));
-        app.ui.line(pad + shown + "  " + size + "  " + short_sha(e->sha, 12));
+        rows.push_back(Row{pad + shown, human_size(static_cast<i64>(e->size)),
+                           short_sha(e->sha, 12), false});
       }
     }
   };
-  app.ui.line(branch_path + (snap->entries.empty() ? "  (empty)" : ""));
   walk(std::string(), 0);
+  std::size_t widest = 0;
+  for (const auto& r : rows) {
+    const std::size_t w = static_cast<std::size_t>(gen::text_width(r.label));
+    if (w > widest) widest = w;
+  }
+  app.ui.line(branch_path + (snap->entries.empty() ? "  (empty)" : ""));
+  for (const auto& r : rows) {
+    std::string line = r.label;
+    const std::size_t w = static_cast<std::size_t>(gen::text_width(r.label));
+    if (!r.dir) {
+      line.append(widest + 2 - w, ' ');
+      line += r.size + "  " + r.sha;
+    }
+    app.ui.line(line);
+  }
 }
 
 void print_branch_tree(App& app, const Archive& a, bool tree, bool releases, int max_depth) {
@@ -267,7 +289,8 @@ int cmd_set(App& app, const std::vector<std::string>& args) {
         continue;
       }
       std::string line = "  " + d.key;
-      while (line.size() < 30) line.push_back(' ');
+      const int pad = 28 - gen::text_width(line);
+      for (int i = 0; i < pad; ++i) line.push_back(' ');
       line += "= " + app.settings.get(d.key);
       app.ui.line(line);
     }
@@ -368,9 +391,13 @@ int cmd_reg(App& app, const std::vector<std::string>& args) {
 
   std::string branch_path = opt_value(args, "-branch", std::string());
   if (branch_path.empty()) {
-    const std::string rel = abs.substr(a.root().size());
-    branch_path = rel.empty() ? "/" : "/" + trim(rel);
-    std::replace(branch_path.begin(), branch_path.end(), '\\', '/');
+    /* Derive the branch path from the directory and canonicalize it: the raw
+       relative text starts with a separator, which would otherwise show up as
+       "//docs" in the confirmation line. */
+    branch_path = gen::normalize_path(abs.substr(a.root().size()));
+    if (branch_path.empty() || branch_path == ".") branch_path = "/";
+  } else {
+    branch_path = gen::normalize_path(branch_path);
   }
   const ArchiveType type = archive_type_parse(opt_value(args, "-type", archive_type_name(a.type())));
   if (!a.branch_exists(branch_path)) a.create_branch(branch_path, "");
@@ -392,11 +419,10 @@ int cmd_reg(App& app, const std::vector<std::string>& args) {
 int cmd_unreg(App& app, const std::vector<std::string>& args) {
   Archive a = open_here(app);
   const std::string raw = need_arg(args, 1, "<path>");
-  std::string branch_path = raw;
+  std::string branch_path = gen::normalize_path(raw);
   if (fs::is_dir(fs::absolute(raw)) || fs::is_file(fs::absolute(raw))) {
-    const std::string rel = fs::absolute(raw).substr(a.root().size());
-    branch_path = rel.empty() ? "/" : "/" + trim(rel);
-    std::replace(branch_path.begin(), branch_path.end(), '\\', '/');
+    branch_path = gen::normalize_path(fs::absolute(raw).substr(a.root().size()));
+    if (branch_path.empty() || branch_path == ".") branch_path = "/";
   }
   a.remove_branch(branch_path, has_flag(args, "-recursive"));
   app.ui.line(msgf("unreg.done", branch_path));
@@ -446,17 +472,101 @@ int cmd_list(App& app, const std::vector<std::string>& args) {
   return 0;
 }
 
+/* Content search over the tracked snapshots: every branch head is walked, object
+   bodies are scanned line by line and matches are reported as path:line: text. */
 int cmd_search(App& app, const std::vector<std::string>& args) {
-  Archive a = open_here(app, args.size() > 1 && !starts_with(args[1], "-") ? args[1] : std::string());
-  const std::string needle = to_lower(need_arg(args, 2, "<branch>"));
-  int hits = 0;
-  for (const auto& b : a.branches()) {
-    const std::string hay = to_lower(b.name + " " + b.path);
-    if (hay.find(needle) == std::string::npos) continue;
-    ++hits;
-    app.ui.line(b.path + "  @" + std::to_string(b.head_seq) + "  " + b.id);
+  const i64 started = now_ms();
+  Archive a = open_here(app);
+  const std::string pattern = need_arg(args, 1, "<pattern>");
+  const std::string path_glob = opt_value(args, "-path", std::string());
+  const std::string branch_filter = opt_value(args, "-branch", std::string());
+  const bool case_sensitive = has_flag(args, "-case");
+  const bool use_regex = has_flag(args, "-regex");
+  std::size_t limit = 200;
+  const std::string limit_text = opt_value(args, "-limit", std::string());
+  if (!limit_text.empty()) {
+    const long long parsed = std::atoll(limit_text.c_str());
+    if (parsed > 0) limit = static_cast<std::size_t>(parsed);
   }
-  if (hits == 0) app.ui.line(msg("search.none"));
+
+  std::vector<BranchInfo> scope;
+  if (!branch_filter.empty()) {
+    const auto found = a.find(branch_filter);
+    if (!found) fail(3013, msg("store.no_branch"), branch_filter);
+    scope.push_back(*found);
+  } else {
+    scope = a.branches();
+  }
+
+  std::regex rx;
+  if (use_regex) {
+    std::regex_constants::syntax_option_type flags = std::regex::ECMAScript;
+    if (!case_sensitive) flags |= std::regex::icase;
+    try {
+      rx = std::regex(pattern, flags);
+    } catch (const std::regex_error& e) {
+      fail(3106, msg("search.invalid_regex"), pattern + " (" + e.what() + ")");
+    }
+  }
+
+  const std::string needle = case_sensitive ? pattern : to_lower(pattern);
+  const auto line_hit = [&](const std::string& line) -> bool {
+    if (use_regex) return std::regex_search(line, rx);
+    if (case_sensitive) return line.find(needle) != std::string::npos;
+    return to_lower(line).find(needle) != std::string::npos;
+  };
+
+  std::size_t hits = 0;
+  std::size_t binary_skipped = 0;
+  bool truncated = false;
+  for (const auto& b : scope) {
+    auto snap = a.head(b.path);
+    if (!snap) continue;
+    for (const auto& e : snap->entries) {
+      if (e.dir) continue;
+      if (!path_glob.empty() && !gen::glob_match(path_glob, e.path)) continue;
+      std::string data;
+      if (!a.objects().get(e.sha, data)) continue;
+      if (data.find('\0') != std::string::npos) {
+        ++binary_skipped;
+        continue;
+      }
+      std::size_t line_no = 0;
+      std::size_t pos = 0;
+      while (true) {
+        std::size_t end = data.find('\n', pos);
+        if (end == std::string::npos) end = data.size();
+        std::string line = data.substr(pos, end - pos);
+        if (!line.empty() && line.back() == '\r') line.pop_back();
+        ++line_no;
+        if (line_hit(line)) {
+          if (hits >= limit) {
+            truncated = true;
+            break;
+          }
+          ++hits;
+          std::string shown = line;
+          if (shown.size() > 200) shown = shown.substr(0, 200) + "...";
+          app.ui.line(b.path + "  " + e.path + ":" + std::to_string(line_no) + ": " + shown);
+        }
+        if (end == data.size()) break;
+        pos = end + 1;
+      }
+      if (truncated) break;
+    }
+    if (truncated) break;
+  }
+
+  if (hits == 0) {
+    app.ui.line(msg("search.none"));
+  } else {
+    app.ui.line(std::string(msg("search.hits")) + ": " + std::to_string(hits) + "  (" +
+                human_duration(now_ms() - started) + ")");
+  }
+  if (binary_skipped > 0) {
+    app.ui.line(std::string(msg("search.binary_skipped")) + ": " + std::to_string(binary_skipped));
+  }
+  if (truncated) app.ui.warn(msg("search.limit"));
   return 0;
 }
 
@@ -547,7 +657,17 @@ int cmd_doctor(App& app, const std::vector<std::string>&) {
   app.ui.line(std::string("  self-tests ") + std::to_string(gen::self_test_count()));
   app.ui.line(std::string("  commands   ") + std::to_string(gen::command_count()));
   app.ui.line(std::string("  errors     ") + std::to_string(gen::error_count()));
-  app.ui.line(std::string("  unicode    ") + std::to_string(gen::unicode_table_codepoints()));
+  app.ui.line(std::string("  unicode    ") + std::to_string(gen::unicode_table_codepoints()) +
+              " codepoints, " + std::to_string(gen::unicode_name_count()) + " names");
+  const char* probe_name = gen::unicode_name(0x4E2Du);
+  app.ui.line(std::string("  width      U+4E2D=") + (probe_name == nullptr ? "?" : probe_name) +
+              " [" + gen::unicode_category(0x4E2Du) + "] cells=" +
+              std::to_string(gen::text_width("\xE4\xB8\xAD")));
+  const int proto_types = gen::proto_type_count();
+  app.ui.line(std::string("  protocol   ") + std::to_string(proto_types) + " types" +
+              (proto_types > 0 && gen::proto_type_name(0) != nullptr
+                   ? std::string(", first=") + gen::proto_type_name(0)
+                   : std::string()));
   app.ui.line(std::string("  elapsed    ") + human_duration(now_ms() - started));
   return 0;
 }
@@ -567,6 +687,20 @@ int cmd_self_test(App& app, const std::vector<std::string>& args) {
       ++failures;
       app.ui.warn("FAIL " + name + (detail.empty() ? "" : "  " + detail));
     }
+  }
+  /* The generated vectors are also executed through the vector runner so the
+     aggregate pass/fail counts come from the generated harness itself. */
+  if (filter.empty()) {
+    int vector_pass = 0;
+    int vector_fail = 0;
+    const int vector_total = gen::self_test_run(&vector_pass, &vector_fail);
+    if (vector_total != total || vector_fail != failures) {
+      app.ui.warn("vector runner disagrees: total=" + std::to_string(vector_total) +
+                  " pass=" + std::to_string(vector_pass) + " fail=" + std::to_string(vector_fail));
+      failures += vector_fail > failures ? (vector_fail - failures) : 0;
+    }
+    app.ui.line("generated vectors: " + std::to_string(vector_total) + " total, " +
+                std::to_string(vector_pass) + " passed, " + std::to_string(vector_fail) + " failed");
   }
   /* Crypto vectors are hand-written invariants that must hold for every build. */
   struct Vec { const char* name; bool ok; };

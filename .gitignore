@@ -15,3 +15,8 @@ reports/
 out/
 *.zip
 *.7z
+tools/codegen/obj/
+*.err
+tools/__pycache__/
+tests/__pycache__/
+*.pyc

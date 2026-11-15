@@ -18,7 +18,7 @@ struct vd_context {
 
 namespace {
 
-constexpr const char* kVersion = "0.1.0";
+constexpr const char* kVersion = "0.3.0";
 constexpr const char* kAbi = "vanadium-abi-1";
 
 std::string current_dir() {

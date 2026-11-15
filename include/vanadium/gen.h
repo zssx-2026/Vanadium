@@ -40,4 +40,30 @@ bool proto_decode_field(int type_id, const std::string& raw, std::string& value)
 std::uint64_t crc64_table_entry(int index);
 int unicode_table_codepoints();
 
+/* Display width of a UTF-8 string in terminal cells (generated width tables). */
+int text_width(const std::string& utf8);
+
+/* Glob match with '*', '?' and '[...]' over a whole string. */
+bool glob_match(const char* pattern, const char* text);
+bool glob_match(const std::string& pattern, const std::string& text);
+
+/* Canonicalize a path: '\\' -> '/', drop '.' segments, fold '..' and empty parts. */
+std::string normalize_path(const std::string& path);
+
+/* Validate one setting assignment against the generated settings schema.
+   Returns 0 when accepted, otherwise the generated error code. */
+int validate_setting(const std::string& key, const std::string& value);
+
+/* Run every generated self-test vector; returns the total, fills pass/fail counts. */
+int self_test_run(int* passed, int* failed);
+
+/* Unicode names and general-category ids from the generated tables. */
+int unicode_name_count();
+const char* unicode_name(std::uint32_t cp);
+int unicode_category_id(std::uint32_t cp);
+
+/* Protocol type registry generated from schema/protocol.json. */
+int proto_type_count();
+const char* proto_type_name(int type_id);
+
 }  // namespace vd::gen

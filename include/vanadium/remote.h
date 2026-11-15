@@ -23,6 +23,16 @@ struct HttpOptions {
   int retries = 2;
   std::string user_agent = "inv/0.1 (+vanadium)";
   bool follow_redirects = true;
+  /* Per-phase timeouts in milliseconds. 0 keeps the derived defaults
+     (resolve min(timeout_ms,15s), connect min(timeout_ms,30s)); raise
+     connect_ms on weak networks where the handshake alone takes >20s.
+     The segmented downloader overrides both from the environment:
+       INV_HTTP_RESOLVE_MS  default 15000, clamp [1000, 600000]
+       INV_HTTP_CONNECT_MS  default 60000, clamp [1000, 600000]
+     Set them to ride out a slow handshake without touching the CLI; the same
+     names are documented in docs/IDM-NOTES.md section 9. */
+  int resolve_ms = 0;
+  int connect_ms = 0;
 };
 
 HttpResponse request(const std::string& url, const HttpOptions& opt);

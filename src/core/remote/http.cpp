@@ -11,8 +11,6 @@ namespace {
 
 using detail::RawResponse;
 
-constexpr int kMaxRedirects = 5;
-
 bool iequals(const std::string& a, const std::string& b) { return to_lower(a) == to_lower(b); }
 
 bool retryable_status(int status) {
@@ -34,33 +32,13 @@ void sleep_backoff(int attempt) {
   std::this_thread::sleep_for(std::chrono::milliseconds(base + jitter(rd)));
 }
 
-std::string resolve_location(const std::string& base_url, const std::string& location) {
-  if (starts_with(location, "http://") || starts_with(location, "https://")) return location;
-  detail::UrlParts parts = detail::parse_url(base_url);
-  std::string origin = parts.to_string();
-  size_t scheme_end = origin.find("://");
-  size_t path_start = origin.find('/', scheme_end == std::string::npos ? 0 : scheme_end + 3);
-  std::string root = path_start == std::string::npos ? origin : origin.substr(0, path_start);
-  if (starts_with(location, "//")) {
-    return (parts.https ? "https:" : "http:") + location;
-  }
-  if (!location.empty() && location[0] == '/') return root + location;
-  /* Relative to the directory of the current target. */
-  std::string path = path_start == std::string::npos ? std::string("/") : origin.substr(path_start);
-  size_t cut = path.find('?');
-  if (cut != std::string::npos) path.resize(cut);
-  size_t slash = path.rfind('/');
-  if (slash != std::string::npos) path.resize(slash + 1);
-  return root + path + location;
-}
-
 /* Executes one logical request: follows redirects but never retries. */
 RawResponse perform(const std::string& url, const HttpOptions& opt) {
   std::string current = url;
   std::string method = opt.method.empty() ? "GET" : opt.method;
   std::string body = opt.body;
 
-  for (int hop = 0; hop <= kMaxRedirects; ++hop) {
+  for (int hop = 0; hop <= detail::kMaxRedirects; ++hop) {
     HttpOptions hop_opt = opt;
     hop_opt.method = method;
     hop_opt.body = body;
@@ -73,7 +51,7 @@ RawResponse perform(const std::string& url, const HttpOptions& opt) {
       method = "GET";
       body.clear();
     }
-    current = resolve_location(current, resp.location);
+    current = detail::resolve_location(current, resp.location);
   }
   fail(3, "too many HTTP redirects", url);
 }

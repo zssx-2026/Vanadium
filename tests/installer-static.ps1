@@ -41,7 +41,7 @@ function Get-ExpectedVersion {
     $v = (Get-Content -LiteralPath $vf -TotalCount 1)
     if ($v) { return $v.Trim() }
   }
-  return '0.1.0'
+  return '0.3.0'
 }
 
 function Get-Makensis {
