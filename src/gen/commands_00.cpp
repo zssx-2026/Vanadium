@@ -94,6 +94,11 @@ const OptRow kOptions[] = {
 {"-powershell", "", {"Emit PowerShell completion", "\u8F93\u51FA PowerShell \u8865\u5168", "\u8F38\u51FA PowerShell \u88DC\u5168", "Emit PowerShell completion"}},
 {"-port", "<n>", {"TCP port to listen on (default 8341)", "\u76D1\u542C\u7684 TCP \u7AEF\u53E3\uFF08\u9ED8\u8BA4 8341\uFF09", "\u76E3\u807D\u7684 TCP \u7AEF\u53E3\uFF08\u9ED8\u8A8D 8341\uFF09", "TCP port to listen on (default 8341)"}},
 {"-branch", "<path>", {"Branch to publish (default /)", "\u53D1\u5E03\u7684\u5206\u652F\uFF08\u9ED8\u8BA4 /\uFF09", "\u767C\u5E03\u7684\u5206\u652F\uFF08\u9ED8\u8A8D /\uFF09", "Branch to publish (default /)"}},
+{"-check", "", {"Only check, do not download", "\u53EA\u68C0\u67E5\uFF0C\u4E0D\u4E0B\u8F7D", "\u53EA\u6AA2\u67E5\uFF0C\u4E0D\u4E0B\u8F09", "Only check, do not download"}},
+{"-download", "", {"Download and verify, do not install", "\u4E0B\u8F7D\u5E76\u6821\u9A8C\uFF0C\u4E0D\u5B89\u88C5", "\u4E0B\u8F09\u4E26\u6821\u9A57\uFF0C\u4E0D\u5B89\u88DD", "Download and verify, do not install"}},
+{"-silent", "", {"Run the installer silently into the current directory", "\u9759\u9ED8\u5B89\u88C5\u5230\u5F53\u524D\u76EE\u5F55", "\u975C\u9ED8\u5B89\u88DD\u5230\u7576\u524D\u76EE\u9304", "Run the installer silently into the current directory"}},
+{"-path", "<dir>", {"Download cache directory", "\u4E0B\u8F7D\u7F13\u5B58\u76EE\u5F55", "\u4E0B\u8F09\u5FEB\u53D6\u76EE\u9304", "Download cache directory"}},
+{"-threads", "<n>", {"Download threads (alias -thread)", "\u4E0B\u8F7D\u7EBF\u7A0B\u6570\uFF08\u522B\u540D -thread\uFF09", "\u4E0B\u8F09\u57F7\u884C\u7DD2\u6578\uFF08\u5225\u540D -thread\uFF09", "Download threads (alias -thread)"}},
 };
 
 const std::size_t kOptionCount = sizeof(kOptions) / sizeof(kOptions[0]);
@@ -129,6 +134,7 @@ const CmdRow kCommands[] = {
 {"bench", "", {"Measure hashing, compression and IO throughput", "\u6D4B\u91CF\u54C8\u5E0C\u3001\u538B\u7F29\u4E0E IO \u541E\u5410", "\u6E2C\u91CF\u54C8\u5E0C\u3001\u58D3\u7E2E\u8207 IO \u541E\u5410", "Measure hashing, compression and IO throughput"}, {"inv bench [options]", "inv bench [\u9009\u9879]", "inv bench [\u9078\u9805]", "inv bench [options]"}, 56, 0},
 {"completion", "", {"Print a shell completion script", "\u6253\u5370 shell \u8865\u5168\u811A\u672C", "\u6253\u5370 shell \u88DC\u5168\u8173\u672C", "Print a shell completion script"}, {"inv completion [options]", "inv completion [\u9009\u9879]", "inv completion [\u9078\u9805]", "inv completion [options]"}, 56, 1},
 {"serve", "[path]", {"Start an INV web server for the archive", "\u542F\u52A8\u5B58\u6863\u7684 INV \u7F51\u9875\u670D\u52A1\u5668", "\u555F\u52D5\u5B58\u6A94\u7684 INV \u7DB2\u9801\u670D\u52D9\u5668", "Start an INV web server for the archive"}, {"inv serve [path] [options]", "inv serve [path] [\u9009\u9879]", "inv serve [path] [\u9078\u9805]", "inv serve [path] [options]"}, 57, 2},
+{"update", "", {"Check for and install new versions from the release channel", "\u68C0\u67E5\u5E76\u5B89\u88C5\u53D1\u5E03\u901A\u9053\u4E2D\u7684\u65B0\u7248\u672C", "\u6AA2\u67E5\u4E26\u5B89\u88DD\u767C\u5E03\u901A\u9053\u4E2D\u7684\u65B0\u7248\u672C", "Check for and install new versions from the release channel"}, {"inv update [options]", "inv update [\u9009\u9879]", "inv update [\u9078\u9805]", "inv update [options]"}, 59, 5},
 };
 
 const std::size_t kCommandCount = sizeof(kCommands) / sizeof(kCommands[0]);

@@ -592,6 +592,41 @@ std::string exe_dir() {
   return slash == std::string::npos ? "." : full.substr(0, slash);
 }
 
+/* Parse "0.5.0-snapshot.1" into (0,5,0) + pre-release tag. Numeric compare;
+   a pre-release sorts BELOW the same numeric version. Returns <0 a<b, 0, >0 a>b. */
+int version_cmp(const std::string& a, const std::string& b) {
+  auto split = [](const std::string& s, std::string* nums, std::string* pre) {
+    const std::size_t dash = s.find('-');
+    *nums = s.substr(0, dash == std::string::npos ? s.size() : dash);
+    *pre = dash == std::string::npos ? "" : s.substr(dash + 1);
+  };
+  std::string an, ap, bn, bp;
+  split(a, &an, &ap);
+  split(b, &bn, &bp);
+  auto next_num = [](std::string& s, long* out) {
+    std::size_t i = 0;
+    long v = 0;
+    while (i < s.size() && s[i] != '.') { if (s[i] >= '0' && s[i] <= '9') v = v * 10 + (s[i] - '0'); ++i; }
+    if (i < s.size() && s[i] == '.') ++i;
+    s = s.substr(i);
+    *out = v;
+  };
+  for (int k = 0; k < 4; ++k) {  // 4 numeric fields covers 0.0.0.1 style too
+    long x = 0, y = 0;
+    next_num(an, &x);
+    next_num(bn, &y);
+    if (x != y) return x < y ? -1 : 1;
+    if (an.empty() && bn.empty()) break;
+  }
+  const bool a_pre = !ap.empty(), b_pre = !bp.empty();
+  if (a_pre != b_pre) return a_pre ? -1 : 1;  // snapshot < stable
+  if (!a_pre) return 0;
+  long ai = 0, bi = 0;
+  try { ai = std::stol(ap); } catch (...) { ai = 0; }
+  try { bi = std::stol(bp); } catch (...) { bi = 0; }
+  return ai == bi ? 0 : (ai < bi ? -1 : 1);
+}
+
 }  // namespace
 
 int cmd_update(App& app, const std::vector<std::string>& args) {
@@ -637,7 +672,8 @@ int cmd_update(App& app, const std::vector<std::string>& args) {
     app.ui.error(4015, "no installer asset in the release channel");
     return 1;
   }
-  if (best_version == std::string(kVersion)) {
+  const int cmp = version_cmp(best_version, kVersion);
+  if (cmp <= 0) {
     app.ui.line("You are already on the latest version " + std::string(kVersion) + ".");
     return 0;
   }
@@ -723,8 +759,7 @@ int cmd_update(App& app, const std::vector<std::string>& args) {
   }
   if (silent) {
     app.ui.status("update.install", "Installing");
-    const std::string cmd = "/S /D=" + exe_dir();
-    const int rc = std::system((""" + setup_path + "" /S /D=" + exe_dir()).c_str());
+    const int rc = std::system(("\"" + setup_path + "\" /S /D=\"" + exe_dir() + "\"").c_str());
     app.ui.clear_status();
     if (rc != 0) {
       app.ui.error(4019, "silent install failed (exit " + std::to_string(rc) + ")");

@@ -1011,6 +1011,68 @@
      }
     }
    ]
+  },
+  {
+   "name": "update",
+   "args": "",
+   "summary": {
+    "en": "Check for and install new versions from the release channel",
+    "zh-cn": "检查并安装发布通道中的新版本",
+    "tr-cn": "檢查並安裝發布通道中的新版本",
+    "am-en": "Check for and install new versions from the release channel"
+   },
+   "options": [
+    {
+     "flag": "-check",
+     "arg": "",
+     "summary": {
+      "en": "Only check, do not download",
+      "zh-cn": "只检查，不下载",
+      "tr-cn": "只檢查，不下載",
+      "am-en": "Only check, do not download"
+     }
+    },
+    {
+     "flag": "-download",
+     "arg": "",
+     "summary": {
+      "en": "Download and verify, do not install",
+      "zh-cn": "下载并校验，不安装",
+      "tr-cn": "下載並校驗，不安裝",
+      "am-en": "Download and verify, do not install"
+     }
+    },
+    {
+     "flag": "-silent",
+     "arg": "",
+     "summary": {
+      "en": "Run the installer silently into the current directory",
+      "zh-cn": "静默安装到当前目录",
+      "tr-cn": "靜默安裝到當前目錄",
+      "am-en": "Run the installer silently into the current directory"
+     }
+    },
+    {
+     "flag": "-path",
+     "arg": "<dir>",
+     "summary": {
+      "en": "Download cache directory",
+      "zh-cn": "下载缓存目录",
+      "tr-cn": "下載快取目錄",
+      "am-en": "Download cache directory"
+     }
+    },
+    {
+     "flag": "-threads",
+     "arg": "<n>",
+     "summary": {
+      "en": "Download threads (alias -thread)",
+      "zh-cn": "下载线程数（别名 -thread）",
+      "tr-cn": "下載執行緒數（別名 -thread）",
+      "am-en": "Download threads (alias -thread)"
+     }
+    }
+   ]
   }
  ]
 }
