@@ -341,12 +341,6 @@ int cmd_pull(App& app, const std::vector<std::string>& args) {
   const i64 started = now_ms();
   std::string owner, repo;
   require_repo(app, args, owner, repo);
-  app.ui.status("clone.connect", "Connecting");
-  app.ui.clear_status();
-  app.ui.line("Connected.");
-  app.ui.status("clone.into", "Cloning into " + repo);
-  app.ui.clear_status();
-  app.ui.line("Cloning into " + repo + ".");
   remote::Github gh = github_for(app, "github.com");
   Json rel = gh.get_release(owner, repo, "inv-archive");
   if (!rel.contains("assets") || rel["assets"].size() == 0) {
@@ -395,7 +389,7 @@ int cmd_pull(App& app, const std::vector<std::string>& args) {
   return 0;
 }
 
-int cmd_clone(App& app, const std::vector<std::string>& args) {
+static int cmd_clone_impl(App& app, const std::vector<std::string>& args, const char* verb) {
   const i64 started = now_ms();
   std::string owner, repo;
   const std::string url = require_repo(app, args, owner, repo);
@@ -406,7 +400,17 @@ int cmd_clone(App& app, const std::vector<std::string>& args) {
     app.ui.warn(msgf("clone.exists", target));
     return 1;
   }
+  app.ui.status("clone.connect", "Connecting");
+  app.ui.clear_status();
+  app.ui.line("Connected.");
+  const i64 t_connect = now_ms();
+  const std::string verb_stem = std::strcmp(verb, "fork") == 0 ? "Fork" : "Clon";
+  const std::string verb_full = std::strcmp(verb, "fork") == 0 ? "Fork" : "Clone";
+  app.ui.status(std::string(verb) + ".into", verb_stem + "ing into " + repo);
+  app.ui.clear_status();
+  app.ui.line(verb_stem + "ing into " + repo + ".");
   remote::Github gh = github_for(app, "github.com");
+  const i64 t_search = now_ms();
   Json rel = gh.get_release(owner, repo, "inv-archive");
   if (!rel.contains("assets") || rel["assets"].size() == 0) {
     app.ui.error(4011, msg("clone.no_pack"));
@@ -418,6 +422,7 @@ int cmd_clone(App& app, const std::vector<std::string>& args) {
   app.ui.status("clone", msgf("clone.fetching", owner + "/" + repo));
   const bool ok = remote::download_segmented(url_pack, tmp, threads_from(args), &app.ui, nullptr);
   app.ui.clear_status();
+  const i64 t_download = now_ms();
   if (!ok) {
     app.ui.error(4012, msg("clone.download_failed"));
     return 1;
@@ -453,19 +458,21 @@ int cmd_clone(App& app, const std::vector<std::string>& args) {
     a.objects().put(data);
   }
   a.commit("/", entries, "clone " + owner + "/" + repo);
-  app.ui.line("Clone done.");
+  app.ui.line(verb_full + " done.");
   app.ui.line(std::to_string(n_files) + " files cloned.");
   app.ui.line(std::to_string(n_folders) + " folders cloned.");
   app.ui.line(std::to_string(a.branches().size()) + " branches cloned.");
-  app.ui.line("Used " + std::to_string((now_ms() - started) / 1000) + "s for connecting, " +
-              std::to_string((now_ms() - started) / 1000) + "s for searching, " +
-              std::to_string((now_ms() - started) / 1000) + "s for downloading, " +
-              std::to_string((now_ms() - started) / 1000) + "s for verifying.");
+  app.ui.line("Used " + std::to_string((t_connect - started) / 1000) + "s for connecting, " +
+              std::to_string((t_search - t_connect) / 1000) + "s for searching, " +
+              std::to_string((t_download - t_search) / 1000) + "s for downloading, " +
+              std::to_string((now_ms() - t_download) / 1000) + "s for verifying.");
   app.ui.line("Use \"inv list " + target + "\" to list branches in the archive.");
-  app.ui.line(msgf("clone.done", a.root()));
-  app.ui.line(msgf2("clone.summary", std::to_string(a.branches().size()), human_duration(now_ms() - started)));
   (void)url;
   return 0;
+}
+
+int cmd_clone(App& app, const std::vector<std::string>& args) {
+  return cmd_clone_impl(app, args, "clone");
 }
 
 int cmd_fork(App& app, const std::vector<std::string>& args) {
@@ -474,8 +481,9 @@ int cmd_fork(App& app, const std::vector<std::string>& args) {
   std::string path = opt_value(args, "-path", std::string());
   if (path.empty()) path = fs::join(app.cwd, opt_value(args, "-name", repo));
   const std::string name = opt_value(args, "-name", repo);
-  std::vector<std::string> clone_args = {"inv", "clone", args[1], "-path", path};
-  const int rc = cmd_clone(app, clone_args);
+  const std::string fork_url = args.size() > 1 ? args[1] : std::string();
+  std::vector<std::string> clone_args = {"inv", fork_url, "-path", path};
+  const int rc = cmd_clone_impl(app, clone_args, "fork");
   if (rc != 0) return rc;
   Archive a = Archive::open(path);
   Json meta = Json::object();
@@ -483,7 +491,7 @@ int cmd_fork(App& app, const std::vector<std::string>& args) {
   meta.set("name", Json(name));
   meta.set("type", Json(std::string(archive_type_name(a.type()))));
   fs::write_file(fs::join(a.root(), "meta.json"), meta.dump(2) + "\n");
-  app.ui.line(msgf("fork.done", name));
+  app.ui.line("Fork done.");
   return 0;
 }
 
