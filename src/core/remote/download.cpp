@@ -198,7 +198,10 @@ bool download_segment(Job& job, const Segment& seg, const char* phase) {
     try {
       detail::StreamMeta meta;
       u64 written = detail::stream_to_file(job.url, opt, seg.path, [&](u64 done, u64) {
-        if (job.ui && job.ui->cancelled()) job.abort = true;
+        if (job.ui && job.ui->cancelled()) {
+          job.abort = true;
+          throw Failure(6, "cancelled by user", "segment " + std::to_string(seg.index + 1));
+        }
         u64 overall = job.completed.load() + have + done;
         if (job.ui) {
           job.ui->progress(phase, static_cast<long long>(have + done),
@@ -241,6 +244,13 @@ bool download_segment(Job& job, const Segment& seg, const char* phase) {
       job.completed += have + written;
       return true;
     } catch (const Failure& f) {
+      if (f.code == 6) {
+        /* User cancellation: no retry, no backoff, stop the whole job now. */
+        std::lock_guard<std::mutex> lock(job.mu);
+        job.error = f.message;
+        if (!f.detail.empty()) job.error += " | " + f.detail;
+        return false;
+      }
       if (f.code == 5) {
         /* The object changed size under a resume: no retry can fix that. */
         std::lock_guard<std::mutex> lock(job.mu);
@@ -429,7 +439,10 @@ bool single_stream(Job& job, DownloadReport* report, i64 started) {
     try {
       detail::StreamMeta meta;
       u64 got = detail::stream_to_file(job.url, opt, tmp, [&](u64 done, u64) {
-        if (job.ui && job.ui->cancelled()) job.abort = true;
+        if (job.ui && job.ui->cancelled()) {
+          job.abort = true;
+          throw Failure(6, "cancelled by user", "single stream");
+        }
         if (job.ui) {
           job.ui->progress("download", static_cast<long long>(have + done),
                            static_cast<long long>(job.total),
@@ -595,7 +608,9 @@ bool download_segmented(const std::string& url, const std::string& out_path, int
     if (job.abort.load()) {
       cleanup(job);
       add_where(job, "segment", kSegmentRetries + 1, kSegmentRetries + 1, job.completed.load());
-      if (ui) ui->error(1, "download failed: " + job.error);
+      const std::string reason =
+          job.error.empty() ? std::string("cancelled by user") : job.error;
+      if (ui) ui->error(1, "download failed: " + reason);
       return false;
     }
     if (!merge_segments(job)) {
