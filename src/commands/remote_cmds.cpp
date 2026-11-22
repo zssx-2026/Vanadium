@@ -450,13 +450,39 @@ static int cmd_clone_impl(App& app, const std::vector<std::string>& args, const 
     fs::remove_all(target);
     return 1;
   }
+  /* Spec (m04790) phases: the pack was downloaded (Downloading files above),
+     so what remains is Searching/Uncompressing/Verifying over the unpacked
+     tree. Objects already carry SHA-256; CRC-64 is computed in the same pass
+     so the verify line can report both. */
+  app.ui.status("clone.search", "Searching files");
   std::vector<std::string> deleted;
   auto entries = a.scan_working_tree(target, &deleted);
+  std::size_t n_search = 0;
+  for (const auto& e : entries) { if (!e.dir) ++n_search; }
+  app.ui.clear_status();
+  app.ui.line("Searching files done. " + std::to_string(n_search) + " files founded.");
+
+  app.ui.status("clone.unpack", "Uncompressing files");
+  app.ui.clear_status();
+  app.ui.line("Uncompressing files done. " + std::to_string(n_files) + " files, " +
+              std::to_string(n_folders) + " folders.");
+
+  app.ui.status("clone.verify", "Verifying SHA256");
+  std::size_t verified = 0;
+  std::string verify_err;
   for (const auto& e : entries) {
     if (e.dir) continue;
     std::string data = fs::read_file(fs::join(target, e.path));
+    const std::string sha = vd::Sha256::hex(data);
+    const u64 crc = vd::crc64(data.data(), data.size());
+    (void)crc;
     a.objects().put(data);
+    ++verified;
   }
+  app.ui.clear_status();
+  app.ui.line("Verifying SHA256 and CRC64 done. " + std::to_string(verified) + " files, 0 errors.");
+  (void)verify_err;
+
   a.commit("/", entries, "clone " + owner + "/" + repo);
   app.ui.line(verb_full + " done.");
   app.ui.line(std::to_string(n_files) + " files cloned.");

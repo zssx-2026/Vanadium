@@ -191,9 +191,9 @@ void print_branch_tree(App& app, const Archive& a, bool tree, bool releases, int
     return;
   }
   /* Spec staged banner + tree. */
-  app.ui.status("list.search", "Searching all of the branched in the archive");
+  app.ui.status("list.search", "Searching all of the branches in the archive");
   app.ui.clear_status();
-  app.ui.line("Searching all of the branched in the archive.");
+  app.ui.line("Searching all of the branches in the archive.");
   app.ui.line("Search done.");
   if (line_form) {
     /* 行形式：名称 类型 路径（节点路径以 / 结尾），列宽对齐。 */
@@ -461,6 +461,9 @@ int cmd_init(App& app, const std::vector<std::string>& args) {
   target = fs::absolute(target);
   if (Archive::looks_like_archive(target)) {
     app.ui.warn(msg("init.exists"));
+    /* Pre-.inv archives (or workspaces whose .inv was wiped) would never be
+       able to reg again; re-init is the only repair entry point. */
+    ensure_registry_dir(target);
     return 0;
   }
   app.ui.status("init.archive", "Initing archive");
@@ -999,7 +1002,7 @@ int cmd_rm(App& app, const std::vector<std::string>& args) {
   app.ui.status("rm.remove", "Removing branch");
   app.ui.clear_status();
   a.remove_branch(branch_path, has_flag(args, "-recursive"));
-  app.ui.line("The branch has beed removed.");
+  app.ui.line("The branch has been removed.");
   std::size_t files = 0, folders = 0, bytes = 0;
   if (info) {
     auto snap = a.head(branch_path);
