@@ -524,15 +524,31 @@ fn render_progress_line(p: &Phase, now: Instant, utf8: bool) -> String {
     } else {
         "--".to_string()
     };
+    /* Spec: [num]/[all] （done size） [size]/s — fullwidth parens per m02304. */
     format!(
-        "{} [{}] {} {} {} ETA:{}",
+        "{} [{}] {} {} （{}） {} ETA:{}",
         p.name,
         bar,
         pct,
         count,
+        human_size(p.done.max(0) as u64),
         rate,
         eta_text(p, now)
     )
+}
+
+fn human_size(bytes: u64) -> String {
+    const K: f64 = 1024.0;
+    let b = bytes as f64;
+    if b >= K * K * K {
+        format!("{:.3}GB", b / (K * K * K))
+    } else if b >= K * K {
+        format!("{:.3}MB", b / (K * K))
+    } else if b >= K {
+        format!("{:.3}KB", b / K)
+    } else {
+        format!("{}B", bytes)
+    }
 }
 
 fn human_rate(rate: f64) -> String {
