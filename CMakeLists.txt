@@ -66,7 +66,7 @@ if(VD_HAVE_CRC64_ASM)
 endif()
 if(WIN32)
   # Native transport: Winsock for TCP/DNS, Schannel (secur32) for TLS, crypt32
-  # for certificate chain validation. No WinHTTP.
+  # for certificate chain validation; the transport uses winsock2 + schannel only.
   target_link_libraries(vd_core PUBLIC ws2_32 crypt32 secur32)
 endif()
 
