@@ -632,6 +632,17 @@ int cmd_reg(App& app, const std::vector<std::string>& args) {
   }
   const std::string type_text = opt_value(args, "-type", archive_type_name(a.type()));
   const ArchiveType type = archive_type_parse(type_text);
+  /* Compression level (spec): 0 tar, 1-2 zip, 3 7z, 4 bz2, 5-6 xz, 7 freearc,
+     8 paq, 9 cmix. Levels above the built-in LZ4 backend are recorded in the
+     registry record and applied as packers land. */
+  int zl = -1;
+  {
+    const std::string zl_text = opt_value(args, "-zl", std::string());
+    if (!zl_text.empty()) {
+      zl = std::atoi(zl_text.c_str());
+      if (zl < 0 || zl > 9) fail(3107, "compression level must be 0-9", zl_text);
+    }
+  }
   if (!a.branch_exists(branch_path)) a.create_branch(branch_path, "");
 
   std::vector<std::string> deleted;
@@ -654,7 +665,7 @@ int cmd_reg(App& app, const std::vector<std::string>& args) {
     record.id = info->id;
     record.archive = a.id();
     record.name = a.name();
-    record.type = archive_type_name(type);
+    record.type = archive_type_name(type) + (zl >= 0 ? "-zl" + std::to_string(zl) : "");
     record.path = branch_path;
     record.dir = abs;
     record.created_ms = info->created_ms;
@@ -665,9 +676,10 @@ int cmd_reg(App& app, const std::vector<std::string>& args) {
       app.ui.warn("registry write failed: " + reg_err);
     }
   }
-  app.ui.line("Registered \"" + branch_path + "\" (" + std::to_string(entries.size()) +
-              " items, id " + short_sha(info ? info->id : id) + ")");
-  done_line(app, "reg", entries.size(), started);
+  if (app.json) {
+    app.ui.line("Registered \"" + branch_path + "\" (" + std::to_string(entries.size()) +
+                " items, id " + short_sha(info ? info->id : id) + ")");
+  }
   return 0;
 }
 
@@ -695,7 +707,6 @@ int cmd_unreg(App& app, const std::vector<std::string>& args) {
 
   /* Drop the registry record when one exists for this branch. */
   if (info) remove_registry(app.cwd, info->id);
-  app.ui.line("Unregistered \"" + branch_path + "\"");
   return 0;
 }
 
