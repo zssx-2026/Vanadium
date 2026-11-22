@@ -19,9 +19,10 @@
 #include "vanadium/vd.h"
 
 namespace vd {
-namespace {
 
-const char* kVersion = "0.4.0";
+const char* kVersion = "0.4.0";  /* external linkage (no static/anon): cmd_update reads it */
+
+namespace {
 
 /* Walk up from start looking for an archive root (meta.json). */
 std::string find_archive_root(const std::string& start) {
@@ -345,7 +346,6 @@ int cmd_set(App& app, const std::vector<std::string>& args) {
 }
 
 int cmd_init(App& app, const std::vector<std::string>& args) {
-  const i64 started = now_ms();
   std::string target = args.size() > 1 && !starts_with(args[1], "-") ? args[1] : app.cwd;
   target = fs::absolute(target);
   if (Archive::looks_like_archive(target)) {
@@ -1087,6 +1087,7 @@ const CmdEntry kCommands[] = {
     {"self-test", cmd_self_test},
     {"bench", cmd_bench},
     {"completion", cmd_completion},
+    {"update", cmd_update},
 };
 
 }  // namespace

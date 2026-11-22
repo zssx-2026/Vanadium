@@ -13,6 +13,11 @@
 #include "vanadium/remote.h"
 #include "vanadium/store.h"
 
+#ifdef _WIN32
+#include <windows.h>
+#include <shellapi.h>
+#endif
+
 namespace vd {
 namespace {
 
@@ -531,6 +536,175 @@ int cmd_report(App& app, const std::vector<std::string>& args) {
   fs::write_file_atomic(path, out.dump(2) + "\n");
   app.ui.line(msgf("report.written", path));
   app.ui.summary(out.dump(-1));
+  return 0;
+}
+
+/* --------------------------------------------------------------- update */
+
+extern const char* kVersion;  /* defined in commands.cpp */
+
+namespace {
+
+/* Directory of the running inv.exe (for NSIS /D=). */
+std::string exe_dir() {
+  char buf[MAX_PATH * 2];
+  const DWORD n = GetModuleFileNameA(nullptr, buf, sizeof(buf));
+  if (n == 0 || n >= sizeof(buf)) return ".";
+  std::string full(buf, n);
+  const std::size_t slash = full.find_last_of("\\/");
+  return slash == std::string::npos ? "." : full.substr(0, slash);
+}
+
+}  // namespace
+
+int cmd_update(App& app, const std::vector<std::string>& args) {
+  const i64 started = now_ms();
+  const bool check_only = has_flag(args, "-check");
+  const bool download_only = has_flag(args, "-download");
+  const bool silent = has_flag(args, "-silent");
+  /* Spec phrasing: staged search banner, then the version question. */
+  app.ui.status("update.search", "Searching for update");
+  app.ui.clear_status();
+  app.ui.line("Searching for update.");
+
+  const std::string channel_repo = "zssx-2026/Infinity-Vanade";
+  std::string owner = channel_repo, repo = channel_repo;
+  {
+    const std::size_t slash = channel_repo.find('/');
+    owner = channel_repo.substr(0, slash);
+    repo = channel_repo.substr(slash + 1);
+  }
+  remote::Github gh = github_for(app, "github.com");
+  Json rel = gh.get_release(owner, repo, "inv");
+  if (!rel.contains("assets") || rel["assets"].size() == 0) {
+    app.ui.error(4014, msg("clone.no_pack"));
+    return 1;
+  }
+  /* Latest setup asset: inv-setup-<version>.exe, newest wins. */
+  std::string best_version, best_url, best_name;
+  {
+    const Json& assets = rel["assets"];
+    for (std::size_t i = 0; i < assets.size(); ++i) {
+      const Json& a = assets[i];
+      const std::string name = a["name"].as_string_or("");
+      if (name.rfind("inv-setup-", 0) != 0 || name.size() < 4 + 4 + 4) continue;
+      std::string ver = name.substr(10, name.size() - 14);  // strip inv-setup- and .exe
+      if (ver > best_version) {
+        best_version = ver;
+        best_url = a["browser_download_url"].as_string_or("");
+        best_name = name;
+      }
+    }
+  }
+  if (best_version.empty()) {
+    app.ui.error(4015, "no installer asset in the release channel");
+    return 1;
+  }
+  if (best_version == std::string(kVersion)) {
+    app.ui.line("You are already on the latest version " + std::string(kVersion) + ".");
+    return 0;
+  }
+  app.ui.line("Found version " + best_version + " for update" +
+              std::string(check_only ? " (check only)." : ". Download it now?(y/n)"));
+  if (check_only) return 0;
+  if (!app.yes && !app.ui.prompt("Download it now?", "y/n")) {
+    app.ui.line("The user doesn't agree to perform this operation, exit.");
+    return 0;
+  }
+
+  std::string cache_dir = opt_value(args, "-path", fs::join(fs::temp_dir(), "inv-update"));
+  fs::mkdirs(cache_dir);
+  const std::string setup_path = fs::join(cache_dir, best_name);
+  app.ui.status("update.download", "Downloading");
+  const bool ok = remote::download_segmented(best_url, setup_path, threads_from(args), &app.ui, nullptr);
+  app.ui.clear_status();
+  if (!ok) {
+    if (app.ui.cancelled()) { app.ui.line(msg("ui.cancelled")); return 130; }
+    app.ui.error(4016, "Download failed: " + best_url);
+    return 1;
+  }
+
+  /* Verify SHA256 against SHA256SUMS.txt in the same release. */
+  std::string sums_url;
+  {
+    const Json& assets = rel["assets"];
+    for (std::size_t i = 0; i < assets.size(); ++i) {
+      const Json& a = assets[i];
+      const std::string name = a["name"].as_string_or("");
+      if (name == "SHA256SUMS.txt") sums_url = a["browser_download_url"].as_string_or("");
+    }
+  }
+  app.ui.status("update.sha", "Verifying SHA256");
+  std::string expected;
+  if (!sums_url.empty()) {
+    const std::string sums_path = fs::join(cache_dir, "SHA256SUMS.txt");
+    if (remote::download_segmented(sums_url, sums_path, 2, &app.ui, nullptr)) {
+      const std::string sums = fs::read_file(sums_path);
+      std::size_t pos = 0;
+      while (pos < sums.size()) {
+        std::size_t eol = sums.find('\n', pos);
+        if (eol == std::string::npos) eol = sums.size();
+        const std::string line0 = sums.substr(pos, eol - pos);
+        pos = eol + 1;
+        const std::string line = trim(line0);
+        if (line.size() < 67) continue;
+        const std::string hex = to_lower(line.substr(0, 64));
+        const bool is_hex = hex.find_first_not_of("0123456789abcdef") == std::string::npos;
+        if (is_hex && line.substr(66).find(best_name) != std::string::npos) expected = hex;
+      }
+    }
+  }
+  app.ui.status("update.crc", "Verifying CRC64");
+  const u64 crc = crc64_file(setup_path);
+  app.ui.clear_status();
+  {
+    Sha256 h;
+    char buf[65536];
+    FILE* f = std::fopen(setup_path.c_str(), "rb");
+    if (!f) {
+      app.ui.error(4017, "cannot read downloaded file");
+      return 1;
+    }
+    std::size_t n;
+    while ((n = std::fread(buf, 1, sizeof(buf), f)) > 0) h.update(buf, n);
+    std::fclose(f);
+    const std::string got = h.final_hex();
+    if (!expected.empty() && got != expected) {
+      fs::remove_file(setup_path);
+      app.ui.error(4018, "SHA256 mismatch, the file is corrupt");
+      return 1;
+    }
+    app.ui.line("Download done. sha256 " + got + " crc64 " + crc64_hex(crc));
+  }
+  if (download_only) {
+    app.ui.line("Downloaded to " + setup_path);
+    return 0;
+  }
+  if (!app.yes && !app.ui.prompt("Install now?", "y/n")) {
+    app.ui.line("The user doesn't agree to perform this operation, exit.");
+    return 0;
+  }
+  if (silent) {
+    app.ui.status("update.install", "Installing");
+    const std::string cmd = "/S /D=" + exe_dir();
+    const int rc = std::system((""" + setup_path + "" /S /D=" + exe_dir()).c_str());
+    app.ui.clear_status();
+    if (rc != 0) {
+      app.ui.error(4019, "silent install failed (exit " + std::to_string(rc) + ")");
+      return 1;
+    }
+    app.ui.line("Install done.");
+  } else {
+    app.ui.status("update.open", "Opening installer");
+    app.ui.clear_status();
+    const HINSTANCE r = ShellExecuteA(nullptr, "open", setup_path.c_str(), nullptr, nullptr, SW_SHOWNORMAL);
+    if ((intptr_t)r <= 32) {
+      app.ui.error(4020, "Opening installer failed (error " + std::to_string((int)(intptr_t)r) + ")");
+      return 1;
+    }
+    app.ui.line("Installer is opened.Follow the step to install.");
+  }
+  (void)started;
   return 0;
 }
 

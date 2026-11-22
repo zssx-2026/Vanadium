@@ -64,5 +64,6 @@ int cmd_remote(App&, const std::vector<std::string>&);
 int cmd_self_test(App&, const std::vector<std::string>&);
 int cmd_bench(App&, const std::vector<std::string>&);
 int cmd_completion(App&, const std::vector<std::string>&);
+int cmd_update(App& app, const std::vector<std::string>& args);
 
 }  // namespace vd
