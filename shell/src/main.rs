@@ -244,15 +244,17 @@ fn parse_args() -> Result<Args, String> {
 }
 
 fn home_dir() -> String {
-    for key in ["INV_HOME", "USERPROFILE"] {
-        if let Some(value) = env_value(key) {
-            if !value.is_empty() {
-                return value;
-            }
-        }
+    /* App data (settings, credentials, caches) lives in %APPDATA%/inv —
+       never in the user profile root or the working directory. */
+    if let Some(value) = env_value("INV_HOME") {
+        return value;
+    }
+    if let Some(appdata) = env_value("APPDATA") {
+        let joined = format!("{}\\inv", appdata.trim_end_matches('\\'));
+        return joined;
     }
     match (std::env::var("HOMEDRIVE"), std::env::var("HOMEPATH")) {
-        (Ok(drive), Ok(path)) => format!("{}{}", drive, path),
+        (Ok(drive), Ok(path)) => format!("{}\\inv", format!("{}{}", drive, path)),
         _ => ".".to_string(),
     }
 }
