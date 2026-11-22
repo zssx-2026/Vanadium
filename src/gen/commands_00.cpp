@@ -92,6 +92,8 @@ const OptRow kOptions[] = {
 {"-dry-run", "", {"Report reclaimable space without deleting", "\u53EA\u62A5\u544A\u53EF\u56DE\u6536\u7A7A\u95F4\uFF0C\u4E0D\u5220\u9664", "\u53EA\u5831\u544A\u53EF\u56DE\u6536\u7A7A\u9593\uFF0C\u4E0D\u522A\u9664", "Report reclaimable space without deleting"}},
 {"-out", "<path>", {"Report path, defaults to inv-report.json in the current directory", "\u62A5\u544A\u8DEF\u5F84\uFF0C\u9ED8\u8BA4\u4E3A\u5F53\u524D\u76EE\u5F55\u7684 inv-report.json", "\u5831\u544A\u8DEF\u5F91\uFF0C\u9ED8\u8A8D\u70BA\u7576\u524D\u76EE\u9304\u7684 inv-report.json", "Report path, defaults to inv-report.json in the current directory"}},
 {"-powershell", "", {"Emit PowerShell completion", "\u8F93\u51FA PowerShell \u8865\u5168", "\u8F38\u51FA PowerShell \u88DC\u5168", "Emit PowerShell completion"}},
+{"-port", "<n>", {"TCP port to listen on (default 8341)", "\u76D1\u542C\u7684 TCP \u7AEF\u53E3\uFF08\u9ED8\u8BA4 8341\uFF09", "\u76E3\u807D\u7684 TCP \u7AEF\u53E3\uFF08\u9ED8\u8A8D 8341\uFF09", "TCP port to listen on (default 8341)"}},
+{"-branch", "<path>", {"Branch to publish (default /)", "\u53D1\u5E03\u7684\u5206\u652F\uFF08\u9ED8\u8BA4 /\uFF09", "\u767C\u5E03\u7684\u5206\u652F\uFF08\u9ED8\u8A8D /\uFF09", "Branch to publish (default /)"}},
 };
 
 const std::size_t kOptionCount = sizeof(kOptions) / sizeof(kOptions[0]);
@@ -126,6 +128,7 @@ const CmdRow kCommands[] = {
 {"self-test", "[filter]", {"Run the generated kernel self-test vectors", "\u8FD0\u884C\u751F\u6210\u7684\u5185\u6838\u81EA\u68C0\u5411\u91CF", "\u904B\u884C\u751F\u6210\u7684\u5167\u6838\u81EA\u6AA2\u5411\u91CF", "Run the generated kernel self-test vectors"}, {"inv self-test [filter] [options]", "inv self-test [filter] [\u9009\u9879]", "inv self-test [filter] [\u9078\u9805]", "inv self-test [filter] [options]"}, 56, 0},
 {"bench", "", {"Measure hashing, compression and IO throughput", "\u6D4B\u91CF\u54C8\u5E0C\u3001\u538B\u7F29\u4E0E IO \u541E\u5410", "\u6E2C\u91CF\u54C8\u5E0C\u3001\u58D3\u7E2E\u8207 IO \u541E\u5410", "Measure hashing, compression and IO throughput"}, {"inv bench [options]", "inv bench [\u9009\u9879]", "inv bench [\u9078\u9805]", "inv bench [options]"}, 56, 0},
 {"completion", "", {"Print a shell completion script", "\u6253\u5370 shell \u8865\u5168\u811A\u672C", "\u6253\u5370 shell \u88DC\u5168\u8173\u672C", "Print a shell completion script"}, {"inv completion [options]", "inv completion [\u9009\u9879]", "inv completion [\u9078\u9805]", "inv completion [options]"}, 56, 1},
+{"serve", "[path]", {"Start an INV web server for the archive", "\u542F\u52A8\u5B58\u6863\u7684 INV \u7F51\u9875\u670D\u52A1\u5668", "\u555F\u52D5\u5B58\u6A94\u7684 INV \u7DB2\u9801\u670D\u52D9\u5668", "Start an INV web server for the archive"}, {"inv serve [path] [options]", "inv serve [path] [\u9009\u9879]", "inv serve [path] [\u9078\u9805]", "inv serve [path] [options]"}, 57, 2},
 };
 
 const std::size_t kCommandCount = sizeof(kCommands) / sizeof(kCommands[0]);

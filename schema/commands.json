@@ -979,6 +979,38 @@
      }
     }
    ]
+  },
+  {
+   "name": "serve",
+   "args": "[path]",
+   "summary": {
+    "en": "Start an INV web server for the archive",
+    "zh-cn": "启动存档的 INV 网页服务器",
+    "tr-cn": "啟動存檔的 INV 網頁服務器",
+    "am-en": "Start an INV web server for the archive"
+   },
+   "options": [
+    {
+     "flag": "-port",
+     "arg": "<n>",
+     "summary": {
+      "en": "TCP port to listen on (default 8341)",
+      "zh-cn": "监听的 TCP 端口（默认 8341）",
+      "tr-cn": "監聽的 TCP 端口（默認 8341）",
+      "am-en": "TCP port to listen on (default 8341)"
+     }
+    },
+    {
+     "flag": "-branch",
+     "arg": "<path>",
+     "summary": {
+      "en": "Branch to publish (default /)",
+      "zh-cn": "发布的分支（默认 /）",
+      "tr-cn": "發布的分支（默認 /）",
+      "am-en": "Branch to publish (default /)"
+     }
+    }
+   ]
   }
  ]
 }

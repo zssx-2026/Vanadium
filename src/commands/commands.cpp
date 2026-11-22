@@ -1219,6 +1219,7 @@ const CmdEntry kCommands[] = {
     {"rm", cmd_rm},
     {"clone", cmd_clone},
     {"fork", cmd_fork},
+    {"serve", cmd_serve},
     {"login", cmd_login},
     {"release", cmd_release},
     {"edit", cmd_edit},

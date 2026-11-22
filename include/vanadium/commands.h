@@ -52,6 +52,7 @@ int cmd_rb(App&, const std::vector<std::string>&);
 int cmd_rm(App&, const std::vector<std::string>&);
 int cmd_clone(App&, const std::vector<std::string>&);
 int cmd_fork(App&, const std::vector<std::string>&);
+int cmd_serve(App&, const std::vector<std::string>&);
 int cmd_login(App&, const std::vector<std::string>&);
 int cmd_release(App&, const std::vector<std::string>&);
 int cmd_edit(App&, const std::vector<std::string>&);
