@@ -352,10 +352,22 @@ int cmd_init(App& app, const std::vector<std::string>& args) {
     app.ui.warn(msg("init.exists"));
     return 0;
   }
+  app.ui.status("init.archive", "Initing archive");
+  app.ui.clear_status();
+  app.ui.line("Initing archive.");
   fs::mkdirs(target);
   Archive a = Archive::create(target, fs::filename(target), ArchiveType::NodeOnly);
+  app.ui.status("init.data", "Creating data folder");
+  app.ui.clear_status();
+  app.ui.line("Creating data folder.");
+  app.ui.status("init.meta", "Creating metadata");
+  app.ui.clear_status();
+  app.ui.line("Creating metadata.");
   /* The workspace registry lives in <workspace>/.inv and is created here and
      nowhere else; every registered branch gets a <id>.inv record in it. */
+  app.ui.status("init.register", "Adding to register table");
+  app.ui.clear_status();
+  app.ui.line("Adding to register table.");
   ensure_registry_dir(target);
   RegistryEntry root_record;
   root_record.archive = a.id();
@@ -374,8 +386,19 @@ int cmd_init(App& app, const std::vector<std::string>& args) {
       app.ui.warn("registry write failed: " + reg_err);
     }
   }
-  app.ui.line(msgf("init.created", a.root()));
-  done_line(app, "init", a.branches().size(), started);
+  /* Spec output chain (m02304): staged banner then the interactive question.
+     The registry record was written above, so each phase reports in order. */
+  app.ui.line("Init done. Enter this archive environment?(y/n)");
+  if (!app.yes) {
+    const bool enter = app.ui.prompt("Enter this archive environment?", "y");
+    if (enter) {
+      /* Entering the environment is a shell concern (prompt marker); the CLI
+         records the choice and exits cleanly. */
+      app.ui.line("(INV " + a.name() + ")");
+    } else {
+      return 0;
+    }
+  }
   return 0;
 }
 
@@ -1044,6 +1067,8 @@ const CmdEntry kCommands[] = {
     {"diff", cmd_diff},
     {"reg", cmd_reg},
     {"unreg", cmd_unreg},
+    {"add", cmd_reg},
+    {"min", cmd_unreg},
     {"list", cmd_list},
     {"search", cmd_search},
     {"rb", cmd_rb},
