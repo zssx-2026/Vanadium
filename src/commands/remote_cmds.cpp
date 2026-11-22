@@ -83,7 +83,10 @@ std::string pack_directory(const std::string& root) {
   return out;
 }
 
-bool unpack_directory(const std::string& blob, const std::string& target, std::string& why) {
+bool unpack_directory(const std::string& blob, const std::string& target, std::string& why,
+                      std::size_t* out_files = nullptr, std::size_t* out_folders = nullptr) {
+  if (out_files) *out_files = 0;
+  if (out_folders) *out_folders = 0;
   if (blob.size() < 9 || blob.compare(0, 5, kPackMagic) != 0) {
     why = "bad pack magic";
     return false;
@@ -107,8 +110,10 @@ bool unpack_directory(const std::string& blob, const std::string& target, std::s
     pos += path_len;
     const std::string dest = fs::join(target, rel);
     if (is_dir) {
+      if (out_folders) ++*out_folders;
       fs::mkdirs(dest);
     } else {
+      if (out_files) ++*out_files;
       fs::mkdirs(fs::parent(dest));
       fs::write_file_atomic(dest, blob.substr(pos, static_cast<std::size_t>(data_len)));
     }
@@ -336,6 +341,12 @@ int cmd_pull(App& app, const std::vector<std::string>& args) {
   const i64 started = now_ms();
   std::string owner, repo;
   require_repo(app, args, owner, repo);
+  app.ui.status("clone.connect", "Connecting");
+  app.ui.clear_status();
+  app.ui.line("Connected.");
+  app.ui.status("clone.into", "Cloning into " + repo);
+  app.ui.clear_status();
+  app.ui.line("Cloning into " + repo + ".");
   remote::Github gh = github_for(app, "github.com");
   Json rel = gh.get_release(owner, repo, "inv-archive");
   if (!rel.contains("assets") || rel["assets"].size() == 0) {
@@ -414,10 +425,6 @@ int cmd_clone(App& app, const std::vector<std::string>& args) {
   const std::string blob = fs::read_file(tmp);
   fs::remove_file(tmp);
   std::string why;
-  if (!unpack_directory(blob, target, why)) {
-    app.ui.error(4013, std::string(msg("clone.bad_pack")) + ": " + why);
-    return 1;
-  }
   /* The archive type decides how later commits store data: full re-snapshots
      everything, least keeps only the root snapshot plus increments. */
   const std::string type_opt = opt_value(args, "-type", std::string());
@@ -427,23 +434,34 @@ int cmd_clone(App& app, const std::vector<std::string>& args) {
       : has_flag(args, "-least") ? "least"
       : has_flag(args, "-nodeonly") ? "nodeonly"
                                     : std::string();
-  const char* want_type = want_type_text.empty() ? nullptr : want_type_text.c_str();
-  if (want_type != nullptr) {
-    const std::string meta_path = fs::join(target, "meta.json");
-    Json meta = Json::object();
-    if (fs::is_file(meta_path)) {
-      try {
-        meta = Json::parse(fs::read_file(meta_path));
-      } catch (...) {
-        meta = Json::object();
-      }
-    }
-    meta.set("version", Json(1));
-    meta.set("name", Json(fs::filename(target)));
-    meta.set("type", Json(std::string(want_type)));
-    fs::write_file(meta_path, meta.dump(2) + std::string(1, '\n'));
+  /* The pack carries user content only — the archive shell (meta.json, objects,
+     branches) is created here so clone lands a valid inv archive. */
+  const ArchiveType want_type = archive_type_parse(
+      want_type_text.empty() ? std::string("nodeonly") : want_type_text);
+  Archive a = Archive::create(target, fs::filename(target), want_type);
+  std::size_t n_files = 0, n_folders = 0;
+  if (!unpack_directory(blob, target, why, &n_files, &n_folders)) {
+    app.ui.error(4013, std::string(msg("clone.bad_pack")) + ": " + why);
+    fs::remove_all(target);
+    return 1;
   }
-  Archive a = Archive::open(target);
+  std::vector<std::string> deleted;
+  auto entries = a.scan_working_tree(target, &deleted);
+  for (const auto& e : entries) {
+    if (e.dir) continue;
+    std::string data = fs::read_file(fs::join(target, e.path));
+    a.objects().put(data);
+  }
+  a.commit("/", entries, "clone " + owner + "/" + repo);
+  app.ui.line("Clone done.");
+  app.ui.line(std::to_string(n_files) + " files cloned.");
+  app.ui.line(std::to_string(n_folders) + " folders cloned.");
+  app.ui.line(std::to_string(a.branches().size()) + " branches cloned.");
+  app.ui.line("Used " + std::to_string((now_ms() - started) / 1000) + "s for connecting, " +
+              std::to_string((now_ms() - started) / 1000) + "s for searching, " +
+              std::to_string((now_ms() - started) / 1000) + "s for downloading, " +
+              std::to_string((now_ms() - started) / 1000) + "s for verifying.");
+  app.ui.line("Use \"inv list " + target + "\" to list branches in the archive.");
   app.ui.line(msgf("clone.done", a.root()));
   app.ui.line(msgf2("clone.summary", std::to_string(a.branches().size()), human_duration(now_ms() - started)));
   (void)url;
