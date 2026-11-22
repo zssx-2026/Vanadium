@@ -37,6 +37,7 @@ void print_help(App& app, const std::string& command);
 /* Individual commands, one translation unit per family under src/commands. */
 int cmd_help(App&, const std::vector<std::string>&);
 int cmd_version(App&, const std::vector<std::string>&);
+int cmd_info(App&, const std::vector<std::string>&);
 int cmd_set(App&, const std::vector<std::string>&);
 int cmd_init(App&, const std::vector<std::string>&);
 int cmd_status(App&, const std::vector<std::string>&);

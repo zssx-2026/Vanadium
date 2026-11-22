@@ -60,13 +60,6 @@ void load_settings(App& app) {
 
 void save_settings(App& app) { app.settings.save(default_settings_path(app)); }
 
-/* Render "12 files, 3 branches" style count lines plus elapsed time. */
-void done_line(App& app, const std::string& what, std::size_t count, i64 started_ms) {
-  app.ui.line(what + " done.");
-  app.ui.line("  " + std::to_string(count) + " " + msg("ui.items") + ", " +
-              human_duration(now_ms() - started_ms));
-}
-
 std::string short_sha(const std::string& sha, std::size_t n = 12) {
   return sha.size() <= n ? sha : sha.substr(0, n);
 }
@@ -391,6 +384,36 @@ int cmd_version(App& app, const std::vector<std::string>&) {
   return 0;
 }
 
+/* Spec (m04790): version banner, provenance, channel, timestamps and links.
+   The release timestamps come from the snapshot/stable schedule, not from the
+   build clock, so repeated runs on the same build print the same values. */
+int cmd_info(App& app, const std::vector<std::string>&) {
+  const std::string v = kVersion;
+  app.ui.line("INV " + v);
+  app.ui.line("Made by Infinity.Inc");
+  std::string channel = "Official version";
+  if (v.find("snapshot") != std::string::npos) channel = "Snapshot version";
+  else if (v.find("-alpha") != std::string::npos || v.find("-beta") != std::string::npos) channel = "Beta version";
+  app.ui.line(channel);
+  app.ui.line("Release time stamp: 2026-11-22 19:50:00 (UTC+8)");
+  app.ui.line("Official support period: n/a (pre-release channel)");
+  app.ui.line("");
+  app.ui.line("          ███████                     ███████");
+  app.ui.line("       ███       ███               ███       ███");
+  app.ui.line("     ███             ███         ███             ███");
+  app.ui.line("   ██                   ███   ███                   ██");
+  app.ui.line("  ██                       ███                       ██");
+  app.ui.line("   ██                   ███   ███                   ██");
+  app.ui.line("     ███             ███         ███             ███");
+  app.ui.line("       ███       ███               ███       ███");
+  app.ui.line("          ███████                     ███████");
+  app.ui.line("");
+  app.ui.line("Give a star of this project: https://github.com/zssx-2026/Vanadium");
+  app.ui.line("Open the release page of this version: https://github.com/zssx-2026/Infinity-Vanade/releases");
+  app.ui.line("Open the project page on Github: https://github.com/zssx-2026/Vanadium");
+  return 0;
+}
+
 int cmd_help(App& app, const std::vector<std::string>& args) {
   print_help(app, args.size() > 1 ? args[1] : std::string());
   return 0;
@@ -602,7 +625,6 @@ int cmd_diff(App& app, const std::vector<std::string>& args) {
 }
 
 int cmd_reg(App& app, const std::vector<std::string>& args) {
-  const i64 started = now_ms();
   /* Registering requires an initialised workspace: the registry directory
      <cwd>/.inv must already exist. It is never created implicitly. */
   if (!workspace_initialized(app.cwd)) {
@@ -1202,6 +1224,7 @@ struct CmdEntry {
 const CmdEntry kCommands[] = {
     {"help", cmd_help},
     {"version", cmd_version},
+    {"info", cmd_info},
     {"set", cmd_set},
     {"init", cmd_init},
     {"status", cmd_status},
