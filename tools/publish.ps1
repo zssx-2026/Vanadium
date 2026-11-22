@@ -27,7 +27,7 @@
 
 .PARAMETER Tag
   Release tag. Defaults to inv. Snapshot/alpha builds pass e.g.
-  -Tag inv-0.5.0-snapshot.1 -Version 0.5.0-snapshot.1 -Prerelease.
+  -Tag inv-0.5.0-snapshot.2 -Version 0.5.0-snapshot.2 -Prerelease.
 
 .PARAMETER Repo
   owner/name. Defaults to zssx-2026/Infinity-Vanade.

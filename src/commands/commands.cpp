@@ -22,7 +22,7 @@
 
 namespace vd {
 
-const char* kVersion = "0.5.0-snapshot.1";  /* external linkage (no static/anon): cmd_update reads it */
+const char* kVersion = "0.5.0-snapshot.2";  /* external linkage (no static/anon): cmd_update reads it */
 
 namespace {
 

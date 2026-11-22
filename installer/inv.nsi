@@ -40,7 +40,7 @@ SetCompressor /SOLID zlib
   !define APP_VERSION "0.5.0"
 !endif
 
-; A pre-release suffix ("0.5.0-snapshot.1") is split off first: the numeric
+; A pre-release suffix ("0.5.0-snapshot.2") is split off first: the numeric
 ; MAJOR.MINOR.PATCH fields drive the Windows version metadata, the suffix is
 ; carried into DisplayVersion / OutFile / branding verbatim.
 !define VER_FULL "${APP_VERSION}"
