@@ -667,18 +667,26 @@ int cmd_reg(App& app, const std::vector<std::string>& args) {
   }
   if (!a.branch_exists(branch_path)) a.create_branch(branch_path, "");
 
+  /* Spec (m04790) chain for add: compress what was searched, copy it into
+     the archive, then announce. The object store holds compressed payloads
+     already, so the phases report over the same scan+put+commit work. */
+  app.ui.status("reg.compress", "Compressing files");
   std::vector<std::string> deleted;
   auto entries = a.scan_working_tree(abs, &deleted);
+  std::size_t n_files = 0;
   for (const auto& e : entries) {
     if (e.dir) continue;
     std::string data = fs::read_file(fs::join(abs, e.path));
     a.objects().put(data);
+    ++n_files;
   }
-  const std::string id = a.commit(branch_path, entries, opt_value(args, "-message", "register"));
-
-  app.ui.status("reg.register", "Registering folder");
   app.ui.clear_status();
-  app.ui.line("The folder has been registered.");
+  app.ui.line("Compress done. " + std::to_string(n_files) + " files compressed.");
+
+  app.ui.status("reg.copy", "Copying files");
+  const std::string id = a.commit(branch_path, entries, opt_value(args, "-message", "register"));
+  app.ui.clear_status();
+  app.ui.line("The folder has been added.");
 
   /* Persist the registry record <cwd>/.inv/<branch id>.inv. */
   const auto info = a.find(branch_path);
