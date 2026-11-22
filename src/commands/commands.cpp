@@ -1,8 +1,10 @@
 #include "vanadium/commands.h"
 
 #include <algorithm>
+#include <array>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <functional>
 #include <map>
 #include <regex>
@@ -138,12 +140,53 @@ void print_file_tree(App& app, const Archive& a, const std::string& branch_path,
   }
 }
 
-void print_branch_tree(App& app, const Archive& a, bool tree, bool releases, int max_depth) {
+void print_branch_tree(App& app, const Archive& a, bool tree, bool releases, int max_depth,
+                       bool line_form, bool sys_only) {
   std::vector<BranchInfo> all = a.branches();
   std::sort(all.begin(), all.end(), [](const BranchInfo& x, const BranchInfo& y) {
     return x.path < y.path;
   });
-  if (!tree) {
+  /* Virtual release system branches (spec tree always shows the releases namespaces). */
+  struct SysRelease { const char* path; const char* name; };
+  const SysRelease kReleases[] = {
+      {"releases/tag", "tag"}, {"releases/tag/v1.0", "v1.0"},
+      {"releases/rawdata", "rawdata"}, {"releases/rawdata/v1.0", "v1.0"}};
+  std::size_t nodes = 0, branches = 0;
+  auto kind_of = [](const BranchInfo& b) -> const char* {
+    return b.head_seq == 0 ? "分支节点" : "分支";
+  };
+  if (sys_only) {
+    /* System namespaces only: branch store + registry + release channels. */
+    app.ui.line("branches 分支节点 /branches/");
+    ++nodes;
+    for (const auto& b : all) {
+      if (b.path == "/") continue;
+      app.ui.line(std::string(b.name) + " " + kind_of(b) + " " + b.path);
+      ++branches;
+    }
+    const auto records = list_registry(a.root());
+    if (!records.empty()) {
+      app.ui.line("registry 分支节点 /registry/");
+      ++nodes;
+      for (const auto& r : records) {
+        app.ui.line(std::string(short_sha(r.id)) + kRegistrySuffix + " 记录 /registry/" +
+                    short_sha(r.id) + kRegistrySuffix);
+      }
+    }
+    for (const auto& r : kReleases) {
+      (void)r;
+    }
+    app.ui.line("releases 分支节点 /releases/");
+    app.ui.line("tag 分支节点 /releases/tag/");
+    app.ui.line("v1.0 分支 /releases/tag/v1.0");
+    app.ui.line("rawdata 分支节点 /releases/rawdata/");
+    app.ui.line("v1.0 分支 /releases/rawdata/v1.0");
+    nodes += 3;
+    branches += 2;
+    app.ui.line("list " + std::to_string(nodes) + " nodes, " + std::to_string(branches) + " branches.");
+    return;
+  }
+  if (!tree && !line_form) {
     for (const auto& b : all) {
       app.ui.line(b.path + "  @" + std::to_string(b.head_seq) + "  " + short_sha(b.id, 12) +
                   (b.system ? "  [system]" : ""));
@@ -154,23 +197,68 @@ void print_branch_tree(App& app, const Archive& a, bool tree, bool releases, int
     }
     return;
   }
-  app.ui.line("/");
-  app.ui.line("branches/");
+  /* Spec staged banner + tree. */
+  app.ui.status("list.search", "Searching all of the branched in the archive");
+  app.ui.clear_status();
+  app.ui.line("Searching all of the branched in the archive.");
+  app.ui.line("Search done.");
+  if (line_form) {
+    /* 行形式：名称 类型 路径（节点路径以 / 结尾），列宽对齐。 */
+    std::vector<std::array<std::string, 3>> rows;
+    std::size_t w_name = 4, w_kind = 6;
+    auto push_row = [&](const std::string& name, const char* kind, const std::string& path) {
+      rows.push_back({name, kind, path});
+      w_name = std::max(w_name, name.size());
+      w_kind = std::max(w_kind, std::strlen(kind));
+    };
+    std::string root_kind = "主分支";
+    (void)root_kind;
+    push_row("/", "主分支", "/");
+    push_row("branches", "分支节点", "/branches/");
+    for (const auto& b : all) {
+      if (b.path == "/") continue;
+      push_row(b.name, b.head_seq == 0 ? "分支节点" : "分支", b.path + (b.head_seq == 0 ? "/" : ""));
+    }
+    push_row("releases", "分支节点", "/releases/");
+    push_row("tag", "分支节点", "/releases/tag/");
+    push_row("v1.0", "分支", "/releases/tag/v1.0");
+    push_row("rawdata", "分支节点", "/releases/rawdata/");
+    push_row("v1.0", "分支", "/releases/rawdata/v1.0");
+    for (const auto& r : rows) {
+      std::string name = r[0];
+      std::string kind = r[1];
+      name.resize(w_name + 2, ' ');
+      kind.resize(w_kind + 2, ' ');
+      app.ui.line(name + kind + r[2]);
+      if (kind.find("节点") != std::string::npos || r[1] == std::string("主分支")) ++nodes;
+      else ++branches;
+    }
+    nodes = rows.size() ? nodes : 0;
+    app.ui.line("list " + std::to_string(nodes) + " nodes, " + std::to_string(branches) + " branches.");
+    return;
+  }
+  /* Tree form: (系统分支) markers, releases namespaces unfolded. */
+  app.ui.line("/（主分支）");
+  app.ui.line("  branches/（系统分支）");
   for (const auto& b : all) {
     if (b.path == "/") continue;
     const std::string rel = b.path.substr(1);
-    const std::size_t depth = static_cast<std::size_t>(std::count(rel.begin(), rel.end(), '/'));
+    const std::size_t depth = static_cast<std::size_t>(std::count(rel.begin(), rel.end(), '/')) + 1;
     if (max_depth >= 0 && static_cast<int>(depth) > max_depth) continue;
-    std::string line = "  ";
-    for (std::size_t i = 0; i < depth; ++i) line += "|   ";
-    line += "|-- " + b.name;
-    if (b.head_seq > 0) line += "  @" + std::to_string(b.head_seq);
+    std::string line;
+    for (std::size_t i = 0; i < depth; ++i) line += "    ";
+    line += b.name;
+    if (b.head_seq == 0) line += "/";
+    line += "（" + std::string(b.head_seq == 0 ? "分支节点" : "分支") + "）";
     app.ui.line(line);
+    if (b.head_seq == 0) ++nodes; else ++branches;
   }
-  if (releases) {
-    app.ui.line("releases/tag/v1.0");
-    app.ui.line("releases/rawdata/v1.0");
-  }
+  app.ui.line("  releases/（系统分支，其下所有分支和节点都不列出）");
+  app.ui.line("    tag/");
+  app.ui.line("      v1.0");
+  app.ui.line("    rawdata/");
+  app.ui.line("      v1.0");
+  app.ui.line("list " + std::to_string(nodes) + " nodes, " + std::to_string(branches) + " branches.");
 }
 
 /* Options that consume the following token as their value. need_arg uses this
@@ -624,21 +712,7 @@ int cmd_list(App& app, const std::vector<std::string>& args) {
   const bool tree = has_flag(args, "-tree");
   const bool releases = has_flag(args, "-releases");
   if (has_flag(args, "-sys")) {
-    /* System namespaces only: the branch store and the release channels. */
-    app.ui.line("branches/");
-    for (const auto& b : a.branches()) {
-      if (b.path == "/") continue;
-      app.ui.line("  " + b.path + (b.head_seq > 0 ? "  @" + std::to_string(b.head_seq) : ""));
-    }
-    app.ui.line("releases/tag/v1.0");
-    app.ui.line("releases/rawdata/v1.0");
-    const auto records = list_registry(a.root());
-    if (!records.empty()) {
-      app.ui.line("registry/");
-      for (const auto& r : records) {
-        app.ui.line("  " + short_sha(r.id) + kRegistrySuffix + "  " + r.path);
-      }
-    }
+    print_branch_tree(app, a, true, releases, -1, has_flag(args, "-line"), true);
     return 0;
   }
   int max_depth = -1;
@@ -661,14 +735,18 @@ int cmd_list(App& app, const std::vector<std::string>& args) {
     else if (a.branch_exists(target)) branch_path = target;
     else if (!fs_start.empty() && a.branch_exists("/")) branch_path.clear();
   }
-  if (!branch_path.empty() && a.branch_exists(branch_path)) {
+  /* Root "/" keeps meaning "list the branches" (spec). A non-root branch path or a
+     real subdirectory shows that branch's files. */
+  if (!branch_path.empty() && branch_path != "/" && a.branch_exists(branch_path)) {
     print_file_tree(app, a, branch_path, max_depth, has_flag(args, "-line"));
     return 0;
   }
   if (!branch_path.empty() && branch_path != "/") {
     fail(3013, msg("store.no_branch"), branch_path);
   }
-  print_branch_tree(app, a, tree, releases, max_depth);
+  /* Spec default: the tree form with staged banner; -line selects the row form. */
+  print_branch_tree(app, a, tree || !has_flag(args, "-line"), releases, max_depth,
+                    has_flag(args, "-line"), false);
   return 0;
 }
 
