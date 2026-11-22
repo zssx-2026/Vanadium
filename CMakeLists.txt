@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(vanadium VERSION 0.3.0 LANGUAGES C CXX)
+project(vanadium VERSION 0.4.0 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -44,8 +44,14 @@ set(VD_CORE_SOURCES
   "${CMAKE_CURRENT_SOURCE_DIR}/src/core/i18n.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/src/core/settings.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/src/core/store.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/src/core/registry.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/src/core/remote/http.cpp"
-  "${CMAKE_CURRENT_SOURCE_DIR}/src/core/remote/winhttp_util.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/src/core/remote/transport.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/src/core/remote/net/uri.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/src/core/remote/net/socket.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/src/core/remote/net/tls.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/src/core/remote/net/http1.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/src/core/remote/net/sched.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/src/core/remote/download.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/src/core/remote/github.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/src/core/remote/auth.cpp")
@@ -59,7 +65,9 @@ if(VD_HAVE_CRC64_ASM)
   target_compile_definitions(vd_core PUBLIC VD_HAVE_CRC64_ASM=1)
 endif()
 if(WIN32)
-  target_link_libraries(vd_core PUBLIC winhttp)
+  # Native transport: Winsock for TCP/DNS, Schannel (secur32) for TLS, crypt32
+  # for certificate chain validation. No WinHTTP.
+  target_link_libraries(vd_core PUBLIC ws2_32 crypt32 secur32)
 endif()
 
 # ---- command layer ----
@@ -98,7 +106,12 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/src/core/remote/probe.cpp")
     "${CMAKE_CURRENT_SOURCE_DIR}/src/core/remote/probe.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/core/remote/probe_shim.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/core/remote/http.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/core/remote/winhttp_util.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/core/remote/transport.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/core/remote/net/uri.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/core/remote/net/socket.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/core/remote/net/tls.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/core/remote/net/http1.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/core/remote/net/sched.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/core/remote/download.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/core/remote/github.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/core/remote/auth.cpp"
@@ -108,7 +121,7 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/src/core/remote/probe.cpp")
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/gen")
   if(WIN32)
-    target_link_libraries(vd_probe PRIVATE winhttp)
+    target_link_libraries(vd_probe PRIVATE ws2_32 crypt32 secur32)
   endif()
   set_target_properties(vd_probe PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/build")
 endif()

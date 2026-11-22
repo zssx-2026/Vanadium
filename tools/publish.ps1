@@ -9,6 +9,22 @@
   The token is read from the user environment variable
   gittoken_zssx-2026_1 and is never printed or written to disk.
 
+.NOTES
+  0.5.0 native-transport gate: run these before publishing. The guardrails are
+  advisory by default (they print ADVISORY lines and keep a 0.4.x run green),
+  so the switches below are what turn them into hard failures.
+
+    cmake --build build\cmake --parallel 1
+    powershell -NoProfile -ExecutionPolicy Bypass -File tests\installer-static.ps1 -RequireNativeTransport
+      expect: checks=14 failures=0 / STATIC_RESULT=PASS
+              (no WinHTTP in src/include/CMakeLists.txt, WINHTTP.dll gone from the
+               import table, WS2_32 + CRYPT32 + SECUR32 present)
+    powershell -NoProfile -ExecutionPolicy Bypass -File tools\acceptance.ps1 -RequireNativeTransport
+      expect: step 4b PASS ("transport  native (winsock2 + schannel)") and
+              step 8b PASS (downloader local range server: rc=0 + sha256) and
+              ACCEPTANCE_RESULT=PASS with fail=0
+              (step 4c asserts the "abi vanadium-abi-1" tag unconditionally)
+
 .PARAMETER Tag
   Release tag. Defaults to inv.
 
@@ -76,7 +92,7 @@ function Get-ExpectedVersion {
     $v = (Get-Content -LiteralPath $vf -TotalCount 1)
     if ($v) { return $v.Trim() }
   }
-  return '0.3.0'
+  return '0.4.0'
 }
 
 # ---------------------------------------------------------------------------

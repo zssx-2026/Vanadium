@@ -1,0 +1,9944 @@
+{
+ "version": 1,
+ "comment": "Registry tables for the Vanadium HTTP client and TLS layer",
+ "status": [
+  {
+   "code": 100,
+   "reason": "Continue",
+   "class": "informational"
+  },
+  {
+   "code": 101,
+   "reason": "Switching Protocols",
+   "class": "informational"
+  },
+  {
+   "code": 102,
+   "reason": "Processing",
+   "class": "informational"
+  },
+  {
+   "code": 103,
+   "reason": "Early Hints",
+   "class": "informational"
+  },
+  {
+   "code": 200,
+   "reason": "OK",
+   "class": "success"
+  },
+  {
+   "code": 201,
+   "reason": "Created",
+   "class": "success"
+  },
+  {
+   "code": 202,
+   "reason": "Accepted",
+   "class": "success"
+  },
+  {
+   "code": 203,
+   "reason": "Non-Authoritative Information",
+   "class": "success"
+  },
+  {
+   "code": 204,
+   "reason": "No Content",
+   "class": "success"
+  },
+  {
+   "code": 205,
+   "reason": "Reset Content",
+   "class": "success"
+  },
+  {
+   "code": 206,
+   "reason": "Partial Content",
+   "class": "success"
+  },
+  {
+   "code": 207,
+   "reason": "Multi-Status",
+   "class": "success"
+  },
+  {
+   "code": 208,
+   "reason": "Already Reported",
+   "class": "success"
+  },
+  {
+   "code": 226,
+   "reason": "IM Used",
+   "class": "success"
+  },
+  {
+   "code": 300,
+   "reason": "Multiple Choices",
+   "class": "redirect"
+  },
+  {
+   "code": 301,
+   "reason": "Moved Permanently",
+   "class": "redirect"
+  },
+  {
+   "code": 302,
+   "reason": "Found",
+   "class": "redirect"
+  },
+  {
+   "code": 303,
+   "reason": "See Other",
+   "class": "redirect"
+  },
+  {
+   "code": 304,
+   "reason": "Not Modified",
+   "class": "redirect"
+  },
+  {
+   "code": 305,
+   "reason": "Use Proxy",
+   "class": "redirect"
+  },
+  {
+   "code": 307,
+   "reason": "Temporary Redirect",
+   "class": "redirect"
+  },
+  {
+   "code": 308,
+   "reason": "Permanent Redirect",
+   "class": "redirect"
+  },
+  {
+   "code": 400,
+   "reason": "Bad Request",
+   "class": "client"
+  },
+  {
+   "code": 401,
+   "reason": "Unauthorized",
+   "class": "client"
+  },
+  {
+   "code": 402,
+   "reason": "Payment Required",
+   "class": "client"
+  },
+  {
+   "code": 403,
+   "reason": "Forbidden",
+   "class": "client"
+  },
+  {
+   "code": 404,
+   "reason": "Not Found",
+   "class": "client"
+  },
+  {
+   "code": 405,
+   "reason": "Method Not Allowed",
+   "class": "client"
+  },
+  {
+   "code": 406,
+   "reason": "Not Acceptable",
+   "class": "client"
+  },
+  {
+   "code": 407,
+   "reason": "Proxy Authentication Required",
+   "class": "client"
+  },
+  {
+   "code": 408,
+   "reason": "Request Timeout",
+   "class": "client"
+  },
+  {
+   "code": 409,
+   "reason": "Conflict",
+   "class": "client"
+  },
+  {
+   "code": 410,
+   "reason": "Gone",
+   "class": "client"
+  },
+  {
+   "code": 411,
+   "reason": "Length Required",
+   "class": "client"
+  },
+  {
+   "code": 412,
+   "reason": "Precondition Failed",
+   "class": "client"
+  },
+  {
+   "code": 413,
+   "reason": "Content Too Large",
+   "class": "client"
+  },
+  {
+   "code": 414,
+   "reason": "URI Too Long",
+   "class": "client"
+  },
+  {
+   "code": 415,
+   "reason": "Unsupported Media Type",
+   "class": "client"
+  },
+  {
+   "code": 416,
+   "reason": "Range Not Satisfiable",
+   "class": "client"
+  },
+  {
+   "code": 417,
+   "reason": "Expectation Failed",
+   "class": "client"
+  },
+  {
+   "code": 418,
+   "reason": "I'm a teapot",
+   "class": "client"
+  },
+  {
+   "code": 421,
+   "reason": "Misdirected Request",
+   "class": "client"
+  },
+  {
+   "code": 422,
+   "reason": "Unprocessable Content",
+   "class": "client"
+  },
+  {
+   "code": 423,
+   "reason": "Locked",
+   "class": "client"
+  },
+  {
+   "code": 424,
+   "reason": "Failed Dependency",
+   "class": "client"
+  },
+  {
+   "code": 425,
+   "reason": "Too Early",
+   "class": "client"
+  },
+  {
+   "code": 426,
+   "reason": "Upgrade Required",
+   "class": "client"
+  },
+  {
+   "code": 428,
+   "reason": "Precondition Required",
+   "class": "client"
+  },
+  {
+   "code": 429,
+   "reason": "Too Many Requests",
+   "class": "client"
+  },
+  {
+   "code": 431,
+   "reason": "Request Header Fields Too Large",
+   "class": "client"
+  },
+  {
+   "code": 451,
+   "reason": "Unavailable For Legal Reasons",
+   "class": "client"
+  },
+  {
+   "code": 500,
+   "reason": "Internal Server Error",
+   "class": "server"
+  },
+  {
+   "code": 501,
+   "reason": "Not Implemented",
+   "class": "server"
+  },
+  {
+   "code": 502,
+   "reason": "Bad Gateway",
+   "class": "server"
+  },
+  {
+   "code": 503,
+   "reason": "Service Unavailable",
+   "class": "server"
+  },
+  {
+   "code": 504,
+   "reason": "Gateway Timeout",
+   "class": "server"
+  },
+  {
+   "code": 505,
+   "reason": "HTTP Version Not Supported",
+   "class": "server"
+  },
+  {
+   "code": 506,
+   "reason": "Variant Also Negotiates",
+   "class": "server"
+  },
+  {
+   "code": 507,
+   "reason": "Insufficient Storage",
+   "class": "server"
+  },
+  {
+   "code": 508,
+   "reason": "Loop Detected",
+   "class": "server"
+  },
+  {
+   "code": 510,
+   "reason": "Not Extended",
+   "class": "server"
+  },
+  {
+   "code": 511,
+   "reason": "Network Authentication Required",
+   "class": "server"
+  },
+  {
+   "code": 419,
+   "reason": "Page Expired",
+   "class": "client"
+  },
+  {
+   "code": 420,
+   "reason": "Enhance Your Calm",
+   "class": "client"
+  },
+  {
+   "code": 444,
+   "reason": "Connection Closed Without Response",
+   "class": "client"
+  },
+  {
+   "code": 449,
+   "reason": "Retry With",
+   "class": "client"
+  },
+  {
+   "code": 450,
+   "reason": "Blocked by Windows Parental Controls",
+   "class": "client"
+  },
+  {
+   "code": 494,
+   "reason": "Request Header Too Large",
+   "class": "client"
+  },
+  {
+   "code": 495,
+   "reason": "SSL Certificate Error",
+   "class": "client"
+  },
+  {
+   "code": 496,
+   "reason": "SSL Certificate Required",
+   "class": "client"
+  },
+  {
+   "code": 497,
+   "reason": "HTTP Request Sent to HTTPS Port",
+   "class": "client"
+  },
+  {
+   "code": 498,
+   "reason": "Invalid Token",
+   "class": "client"
+  },
+  {
+   "code": 499,
+   "reason": "Client Closed Request",
+   "class": "client"
+  },
+  {
+   "code": 509,
+   "reason": "Bandwidth Limit Exceeded",
+   "class": "server"
+  },
+  {
+   "code": 520,
+   "reason": "Unknown Error",
+   "class": "server"
+  },
+  {
+   "code": 521,
+   "reason": "Web Server Is Down",
+   "class": "server"
+  },
+  {
+   "code": 522,
+   "reason": "Connection Timed Out",
+   "class": "server"
+  },
+  {
+   "code": 523,
+   "reason": "Origin Is Unreachable",
+   "class": "server"
+  },
+  {
+   "code": 524,
+   "reason": "A Timeout Occurred",
+   "class": "server"
+  },
+  {
+   "code": 525,
+   "reason": "SSL Handshake Failed",
+   "class": "server"
+  },
+  {
+   "code": 526,
+   "reason": "Invalid SSL Certificate",
+   "class": "server"
+  },
+  {
+   "code": 527,
+   "reason": "Railgun Error",
+   "class": "server"
+  },
+  {
+   "code": 530,
+   "reason": "Site is Frozen",
+   "class": "server"
+  },
+  {
+   "code": 598,
+   "reason": "Network Read Timeout Error",
+   "class": "server"
+  },
+  {
+   "code": 599,
+   "reason": "Network Connect Timeout Error",
+   "class": "server"
+  }
+ ],
+ "headers": [
+  {
+   "name": "accept",
+   "canonical": "Accept",
+   "request": true,
+   "response": false,
+   "combinable": true
+  },
+  {
+   "name": "accept-charset",
+   "canonical": "Accept-Charset",
+   "request": true,
+   "response": false,
+   "combinable": true
+  },
+  {
+   "name": "accept-encoding",
+   "canonical": "Accept-Encoding",
+   "request": true,
+   "response": false,
+   "combinable": true
+  },
+  {
+   "name": "accept-language",
+   "canonical": "Accept-Language",
+   "request": true,
+   "response": false,
+   "combinable": true
+  },
+  {
+   "name": "accept-ranges",
+   "canonical": "Accept-Ranges",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "access-control-allow-credentials",
+   "canonical": "Access-Control-Allow-Credentials",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "access-control-allow-headers",
+   "canonical": "Access-Control-Allow-Headers",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "access-control-allow-methods",
+   "canonical": "Access-Control-Allow-Methods",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "access-control-allow-origin",
+   "canonical": "Access-Control-Allow-Origin",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "access-control-allow-private-network",
+   "canonical": "Access-Control-Allow-Private-Network",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "access-control-expose-headers",
+   "canonical": "Access-Control-Expose-Headers",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "access-control-max-age",
+   "canonical": "Access-Control-Max-Age",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "access-control-request-headers",
+   "canonical": "Access-Control-Request-Headers",
+   "request": true,
+   "response": false,
+   "combinable": true
+  },
+  {
+   "name": "access-control-request-method",
+   "canonical": "Access-Control-Request-Method",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "access-control-request-private-network",
+   "canonical": "Access-Control-Request-Private-Network",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "age",
+   "canonical": "Age",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "allow",
+   "canonical": "Allow",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "alt-svc",
+   "canonical": "Alt-Svc",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "alt-used",
+   "canonical": "Alt-Used",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "authorization",
+   "canonical": "Authorization",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "cache-control",
+   "canonical": "Cache-Control",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "cache-status",
+   "canonical": "Cache-Status",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "cdn-cache-control",
+   "canonical": "CDN-Cache-Control",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "cdn-loop",
+   "canonical": "CDN-Loop",
+   "request": true,
+   "response": false,
+   "combinable": true
+  },
+  {
+   "name": "clear-site-data",
+   "canonical": "Clear-Site-Data",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "connection",
+   "canonical": "Connection",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "content-digest",
+   "canonical": "Content-Digest",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "content-disposition",
+   "canonical": "Content-Disposition",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "content-encoding",
+   "canonical": "Content-Encoding",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "content-language",
+   "canonical": "Content-Language",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "content-length",
+   "canonical": "Content-Length",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "content-location",
+   "canonical": "Content-Location",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "content-range",
+   "canonical": "Content-Range",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "content-security-policy",
+   "canonical": "Content-Security-Policy",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "content-security-policy-report-only",
+   "canonical": "Content-Security-Policy-Report-Only",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "content-type",
+   "canonical": "Content-Type",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "cookie",
+   "canonical": "Cookie",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "cross-origin-embedder-policy",
+   "canonical": "Cross-Origin-Embedder-Policy",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "cross-origin-opener-policy",
+   "canonical": "Cross-Origin-Opener-Policy",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "cross-origin-resource-policy",
+   "canonical": "Cross-Origin-Resource-Policy",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "date",
+   "canonical": "Date",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "dnt",
+   "canonical": "DNT",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "etag",
+   "canonical": "ETag",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "expect",
+   "canonical": "Expect",
+   "request": true,
+   "response": false,
+   "combinable": true
+  },
+  {
+   "name": "expect-ct",
+   "canonical": "Expect-CT",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "expires",
+   "canonical": "Expires",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "forwarded",
+   "canonical": "Forwarded",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "from",
+   "canonical": "From",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "host",
+   "canonical": "Host",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "if-match",
+   "canonical": "If-Match",
+   "request": true,
+   "response": false,
+   "combinable": true
+  },
+  {
+   "name": "if-modified-since",
+   "canonical": "If-Modified-Since",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "if-none-match",
+   "canonical": "If-None-Match",
+   "request": true,
+   "response": false,
+   "combinable": true
+  },
+  {
+   "name": "if-range",
+   "canonical": "If-Range",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "if-unmodified-since",
+   "canonical": "If-Unmodified-Since",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "keep-alive",
+   "canonical": "Keep-Alive",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "last-modified",
+   "canonical": "Last-Modified",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "link",
+   "canonical": "Link",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "location",
+   "canonical": "Location",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "max-forwards",
+   "canonical": "Max-Forwards",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "nel",
+   "canonical": "NEL",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "origin",
+   "canonical": "Origin",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "origin-agent-cluster",
+   "canonical": "Origin-Agent-Cluster",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "permissions-policy",
+   "canonical": "Permissions-Policy",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "pragma",
+   "canonical": "Pragma",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "prefer",
+   "canonical": "Prefer",
+   "request": true,
+   "response": false,
+   "combinable": true
+  },
+  {
+   "name": "preference-applied",
+   "canonical": "Preference-Applied",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "priority",
+   "canonical": "Priority",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "proxy-authenticate",
+   "canonical": "Proxy-Authenticate",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "proxy-authorization",
+   "canonical": "Proxy-Authorization",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "proxy-connection",
+   "canonical": "Proxy-Connection",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "proxy-status",
+   "canonical": "Proxy-Status",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "range",
+   "canonical": "Range",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "referer",
+   "canonical": "Referer",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "referrer-policy",
+   "canonical": "Referrer-Policy",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "report-to",
+   "canonical": "Report-To",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "reporting-endpoints",
+   "canonical": "Reporting-Endpoints",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "repr-digest",
+   "canonical": "Repr-Digest",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "retry-after",
+   "canonical": "Retry-After",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "sec-fetch-dest",
+   "canonical": "Sec-Fetch-Dest",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "sec-fetch-mode",
+   "canonical": "Sec-Fetch-Mode",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "sec-fetch-site",
+   "canonical": "Sec-Fetch-Site",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "sec-fetch-user",
+   "canonical": "Sec-Fetch-User",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "sec-gpc",
+   "canonical": "Sec-GPC",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "sec-purpose",
+   "canonical": "Sec-Purpose",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "sec-speculation-tags",
+   "canonical": "Sec-Speculation-Tags",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "server",
+   "canonical": "Server",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "server-timing",
+   "canonical": "Server-Timing",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "service-worker-allowed",
+   "canonical": "Service-Worker-Allowed",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "set-cookie",
+   "canonical": "Set-Cookie",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "set-cookie2",
+   "canonical": "Set-Cookie2",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "sourcemap",
+   "canonical": "Sourcemap",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "strict-transport-security",
+   "canonical": "Strict-Transport-Security",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "te",
+   "canonical": "TE",
+   "request": true,
+   "response": false,
+   "combinable": true
+  },
+  {
+   "name": "timing-allow-origin",
+   "canonical": "Timing-Allow-Origin",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "trailer",
+   "canonical": "Trailer",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "transfer-encoding",
+   "canonical": "Transfer-Encoding",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "upgrade",
+   "canonical": "Upgrade",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "upgrade-insecure-requests",
+   "canonical": "Upgrade-Insecure-Requests",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "user-agent",
+   "canonical": "User-Agent",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "vary",
+   "canonical": "Vary",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "via",
+   "canonical": "Via",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "want-content-digest",
+   "canonical": "Want-Content-Digest",
+   "request": true,
+   "response": false,
+   "combinable": true
+  },
+  {
+   "name": "want-repr-digest",
+   "canonical": "Want-Repr-Digest",
+   "request": true,
+   "response": false,
+   "combinable": true
+  },
+  {
+   "name": "www-authenticate",
+   "canonical": "WWW-Authenticate",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "sec-websocket-accept",
+   "canonical": "Sec-WebSocket-Accept",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "sec-websocket-extensions",
+   "canonical": "Sec-WebSocket-Extensions",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "sec-websocket-key",
+   "canonical": "Sec-WebSocket-Key",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "sec-websocket-protocol",
+   "canonical": "Sec-WebSocket-Protocol",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "sec-websocket-version",
+   "canonical": "Sec-WebSocket-Version",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "sec-ch-ua",
+   "canonical": "Sec-CH-UA",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "sec-ch-ua-arch",
+   "canonical": "Sec-CH-UA-Arch",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "sec-ch-ua-bitness",
+   "canonical": "Sec-CH-UA-Bitness",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "sec-ch-ua-full-version",
+   "canonical": "Sec-CH-UA-Full-Version",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "sec-ch-ua-full-version-list",
+   "canonical": "Sec-CH-UA-Full-Version-List",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "sec-ch-ua-mobile",
+   "canonical": "Sec-CH-UA-Mobile",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "sec-ch-ua-model",
+   "canonical": "Sec-CH-UA-Model",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "sec-ch-ua-platform",
+   "canonical": "Sec-CH-UA-Platform",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "sec-ch-ua-platform-version",
+   "canonical": "Sec-CH-UA-Platform-Version",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "sec-ch-ua-wow64",
+   "canonical": "Sec-CH-UA-WoW64",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "x-forwarded-for",
+   "canonical": "X-Forwarded-For",
+   "request": true,
+   "response": false,
+   "combinable": true
+  },
+  {
+   "name": "x-forwarded-host",
+   "canonical": "X-Forwarded-Host",
+   "request": true,
+   "response": false,
+   "combinable": true
+  },
+  {
+   "name": "x-forwarded-port",
+   "canonical": "X-Forwarded-Port",
+   "request": true,
+   "response": false,
+   "combinable": true
+  },
+  {
+   "name": "x-forwarded-prefix",
+   "canonical": "X-Forwarded-Prefix",
+   "request": true,
+   "response": false,
+   "combinable": true
+  },
+  {
+   "name": "x-forwarded-proto",
+   "canonical": "X-Forwarded-Proto",
+   "request": true,
+   "response": false,
+   "combinable": true
+  },
+  {
+   "name": "x-forwarded-server",
+   "canonical": "X-Forwarded-Server",
+   "request": true,
+   "response": false,
+   "combinable": true
+  },
+  {
+   "name": "x-original-forwarded-for",
+   "canonical": "X-Original-Forwarded-For",
+   "request": true,
+   "response": false,
+   "combinable": true
+  },
+  {
+   "name": "x-original-url",
+   "canonical": "X-Original-URL",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "x-real-ip",
+   "canonical": "X-Real-IP",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "x-client-ip",
+   "canonical": "X-Client-IP",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "x-cluster-client-ip",
+   "canonical": "X-Cluster-Client-IP",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "x-requested-with",
+   "canonical": "X-Requested-With",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "x-http-method-override",
+   "canonical": "X-HTTP-Method-Override",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "x-method-override",
+   "canonical": "X-Method-Override",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "x-rewrite-url",
+   "canonical": "X-Rewrite-URL",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "x-wap-profile",
+   "canonical": "X-WAP-Profile",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "x-ua-device",
+   "canonical": "X-UA-Device",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "x-device-user-agent",
+   "canonical": "X-Device-User-Agent",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "x-operamini-phone-ua",
+   "canonical": "X-OperaMini-Phone-UA",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "x-cache",
+   "canonical": "X-Cache",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "x-cache-hits",
+   "canonical": "X-Cache-Hits",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "x-served-by",
+   "canonical": "X-Served-By",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "x-timer",
+   "canonical": "X-Timer",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "x-varnish",
+   "canonical": "X-Varnish",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-proxy-cache",
+   "canonical": "X-Proxy-Cache",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-fastly-request-id",
+   "canonical": "X-Fastly-Request-ID",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "cf-cache-status",
+   "canonical": "CF-Cache-Status",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "cf-ray",
+   "canonical": "CF-Ray",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "cf-connecting-ip",
+   "canonical": "CF-Connecting-IP",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "cf-ipcountry",
+   "canonical": "CF-IPCountry",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "cf-visitor",
+   "canonical": "CF-Visitor",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "cf-request-id",
+   "canonical": "CF-Request-ID",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "cf-worker",
+   "canonical": "CF-Worker",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "surrogate-control",
+   "canonical": "Surrogate-Control",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "surrogate-key",
+   "canonical": "Surrogate-Key",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "edge-control",
+   "canonical": "Edge-Control",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-accel-buffering",
+   "canonical": "X-Accel-Buffering",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-accel-expires",
+   "canonical": "X-Accel-Expires",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-accel-limit-rate",
+   "canonical": "X-Accel-Limit-Rate",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-accel-redirect",
+   "canonical": "X-Accel-Redirect",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-sendfile",
+   "canonical": "X-Sendfile",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-github-request-id",
+   "canonical": "X-GitHub-Request-Id",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-github-media-type",
+   "canonical": "X-GitHub-Media-Type",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-github-api-version-selected",
+   "canonical": "X-GitHub-Api-Version-Selected",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-github-enterprise-version",
+   "canonical": "X-GitHub-Enterprise-Version",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-github-delivery",
+   "canonical": "X-GitHub-Delivery",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-github-event",
+   "canonical": "X-GitHub-Event",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-github-hook-id",
+   "canonical": "X-GitHub-Hook-ID",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-github-hook-installation-target-id",
+   "canonical": "X-GitHub-Hook-Installation-Target-ID",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-github-hook-installation-target-type",
+   "canonical": "X-GitHub-Hook-Installation-Target-Type",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-hub-signature",
+   "canonical": "X-Hub-Signature",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-hub-signature-256",
+   "canonical": "X-Hub-Signature-256",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-oauth-scopes",
+   "canonical": "X-OAuth-Scopes",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "x-accepted-oauth-scopes",
+   "canonical": "X-Accepted-OAuth-Scopes",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "x-ratelimit-limit",
+   "canonical": "X-RateLimit-Limit",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-ratelimit-remaining",
+   "canonical": "X-RateLimit-Remaining",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-ratelimit-reset",
+   "canonical": "X-RateLimit-Reset",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-ratelimit-used",
+   "canonical": "X-RateLimit-Used",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-ratelimit-resource",
+   "canonical": "X-RateLimit-Resource",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "traceparent",
+   "canonical": "traceparent",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "tracestate",
+   "canonical": "tracestate",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "baggage",
+   "canonical": "baggage",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "sentry-trace",
+   "canonical": "sentry-trace",
+   "request": true,
+   "response": false,
+   "combinable": true
+  },
+  {
+   "name": "x-b3-traceid",
+   "canonical": "X-B3-TraceId",
+   "request": true,
+   "response": false,
+   "combinable": true
+  },
+  {
+   "name": "x-b3-spanid",
+   "canonical": "X-B3-SpanId",
+   "request": true,
+   "response": false,
+   "combinable": true
+  },
+  {
+   "name": "x-b3-parentspanid",
+   "canonical": "X-B3-ParentSpanId",
+   "request": true,
+   "response": false,
+   "combinable": true
+  },
+  {
+   "name": "x-b3-sampled",
+   "canonical": "X-B3-Sampled",
+   "request": true,
+   "response": false,
+   "combinable": true
+  },
+  {
+   "name": "x-b3-flags",
+   "canonical": "X-B3-Flags",
+   "request": true,
+   "response": false,
+   "combinable": true
+  },
+  {
+   "name": "x-ot-span-context",
+   "canonical": "X-OT-Span-Context",
+   "request": true,
+   "response": false,
+   "combinable": true
+  },
+  {
+   "name": "x-request-id",
+   "canonical": "X-Request-ID",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "x-correlation-id",
+   "canonical": "X-Correlation-ID",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "x-request-start",
+   "canonical": "X-Request-Start",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "x-queue-time",
+   "canonical": "X-Queue-Time",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-amz-request-id",
+   "canonical": "X-Amz-Request-Id",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-amz-id-2",
+   "canonical": "X-Amz-Id-2",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-amz-cf-id",
+   "canonical": "X-Amz-Cf-Id",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-amz-cf-pop",
+   "canonical": "X-Amz-Cf-Pop",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-amz-delete-marker",
+   "canonical": "X-Amz-Delete-Marker",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-amz-expiration",
+   "canonical": "X-Amz-Expiration",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-amz-mp-parts-count",
+   "canonical": "X-Amz-Mp-Parts-Count",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-amz-restore",
+   "canonical": "X-Amz-Restore",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-amz-server-side-encryption",
+   "canonical": "X-Amz-Server-Side-Encryption",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-amz-server-side-encryption-aws-kms-key-id",
+   "canonical": "X-Amz-Server-Side-Encryption-Aws-Kms-Key-Id",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-amz-server-side-encryption-customer-algorithm",
+   "canonical": "X-Amz-Server-Side-Encryption-Customer-Algorithm",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-amz-tagging-count",
+   "canonical": "X-Amz-Tagging-Count",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-amz-version-id",
+   "canonical": "X-Amz-Version-Id",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-amz-website-redirect-location",
+   "canonical": "X-Amz-Website-Redirect-Location",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-amzn-requestid",
+   "canonical": "X-Amzn-Requestid",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-amzn-trace-id",
+   "canonical": "X-Amzn-Trace-Id",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-goog-generation",
+   "canonical": "X-Goog-Generation",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-goog-hash",
+   "canonical": "X-Goog-Hash",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "x-goog-metageneration",
+   "canonical": "X-Goog-Metageneration",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-goog-storage-class",
+   "canonical": "X-Goog-Storage-Class",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-goog-stored-content-encoding",
+   "canonical": "X-Goog-Stored-Content-Encoding",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-goog-stored-content-length",
+   "canonical": "X-Goog-Stored-Content-Length",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-ms-blob-type",
+   "canonical": "X-Ms-Blob-Type",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "x-ms-client-request-id",
+   "canonical": "X-Ms-Client-Request-Id",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "x-ms-copy-source",
+   "canonical": "X-Ms-Copy-Source",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "x-ms-request-id",
+   "canonical": "X-Ms-Request-Id",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-ms-version",
+   "canonical": "X-Ms-Version",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "accept-patch",
+   "canonical": "Accept-Patch",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "accept-post",
+   "canonical": "Accept-Post",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "accept-signature",
+   "canonical": "Accept-Signature",
+   "request": true,
+   "response": false,
+   "combinable": true
+  },
+  {
+   "name": "apply-to-redirect-ref",
+   "canonical": "Apply-To-Redirect-Ref",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "content-base",
+   "canonical": "Content-Base",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "content-id",
+   "canonical": "Content-ID",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "content-md5",
+   "canonical": "Content-MD5",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "content-transfer-encoding",
+   "canonical": "Content-Transfer-Encoding",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "digest",
+   "canonical": "Digest",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "ediint-features",
+   "canonical": "EDIINT-Features",
+   "request": true,
+   "response": false,
+   "combinable": true
+  },
+  {
+   "name": "im",
+   "canonical": "IM",
+   "request": true,
+   "response": false,
+   "combinable": false
+  },
+  {
+   "name": "message-id",
+   "canonical": "Message-ID",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "mime-version",
+   "canonical": "MIME-Version",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "optional-www-authenticate",
+   "canonical": "Optional-WWW-Authenticate",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "p3p",
+   "canonical": "P3P",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "public-key-pins",
+   "canonical": "Public-Key-Pins",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "public-key-pins-report-only",
+   "canonical": "Public-Key-Pins-Report-Only",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "signature",
+   "canonical": "Signature",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "signature-input",
+   "canonical": "Signature-Input",
+   "request": true,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "status",
+   "canonical": "Status",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "tk",
+   "canonical": "Tk",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "variant-vary",
+   "canonical": "Variant-Vary",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "x-aspnet-version",
+   "canonical": "X-AspNet-Version",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-aspnetmvc-version",
+   "canonical": "X-AspNetMvc-Version",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-content-type-options",
+   "canonical": "X-Content-Type-Options",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-dns-prefetch-control",
+   "canonical": "X-DNS-Prefetch-Control",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-download-options",
+   "canonical": "X-Download-Options",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-frame-options",
+   "canonical": "X-Frame-Options",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-permitted-cross-domain-policies",
+   "canonical": "X-Permitted-Cross-Domain-Policies",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-powered-by",
+   "canonical": "X-Powered-By",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-robots-tag",
+   "canonical": "X-Robots-Tag",
+   "request": false,
+   "response": true,
+   "combinable": true
+  },
+  {
+   "name": "x-runtime",
+   "canonical": "X-Runtime",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-ua-compatible",
+   "canonical": "X-UA-Compatible",
+   "request": false,
+   "response": true,
+   "combinable": false
+  },
+  {
+   "name": "x-xss-protection",
+   "canonical": "X-XSS-Protection",
+   "request": false,
+   "response": true,
+   "combinable": false
+  }
+ ],
+ "mime": [
+  {
+   "type": "text/plain",
+   "extensions": [
+    "txt",
+    "text",
+    "log",
+    "ini",
+    "conf",
+    "cfg",
+    "def",
+    "list",
+    "properties"
+   ]
+  },
+  {
+   "type": "text/html",
+   "extensions": [
+    "html",
+    "htm",
+    "shtml"
+   ]
+  },
+  {
+   "type": "text/css",
+   "extensions": [
+    "css"
+   ]
+  },
+  {
+   "type": "text/csv",
+   "extensions": [
+    "csv"
+   ]
+  },
+  {
+   "type": "text/calendar",
+   "extensions": [
+    "ics"
+   ]
+  },
+  {
+   "type": "text/markdown",
+   "extensions": [
+    "md",
+    "markdown"
+   ]
+  },
+  {
+   "type": "text/xml",
+   "extensions": [
+    "xml",
+    "dtd",
+    "ent"
+   ]
+  },
+  {
+   "type": "text/javascript",
+   "extensions": [
+    "js",
+    "mjs"
+   ]
+  },
+  {
+   "type": "text/ecmascript",
+   "extensions": [
+    "es"
+   ]
+  },
+  {
+   "type": "text/rtf",
+   "extensions": [
+    "rtf"
+   ]
+  },
+  {
+   "type": "text/vcard",
+   "extensions": [
+    "vcf"
+   ]
+  },
+  {
+   "type": "text/vtt",
+   "extensions": [
+    "vtt"
+   ]
+  },
+  {
+   "type": "text/n3",
+   "extensions": [
+    "n3"
+   ]
+  },
+  {
+   "type": "text/tab-separated-values",
+   "extensions": [
+    "tsv"
+   ]
+  },
+  {
+   "type": "text/richtext",
+   "extensions": [
+    "rtx"
+   ]
+  },
+  {
+   "type": "text/sgml",
+   "extensions": [
+    "sgml",
+    "sgm"
+   ]
+  },
+  {
+   "type": "text/x-shellscript",
+   "extensions": [
+    "sh"
+   ]
+  },
+  {
+   "type": "text/x-csh",
+   "extensions": [
+    "csh"
+   ]
+  },
+  {
+   "type": "text/x-python",
+   "extensions": [
+    "py"
+   ]
+  },
+  {
+   "type": "text/x-c",
+   "extensions": [
+    "c"
+   ]
+  },
+  {
+   "type": "text/x-c++",
+   "extensions": [
+    "cpp",
+    "cxx",
+    "cc",
+    "hpp",
+    "hxx"
+   ]
+  },
+  {
+   "type": "text/x-java-source",
+   "extensions": [
+    "java"
+   ]
+  },
+  {
+   "type": "text/x-perl",
+   "extensions": [
+    "pl",
+    "pm"
+   ]
+  },
+  {
+   "type": "text/x-ruby",
+   "extensions": [
+    "rb"
+   ]
+  },
+  {
+   "type": "text/x-lua",
+   "extensions": [
+    "lua"
+   ]
+  },
+  {
+   "type": "text/x-pascal",
+   "extensions": [
+    "pas"
+   ]
+  },
+  {
+   "type": "text/x-fortran",
+   "extensions": [
+    "f",
+    "for",
+    "f77",
+    "f90"
+   ]
+  },
+  {
+   "type": "text/x-asm",
+   "extensions": [
+    "asm",
+    "s"
+   ]
+  },
+  {
+   "type": "text/troff",
+   "extensions": [
+    "t",
+    "tr",
+    "roff",
+    "man"
+   ]
+  },
+  {
+   "type": "text/x-diff",
+   "extensions": [
+    "diff",
+    "patch"
+   ]
+  },
+  {
+   "type": "text/x-nfo",
+   "extensions": [
+    "nfo"
+   ]
+  },
+  {
+   "type": "text/x-setext",
+   "extensions": [
+    "etx"
+   ]
+  },
+  {
+   "type": "text/x-uuencode",
+   "extensions": [
+    "uu"
+   ]
+  },
+  {
+   "type": "text/x-vcalendar",
+   "extensions": [
+    "vcs"
+   ]
+  },
+  {
+   "type": "text/plain-bas",
+   "extensions": [
+    "bas"
+   ]
+  },
+  {
+   "type": "text/x-suse-ymp",
+   "extensions": [
+    "ymp"
+   ]
+  },
+  {
+   "type": "text/prs.fallenstein.rst",
+   "extensions": [
+    "rst"
+   ]
+  },
+  {
+   "type": "text/x-org",
+   "extensions": [
+    "org"
+   ]
+  },
+  {
+   "type": "application/json",
+   "extensions": [
+    "json",
+    "map"
+   ]
+  },
+  {
+   "type": "application/ld+json",
+   "extensions": [
+    "jsonld"
+   ]
+  },
+  {
+   "type": "application/manifest+json",
+   "extensions": [
+    "webmanifest"
+   ]
+  },
+  {
+   "type": "application/problem+json",
+   "extensions": []
+  },
+  {
+   "type": "application/geo+json",
+   "extensions": [
+    "geojson"
+   ]
+  },
+  {
+   "type": "application/json5",
+   "extensions": [
+    "json5"
+   ]
+  },
+  {
+   "type": "application/x-ndjson",
+   "extensions": [
+    "ndjson"
+   ]
+  },
+  {
+   "type": "application/yaml",
+   "extensions": [
+    "yaml",
+    "yml"
+   ]
+  },
+  {
+   "type": "application/toml",
+   "extensions": [
+    "toml"
+   ]
+  },
+  {
+   "type": "application/sql",
+   "extensions": [
+    "sql"
+   ]
+  },
+  {
+   "type": "application/graphql",
+   "extensions": [
+    "graphql"
+   ]
+  },
+  {
+   "type": "application/xml",
+   "extensions": [
+    "xsd",
+    "rng"
+   ]
+  },
+  {
+   "type": "application/xhtml+xml",
+   "extensions": [
+    "xhtml",
+    "xht"
+   ]
+  },
+  {
+   "type": "application/atom+xml",
+   "extensions": [
+    "atom"
+   ]
+  },
+  {
+   "type": "application/rss+xml",
+   "extensions": [
+    "rss"
+   ]
+  },
+  {
+   "type": "application/rdf+xml",
+   "extensions": [
+    "rdf"
+   ]
+  },
+  {
+   "type": "application/xslt+xml",
+   "extensions": [
+    "xsl",
+    "xslt"
+   ]
+  },
+  {
+   "type": "application/x-www-form-urlencoded",
+   "extensions": []
+  },
+  {
+   "type": "application/javascript",
+   "extensions": []
+  },
+  {
+   "type": "application/ecmascript",
+   "extensions": [
+    "es6"
+   ]
+  },
+  {
+   "type": "application/rtf",
+   "extensions": [
+    "rtfx"
+   ]
+  },
+  {
+   "type": "application/pdf",
+   "extensions": [
+    "pdf"
+   ]
+  },
+  {
+   "type": "application/zip",
+   "extensions": [
+    "zip"
+   ]
+  },
+  {
+   "type": "application/gzip",
+   "extensions": [
+    "gz",
+    "tgz"
+   ]
+  },
+  {
+   "type": "application/x-bzip2",
+   "extensions": [
+    "bz2",
+    "tbz2"
+   ]
+  },
+  {
+   "type": "application/x-xz",
+   "extensions": [
+    "xz",
+    "txz"
+   ]
+  },
+  {
+   "type": "application/x-7z-compressed",
+   "extensions": [
+    "7z"
+   ]
+  },
+  {
+   "type": "application/x-rar-compressed",
+   "extensions": [
+    "rar"
+   ]
+  },
+  {
+   "type": "application/x-tar",
+   "extensions": [
+    "tar"
+   ]
+  },
+  {
+   "type": "application/x-lzip",
+   "extensions": [
+    "lz"
+   ]
+  },
+  {
+   "type": "application/x-lzma",
+   "extensions": [
+    "lzma"
+   ]
+  },
+  {
+   "type": "application/x-lz4",
+   "extensions": [
+    "lz4"
+   ]
+  },
+  {
+   "type": "application/zstd",
+   "extensions": [
+    "zst"
+   ]
+  },
+  {
+   "type": "application/x-compress",
+   "extensions": [
+    "z"
+   ]
+  },
+  {
+   "type": "application/x-brotli",
+   "extensions": [
+    "br"
+   ]
+  },
+  {
+   "type": "application/x-cpio",
+   "extensions": [
+    "cpio"
+   ]
+  },
+  {
+   "type": "application/x-iso9660-image",
+   "extensions": [
+    "iso"
+   ]
+  },
+  {
+   "type": "application/x-apple-diskimage",
+   "extensions": [
+    "dmg"
+   ]
+  },
+  {
+   "type": "application/vnd.ms-cab-compressed",
+   "extensions": [
+    "cab"
+   ]
+  },
+  {
+   "type": "application/x-msi",
+   "extensions": [
+    "msi"
+   ]
+  },
+  {
+   "type": "application/x-msdownload",
+   "extensions": [
+    "exe",
+    "dll"
+   ]
+  },
+  {
+   "type": "application/x-msdos-program",
+   "extensions": [
+    "com"
+   ]
+  },
+  {
+   "type": "application/x-bat",
+   "extensions": [
+    "bat"
+   ]
+  },
+  {
+   "type": "application/x-shockwave-flash",
+   "extensions": [
+    "swf"
+   ]
+  },
+  {
+   "type": "application/java-archive",
+   "extensions": [
+    "jar"
+   ]
+  },
+  {
+   "type": "application/x-java-class",
+   "extensions": [
+    "class"
+   ]
+  },
+  {
+   "type": "application/x-python-code",
+   "extensions": [
+    "pyc",
+    "pyo"
+   ]
+  },
+  {
+   "type": "application/wasm",
+   "extensions": [
+    "wasm"
+   ]
+  },
+  {
+   "type": "application/vnd.android.package-archive",
+   "extensions": [
+    "apk"
+   ]
+  },
+  {
+   "type": "application/x-httpd-php",
+   "extensions": [
+    "php",
+    "phtml"
+   ]
+  },
+  {
+   "type": "application/x-ms-shortcut",
+   "extensions": [
+    "lnk"
+   ]
+  },
+  {
+   "type": "application/x-archive",
+   "extensions": [
+    "a",
+    "lib"
+   ]
+  },
+  {
+   "type": "application/x-object",
+   "extensions": [
+    "o"
+   ]
+  },
+  {
+   "type": "application/x-sharedlib",
+   "extensions": [
+    "so"
+   ]
+  },
+  {
+   "type": "application/x-elf",
+   "extensions": [
+    "elf"
+   ]
+  },
+  {
+   "type": "application/vnd.microsoft.portable-executable",
+   "extensions": [
+    "pe"
+   ]
+  },
+  {
+   "type": "application/x-msaccess",
+   "extensions": [
+    "mdb"
+   ]
+  },
+  {
+   "type": "application/x-msmoney",
+   "extensions": [
+    "mny"
+   ]
+  },
+  {
+   "type": "application/x-cdlink",
+   "extensions": [
+    "vcd"
+   ]
+  },
+  {
+   "type": "application/x-director",
+   "extensions": [
+    "dir",
+    "dcr",
+    "dxr"
+   ]
+  },
+  {
+   "type": "application/x-doom",
+   "extensions": [
+    "wad"
+   ]
+  },
+  {
+   "type": "application/x-futuresplash",
+   "extensions": [
+    "spl"
+   ]
+  },
+  {
+   "type": "application/x-gnumeric",
+   "extensions": [
+    "gnumeric"
+   ]
+  },
+  {
+   "type": "application/x-gtar",
+   "extensions": [
+    "gtar"
+   ]
+  },
+  {
+   "type": "application/x-freearc",
+   "extensions": [
+    "arc"
+   ]
+  },
+  {
+   "type": "application/x-lha",
+   "extensions": [
+    "lha",
+    "lzh"
+   ]
+  },
+  {
+   "type": "application/x-arj",
+   "extensions": [
+    "arj"
+   ]
+  },
+  {
+   "type": "application/x-ms-wmz",
+   "extensions": [
+    "wmz"
+   ]
+  },
+  {
+   "type": "application/x-ms-xbap",
+   "extensions": [
+    "xbap"
+   ]
+  },
+  {
+   "type": "application/octet-stream",
+   "extensions": [
+    "bin",
+    "dat",
+    "dump",
+    "img",
+    "raw",
+    "iso2"
+   ]
+  },
+  {
+   "type": "application/vnd.sqlite3",
+   "extensions": [
+    "sqlite",
+    "sqlite3",
+    "db"
+   ]
+  },
+  {
+   "type": "application/x-dbf",
+   "extensions": [
+    "dbf"
+   ]
+  },
+  {
+   "type": "application/x-parquet",
+   "extensions": [
+    "parquet"
+   ]
+  },
+  {
+   "type": "application/vnd.apache.arrow.file",
+   "extensions": [
+    "arrow",
+    "feather"
+   ]
+  },
+  {
+   "type": "application/x-hdf",
+   "extensions": [
+    "hdf"
+   ]
+  },
+  {
+   "type": "application/x-hdf5",
+   "extensions": [
+    "h5"
+   ]
+  },
+  {
+   "type": "application/x-netcdf",
+   "extensions": [
+    "nc"
+   ]
+  },
+  {
+   "type": "application/x-nes-rom",
+   "extensions": [
+    "nes"
+   ]
+  },
+  {
+   "type": "application/x-gameboy-rom",
+   "extensions": [
+    "gb",
+    "gbc"
+   ]
+  },
+  {
+   "type": "application/x-gba-rom",
+   "extensions": [
+    "gba"
+   ]
+  },
+  {
+   "type": "application/x-nintendo-ds-rom",
+   "extensions": [
+    "nds"
+   ]
+  },
+  {
+   "type": "application/x-snes-rom",
+   "extensions": [
+    "sfc",
+    "smc"
+   ]
+  },
+  {
+   "type": "application/x-chess-pgn",
+   "extensions": [
+    "pgn"
+   ]
+  },
+  {
+   "type": "application/x-blender",
+   "extensions": [
+    "blend"
+   ]
+  },
+  {
+   "type": "application/x-krita",
+   "extensions": [
+    "kra"
+   ]
+  },
+  {
+   "type": "application/x-subrip",
+   "extensions": [
+    "srt"
+   ]
+  },
+  {
+   "type": "application/ttml+xml",
+   "extensions": [
+    "ttml"
+   ]
+  },
+  {
+   "type": "application/x-tex",
+   "extensions": [
+    "tex"
+   ]
+  },
+  {
+   "type": "application/x-latex",
+   "extensions": [
+    "latex"
+   ]
+  },
+  {
+   "type": "application/x-texinfo",
+   "extensions": [
+    "texinfo",
+    "texi"
+   ]
+  },
+  {
+   "type": "application/x-dvi",
+   "extensions": [
+    "dvi"
+   ]
+  },
+  {
+   "type": "application/postscript",
+   "extensions": [
+    "ps",
+    "eps"
+   ]
+  },
+  {
+   "type": "application/illustrator",
+   "extensions": [
+    "ai"
+   ]
+  },
+  {
+   "type": "application/epub+zip",
+   "extensions": [
+    "epub"
+   ]
+  },
+  {
+   "type": "application/x-mobipocket-ebook",
+   "extensions": [
+    "mobi"
+   ]
+  },
+  {
+   "type": "application/x-fictionbook+xml",
+   "extensions": [
+    "fb2"
+   ]
+  },
+  {
+   "type": "application/x-abiword",
+   "extensions": [
+    "abw"
+   ]
+  },
+  {
+   "type": "application/vnd.apple.installer+xml",
+   "extensions": [
+    "mpkg"
+   ]
+  },
+  {
+   "type": "application/vnd.apple.mpegurl",
+   "extensions": [
+    "m3u8"
+   ]
+  },
+  {
+   "type": "application/x-mpegurl",
+   "extensions": [
+    "m3u"
+   ]
+  },
+  {
+   "type": "application/dash+xml",
+   "extensions": [
+    "mpd"
+   ]
+  },
+  {
+   "type": "application/smil+xml",
+   "extensions": [
+    "smil",
+    "smi"
+   ]
+  },
+  {
+   "type": "application/ogg",
+   "extensions": [
+    "ogx"
+   ]
+  },
+  {
+   "type": "application/pkcs7-mime",
+   "extensions": [
+    "p7m",
+    "p7c"
+   ]
+  },
+  {
+   "type": "application/pkcs7-signature",
+   "extensions": [
+    "p7s"
+   ]
+  },
+  {
+   "type": "application/pkcs8",
+   "extensions": [
+    "p8"
+   ]
+  },
+  {
+   "type": "application/pkcs10",
+   "extensions": [
+    "p10"
+   ]
+  },
+  {
+   "type": "application/x-pkcs12",
+   "extensions": [
+    "p12",
+    "pfx"
+   ]
+  },
+  {
+   "type": "application/x-pem-file",
+   "extensions": [
+    "pem"
+   ]
+  },
+  {
+   "type": "application/pgp-signature",
+   "extensions": [
+    "asc"
+   ]
+  },
+  {
+   "type": "application/pgp-encrypted",
+   "extensions": [
+    "pgp"
+   ]
+  },
+  {
+   "type": "application/x-x509-ca-cert",
+   "extensions": [
+    "crt",
+    "der"
+   ]
+  },
+  {
+   "type": "application/x-pkcs7-certificates",
+   "extensions": [
+    "p7b",
+    "spc"
+   ]
+  },
+  {
+   "type": "application/x-7z",
+   "extensions": [
+    "7z2"
+   ]
+  },
+  {
+   "type": "application/msword",
+   "extensions": [
+    "doc",
+    "dot"
+   ]
+  },
+  {
+   "type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+   "extensions": [
+    "docx"
+   ]
+  },
+  {
+   "type": "application/vnd.openxmlformats-officedocument.wordprocessingml.template",
+   "extensions": [
+    "dotx"
+   ]
+  },
+  {
+   "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "extensions": [
+    "xlsx"
+   ]
+  },
+  {
+   "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.template",
+   "extensions": [
+    "xltx"
+   ]
+  },
+  {
+   "type": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+   "extensions": [
+    "pptx"
+   ]
+  },
+  {
+   "type": "application/vnd.openxmlformats-officedocument.presentationml.template",
+   "extensions": [
+    "potx"
+   ]
+  },
+  {
+   "type": "application/vnd.openxmlformats-officedocument.presentationml.slideshow",
+   "extensions": [
+    "ppsx"
+   ]
+  },
+  {
+   "type": "application/vnd.ms-excel",
+   "extensions": [
+    "xls",
+    "xlt"
+   ]
+  },
+  {
+   "type": "application/vnd.ms-powerpoint",
+   "extensions": [
+    "ppt",
+    "pot",
+    "ppa"
+   ]
+  },
+  {
+   "type": "application/vnd.ms-word.document.macroenabled.12",
+   "extensions": [
+    "docm"
+   ]
+  },
+  {
+   "type": "application/vnd.ms-excel.sheet.macroenabled.12",
+   "extensions": [
+    "xlsm"
+   ]
+  },
+  {
+   "type": "application/vnd.ms-powerpoint.presentation.macroenabled.12",
+   "extensions": [
+    "pptm"
+   ]
+  },
+  {
+   "type": "application/vnd.oasis.opendocument.text",
+   "extensions": [
+    "odt"
+   ]
+  },
+  {
+   "type": "application/vnd.oasis.opendocument.spreadsheet",
+   "extensions": [
+    "ods"
+   ]
+  },
+  {
+   "type": "application/vnd.oasis.opendocument.presentation",
+   "extensions": [
+    "odp"
+   ]
+  },
+  {
+   "type": "application/vnd.oasis.opendocument.graphics",
+   "extensions": [
+    "odg"
+   ]
+  },
+  {
+   "type": "application/vnd.visio",
+   "extensions": [
+    "vsd",
+    "vst",
+    "vsw"
+   ]
+  },
+  {
+   "type": "application/vnd.ms-visio.drawing",
+   "extensions": [
+    "vsdx"
+   ]
+  },
+  {
+   "type": "audio/mpeg",
+   "extensions": [
+    "mp3",
+    "mpga",
+    "mp2",
+    "mp2a",
+    "m2a",
+    "m3a"
+   ]
+  },
+  {
+   "type": "audio/mp4",
+   "extensions": [
+    "m4a",
+    "mp4a"
+   ]
+  },
+  {
+   "type": "audio/aac",
+   "extensions": [
+    "aac"
+   ]
+  },
+  {
+   "type": "audio/flac",
+   "extensions": [
+    "flac"
+   ]
+  },
+  {
+   "type": "audio/wav",
+   "extensions": [
+    "wav"
+   ]
+  },
+  {
+   "type": "audio/webm",
+   "extensions": [
+    "weba"
+   ]
+  },
+  {
+   "type": "audio/ogg",
+   "extensions": [
+    "oga",
+    "ogg",
+    "spx"
+   ]
+  },
+  {
+   "type": "audio/opus",
+   "extensions": [
+    "opus"
+   ]
+  },
+  {
+   "type": "audio/midi",
+   "extensions": [
+    "mid",
+    "midi",
+    "kar",
+    "rmi"
+   ]
+  },
+  {
+   "type": "audio/x-ms-wma",
+   "extensions": [
+    "wma"
+   ]
+  },
+  {
+   "type": "audio/x-aiff",
+   "extensions": [
+    "aif",
+    "aiff",
+    "aifc"
+   ]
+  },
+  {
+   "type": "audio/basic",
+   "extensions": [
+    "au",
+    "snd"
+   ]
+  },
+  {
+   "type": "audio/x-matroska",
+   "extensions": [
+    "mka"
+   ]
+  },
+  {
+   "type": "audio/3gpp",
+   "extensions": [
+    "3ga"
+   ]
+  },
+  {
+   "type": "audio/amr",
+   "extensions": [
+    "amr"
+   ]
+  },
+  {
+   "type": "audio/x-m4b",
+   "extensions": [
+    "m4b"
+   ]
+  },
+  {
+   "type": "audio/x-ms-wax",
+   "extensions": [
+    "wax"
+   ]
+  },
+  {
+   "type": "audio/x-pn-realaudio",
+   "extensions": [
+    "ra",
+    "ram"
+   ]
+  },
+  {
+   "type": "audio/x-ape",
+   "extensions": [
+    "ape"
+   ]
+  },
+  {
+   "type": "audio/x-wavpack",
+   "extensions": [
+    "wv"
+   ]
+  },
+  {
+   "type": "audio/x-musepack",
+   "extensions": [
+    "mpc"
+   ]
+  },
+  {
+   "type": "video/mp4",
+   "extensions": [
+    "mp4",
+    "mp4v",
+    "mpg4"
+   ]
+  },
+  {
+   "type": "video/mpeg",
+   "extensions": [
+    "mpeg",
+    "mpg",
+    "mpe",
+    "m1v",
+    "m2v"
+   ]
+  },
+  {
+   "type": "video/quicktime",
+   "extensions": [
+    "mov",
+    "qt"
+   ]
+  },
+  {
+   "type": "video/webm",
+   "extensions": [
+    "webm"
+   ]
+  },
+  {
+   "type": "video/ogg",
+   "extensions": [
+    "ogv"
+   ]
+  },
+  {
+   "type": "video/x-matroska",
+   "extensions": [
+    "mkv",
+    "mk3d"
+   ]
+  },
+  {
+   "type": "video/x-msvideo",
+   "extensions": [
+    "avi"
+   ]
+  },
+  {
+   "type": "video/x-ms-wmv",
+   "extensions": [
+    "wmv"
+   ]
+  },
+  {
+   "type": "video/x-flv",
+   "extensions": [
+    "flv"
+   ]
+  },
+  {
+   "type": "video/3gpp",
+   "extensions": [
+    "3gp",
+    "3gpp"
+   ]
+  },
+  {
+   "type": "video/3gpp2",
+   "extensions": [
+    "3g2",
+    "3gp2"
+   ]
+  },
+  {
+   "type": "video/x-m4v",
+   "extensions": [
+    "m4v"
+   ]
+  },
+  {
+   "type": "video/mp2t",
+   "extensions": [
+    "ts",
+    "m2t",
+    "m2ts",
+    "mts"
+   ]
+  },
+  {
+   "type": "video/x-ms-asf",
+   "extensions": [
+    "asf",
+    "asx"
+   ]
+  },
+  {
+   "type": "video/x-f4v",
+   "extensions": [
+    "f4v"
+   ]
+  },
+  {
+   "type": "video/x-fli",
+   "extensions": [
+    "fli"
+   ]
+  },
+  {
+   "type": "video/h264",
+   "extensions": [
+    "h264"
+   ]
+  },
+  {
+   "type": "video/h265",
+   "extensions": [
+    "h265",
+    "hevc"
+   ]
+  },
+  {
+   "type": "video/av1",
+   "extensions": [
+    "av1"
+   ]
+  },
+  {
+   "type": "video/x-ms-wmx",
+   "extensions": [
+    "wmx"
+   ]
+  },
+  {
+   "type": "video/x-ms-vob",
+   "extensions": [
+    "vob"
+   ]
+  },
+  {
+   "type": "video/x-sgi-movie",
+   "extensions": [
+    "movie"
+   ]
+  },
+  {
+   "type": "image/png",
+   "extensions": [
+    "png"
+   ]
+  },
+  {
+   "type": "image/jpeg",
+   "extensions": [
+    "jpg",
+    "jpeg",
+    "jpe",
+    "jfif"
+   ]
+  },
+  {
+   "type": "image/gif",
+   "extensions": [
+    "gif"
+   ]
+  },
+  {
+   "type": "image/webp",
+   "extensions": [
+    "webp"
+   ]
+  },
+  {
+   "type": "image/avif",
+   "extensions": [
+    "avif"
+   ]
+  },
+  {
+   "type": "image/bmp",
+   "extensions": [
+    "bmp",
+    "dib"
+   ]
+  },
+  {
+   "type": "image/tiff",
+   "extensions": [
+    "tif",
+    "tiff"
+   ]
+  },
+  {
+   "type": "image/svg+xml",
+   "extensions": [
+    "svg",
+    "svgz"
+   ]
+  },
+  {
+   "type": "image/x-icon",
+   "extensions": [
+    "ico"
+   ]
+  },
+  {
+   "type": "image/heic",
+   "extensions": [
+    "heic"
+   ]
+  },
+  {
+   "type": "image/heif",
+   "extensions": [
+    "heif"
+   ]
+  },
+  {
+   "type": "image/jxl",
+   "extensions": [
+    "jxl"
+   ]
+  },
+  {
+   "type": "image/jp2",
+   "extensions": [
+    "jp2",
+    "jpx"
+   ]
+  },
+  {
+   "type": "image/x-portable-bitmap",
+   "extensions": [
+    "pbm"
+   ]
+  },
+  {
+   "type": "image/x-portable-graymap",
+   "extensions": [
+    "pgm"
+   ]
+  },
+  {
+   "type": "image/x-portable-pixmap",
+   "extensions": [
+    "ppm"
+   ]
+  },
+  {
+   "type": "image/x-portable-anymap",
+   "extensions": [
+    "pnm"
+   ]
+  },
+  {
+   "type": "image/x-xbitmap",
+   "extensions": [
+    "xbm"
+   ]
+  },
+  {
+   "type": "image/x-xpixmap",
+   "extensions": [
+    "xpm"
+   ]
+  },
+  {
+   "type": "image/x-tga",
+   "extensions": [
+    "tga"
+   ]
+  },
+  {
+   "type": "image/x-pcx",
+   "extensions": [
+    "pcx"
+   ]
+  },
+  {
+   "type": "image/vnd.adobe.photoshop",
+   "extensions": [
+    "psd"
+   ]
+  },
+  {
+   "type": "image/x-canon-cr2",
+   "extensions": [
+    "cr2"
+   ]
+  },
+  {
+   "type": "image/x-canon-crw",
+   "extensions": [
+    "crw"
+   ]
+  },
+  {
+   "type": "image/x-nikon-nef",
+   "extensions": [
+    "nef"
+   ]
+  },
+  {
+   "type": "image/x-sony-arw",
+   "extensions": [
+    "arw"
+   ]
+  },
+  {
+   "type": "image/x-olympus-orf",
+   "extensions": [
+    "orf"
+   ]
+  },
+  {
+   "type": "image/x-fuji-raf",
+   "extensions": [
+    "raf"
+   ]
+  },
+  {
+   "type": "image/x-panasonic-rw2",
+   "extensions": [
+    "rw2"
+   ]
+  },
+  {
+   "type": "image/x-adobe-dng",
+   "extensions": [
+    "dng"
+   ]
+  },
+  {
+   "type": "image/ktx",
+   "extensions": [
+    "ktx"
+   ]
+  },
+  {
+   "type": "image/ktx2",
+   "extensions": [
+    "ktx2"
+   ]
+  },
+  {
+   "type": "image/astc",
+   "extensions": [
+    "astc"
+   ]
+  },
+  {
+   "type": "image/vnd-ms.dds",
+   "extensions": [
+    "dds"
+   ]
+  },
+  {
+   "type": "image/x-freehand",
+   "extensions": [
+    "fh",
+    "fhc",
+    "fh4",
+    "fh5",
+    "fh7"
+   ]
+  },
+  {
+   "type": "image/x-xcf",
+   "extensions": [
+    "xcf"
+   ]
+  },
+  {
+   "type": "image/emf",
+   "extensions": [
+    "emf"
+   ]
+  },
+  {
+   "type": "image/wmf",
+   "extensions": [
+    "wmf"
+   ]
+  },
+  {
+   "type": "image/vnd.wap.wbmp",
+   "extensions": [
+    "wbmp"
+   ]
+  },
+  {
+   "type": "image/x-pict",
+   "extensions": [
+    "pic",
+    "pct"
+   ]
+  },
+  {
+   "type": "image/x-rgb",
+   "extensions": [
+    "rgb"
+   ]
+  },
+  {
+   "type": "image/x-xwindowdump",
+   "extensions": [
+    "xwd"
+   ]
+  },
+  {
+   "type": "image/x-bpg",
+   "extensions": [
+    "bpg"
+   ]
+  },
+  {
+   "type": "image/jxr",
+   "extensions": [
+    "jxr"
+   ]
+  },
+  {
+   "type": "image/x-exr",
+   "extensions": [
+    "exr"
+   ]
+  },
+  {
+   "type": "image/vnd.djvu",
+   "extensions": [
+    "djvu",
+    "djv"
+   ]
+  },
+  {
+   "type": "image/vnd.microsoft.icon",
+   "extensions": [
+    "ico2"
+   ]
+  },
+  {
+   "type": "image/x-cmu-raster",
+   "extensions": [
+    "ras"
+   ]
+  },
+  {
+   "type": "image/x-portable-floatmap",
+   "extensions": [
+    "pfm"
+   ]
+  },
+  {
+   "type": "font/ttf",
+   "extensions": [
+    "ttf"
+   ]
+  },
+  {
+   "type": "font/otf",
+   "extensions": [
+    "otf"
+   ]
+  },
+  {
+   "type": "font/woff",
+   "extensions": [
+    "woff"
+   ]
+  },
+  {
+   "type": "font/woff2",
+   "extensions": [
+    "woff2"
+   ]
+  },
+  {
+   "type": "font/collection",
+   "extensions": [
+    "ttc"
+   ]
+  },
+  {
+   "type": "font/sfnt",
+   "extensions": [
+    "sfnt"
+   ]
+  },
+  {
+   "type": "application/vnd.ms-fontobject",
+   "extensions": [
+    "eot"
+   ]
+  },
+  {
+   "type": "multipart/form-data",
+   "extensions": []
+  },
+  {
+   "type": "multipart/mixed",
+   "extensions": []
+  },
+  {
+   "type": "multipart/alternative",
+   "extensions": []
+  },
+  {
+   "type": "multipart/related",
+   "extensions": []
+  },
+  {
+   "type": "multipart/parallel",
+   "extensions": []
+  },
+  {
+   "type": "multipart/byteranges",
+   "extensions": []
+  },
+  {
+   "type": "multipart/encrypted",
+   "extensions": []
+  },
+  {
+   "type": "multipart/signed",
+   "extensions": []
+  },
+  {
+   "type": "multipart/digest",
+   "extensions": []
+  },
+  {
+   "type": "multipart/report",
+   "extensions": []
+  },
+  {
+   "type": "multipart/voice-message",
+   "extensions": []
+  },
+  {
+   "type": "message/rfc822",
+   "extensions": [
+    "eml",
+    "mime"
+   ]
+  },
+  {
+   "type": "message/http",
+   "extensions": []
+  },
+  {
+   "type": "message/partial",
+   "extensions": []
+  },
+  {
+   "type": "message/news",
+   "extensions": []
+  },
+  {
+   "type": "message/delivery-status",
+   "extensions": []
+  },
+  {
+   "type": "message/disposition-notification",
+   "extensions": []
+  },
+  {
+   "type": "message/global",
+   "extensions": []
+  },
+  {
+   "type": "message/external-body",
+   "extensions": []
+  },
+  {
+   "type": "model/gltf+json",
+   "extensions": [
+    "gltf"
+   ]
+  },
+  {
+   "type": "model/gltf-binary",
+   "extensions": [
+    "glb"
+   ]
+  },
+  {
+   "type": "model/stl",
+   "extensions": [
+    "stl"
+   ]
+  },
+  {
+   "type": "model/obj",
+   "extensions": [
+    "obj"
+   ]
+  },
+  {
+   "type": "model/vrml",
+   "extensions": [
+    "wrl"
+   ]
+  },
+  {
+   "type": "model/3mf",
+   "extensions": [
+    "3mf"
+   ]
+  },
+  {
+   "type": "model/x3d+xml",
+   "extensions": [
+    "x3d"
+   ]
+  },
+  {
+   "type": "model/vnd.collada+xml",
+   "extensions": [
+    "dae"
+   ]
+  },
+  {
+   "type": "model/mesh",
+   "extensions": [
+    "msh"
+   ]
+  },
+  {
+   "type": "model/iges",
+   "extensions": [
+    "igs",
+    "iges"
+   ]
+  },
+  {
+   "type": "chemical/x-pdb",
+   "extensions": [
+    "pdb"
+   ]
+  },
+  {
+   "type": "chemical/x-xyz",
+   "extensions": [
+    "xyz"
+   ]
+  },
+  {
+   "type": "application/vnd.google-earth.kml+xml",
+   "extensions": [
+    "kml"
+   ]
+  },
+  {
+   "type": "application/vnd.google-earth.kmz",
+   "extensions": [
+    "kmz"
+   ]
+  },
+  {
+   "type": "application/gpx+xml",
+   "extensions": [
+    "gpx"
+   ]
+  },
+  {
+   "type": "application/vnd.garmin.tcx+xml",
+   "extensions": [
+    "tcx"
+   ]
+  }
+ ],
+ "tls": {
+  "suites": [
+   {
+    "id": 0,
+    "name": "TLS_NULL_WITH_NULL_NULL",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 1,
+    "name": "TLS_RSA_WITH_NULL_MD5",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 2,
+    "name": "TLS_RSA_WITH_NULL_SHA",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 3,
+    "name": "TLS_RSA_EXPORT_WITH_RC4_40_MD5",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 4,
+    "name": "TLS_RSA_WITH_RC4_128_MD5",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 5,
+    "name": "TLS_RSA_WITH_RC4_128_SHA",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 6,
+    "name": "TLS_RSA_EXPORT_WITH_RC2_CBC_40_MD5",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 7,
+    "name": "TLS_RSA_WITH_IDEA_CBC_SHA",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 8,
+    "name": "TLS_RSA_EXPORT_WITH_DES40_CBC_SHA",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 9,
+    "name": "TLS_RSA_WITH_DES_CBC_SHA",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 10,
+    "name": "TLS_RSA_WITH_3DES_EDE_CBC_SHA",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 11,
+    "name": "TLS_DH_DSS_EXPORT_WITH_DES40_CBC_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 12,
+    "name": "TLS_DH_DSS_WITH_DES_CBC_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 13,
+    "name": "TLS_DH_DSS_WITH_3DES_EDE_CBC_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 14,
+    "name": "TLS_DH_RSA_EXPORT_WITH_DES40_CBC_SHA",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 15,
+    "name": "TLS_DH_RSA_WITH_DES_CBC_SHA",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 16,
+    "name": "TLS_DH_RSA_WITH_3DES_EDE_CBC_SHA",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 17,
+    "name": "TLS_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 18,
+    "name": "TLS_DHE_DSS_WITH_DES_CBC_SHA",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 19,
+    "name": "TLS_DHE_DSS_WITH_3DES_EDE_CBC_SHA",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 20,
+    "name": "TLS_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 21,
+    "name": "TLS_DHE_RSA_WITH_DES_CBC_SHA",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 22,
+    "name": "TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 23,
+    "name": "TLS_DH_anon_EXPORT_WITH_RC4_40_MD5",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 24,
+    "name": "TLS_DH_anon_WITH_RC4_128_MD5",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 25,
+    "name": "TLS_DH_anon_EXPORT_WITH_DES40_CBC_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 26,
+    "name": "TLS_DH_anon_WITH_DES_CBC_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 27,
+    "name": "TLS_DH_anon_WITH_3DES_EDE_CBC_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 30,
+    "name": "TLS_KRB5_WITH_DES_CBC_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 31,
+    "name": "TLS_KRB5_WITH_3DES_EDE_CBC_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 32,
+    "name": "TLS_KRB5_WITH_RC4_128_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 33,
+    "name": "TLS_KRB5_WITH_IDEA_CBC_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 34,
+    "name": "TLS_KRB5_WITH_DES_CBC_MD5",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 35,
+    "name": "TLS_KRB5_WITH_3DES_EDE_CBC_MD5",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 36,
+    "name": "TLS_KRB5_WITH_RC4_128_MD5",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 37,
+    "name": "TLS_KRB5_WITH_IDEA_CBC_MD5",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 38,
+    "name": "TLS_KRB5_EXPORT_WITH_DES_CBC_40_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 39,
+    "name": "TLS_KRB5_EXPORT_WITH_RC2_CBC_40_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 40,
+    "name": "TLS_KRB5_EXPORT_WITH_RC4_40_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 41,
+    "name": "TLS_KRB5_EXPORT_WITH_DES_CBC_40_MD5",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 42,
+    "name": "TLS_KRB5_EXPORT_WITH_RC2_CBC_40_MD5",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 43,
+    "name": "TLS_KRB5_EXPORT_WITH_RC4_40_MD5",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 44,
+    "name": "TLS_PSK_WITH_NULL_SHA",
+    "kx": "psk",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 45,
+    "name": "TLS_DHE_PSK_WITH_NULL_SHA",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 46,
+    "name": "TLS_RSA_PSK_WITH_NULL_SHA",
+    "kx": "psk",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 47,
+    "name": "TLS_RSA_WITH_AES_128_CBC_SHA",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 48,
+    "name": "TLS_DH_DSS_WITH_AES_128_CBC_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49,
+    "name": "TLS_DH_RSA_WITH_AES_128_CBC_SHA",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 50,
+    "name": "TLS_DHE_DSS_WITH_AES_128_CBC_SHA",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 51,
+    "name": "TLS_DHE_RSA_WITH_AES_128_CBC_SHA",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 52,
+    "name": "TLS_DH_anon_WITH_AES_128_CBC_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 53,
+    "name": "TLS_RSA_WITH_AES_256_CBC_SHA",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 54,
+    "name": "TLS_DH_DSS_WITH_AES_256_CBC_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 55,
+    "name": "TLS_DH_RSA_WITH_AES_256_CBC_SHA",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 56,
+    "name": "TLS_DHE_DSS_WITH_AES_256_CBC_SHA",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 57,
+    "name": "TLS_DHE_RSA_WITH_AES_256_CBC_SHA",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 58,
+    "name": "TLS_DH_anon_WITH_AES_256_CBC_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 59,
+    "name": "TLS_RSA_WITH_NULL_SHA256",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 60,
+    "name": "TLS_RSA_WITH_AES_128_CBC_SHA256",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 61,
+    "name": "TLS_RSA_WITH_AES_256_CBC_SHA256",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 62,
+    "name": "TLS_DH_DSS_WITH_AES_128_CBC_SHA256",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 63,
+    "name": "TLS_DH_RSA_WITH_AES_128_CBC_SHA256",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 64,
+    "name": "TLS_DHE_DSS_WITH_AES_128_CBC_SHA256",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 65,
+    "name": "TLS_RSA_WITH_CAMELLIA_128_CBC_SHA",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 66,
+    "name": "TLS_DH_DSS_WITH_CAMELLIA_128_CBC_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 67,
+    "name": "TLS_DH_RSA_WITH_CAMELLIA_128_CBC_SHA",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 68,
+    "name": "TLS_DHE_DSS_WITH_CAMELLIA_128_CBC_SHA",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 69,
+    "name": "TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 70,
+    "name": "TLS_DH_anon_WITH_CAMELLIA_128_CBC_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 103,
+    "name": "TLS_DHE_RSA_WITH_AES_128_CBC_SHA256",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 104,
+    "name": "TLS_DH_DSS_WITH_AES_256_CBC_SHA256",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 105,
+    "name": "TLS_DH_RSA_WITH_AES_256_CBC_SHA256",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 106,
+    "name": "TLS_DHE_DSS_WITH_AES_256_CBC_SHA256",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 107,
+    "name": "TLS_DHE_RSA_WITH_AES_256_CBC_SHA256",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 108,
+    "name": "TLS_DH_anon_WITH_AES_128_CBC_SHA256",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 109,
+    "name": "TLS_DH_anon_WITH_AES_256_CBC_SHA256",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 110,
+    "name": "TLS_ASCONAEAD128_ASCONHASH256",
+    "kx": "other",
+    "aead": false,
+    "version": "1.2"
+   },
+   {
+    "id": 111,
+    "name": "TLS_ASCONAEAD128_SHA256",
+    "kx": "other",
+    "aead": false,
+    "version": "1.2"
+   },
+   {
+    "id": 112,
+    "name": "TLS_AES_128_GCM_ASCONHASH256",
+    "kx": "other",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 113,
+    "name": "TLS_AES_128_CCM_ASCONHASH256",
+    "kx": "other",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 114,
+    "name": "TLS_BELT_CHE256_BELT_HASH",
+    "kx": "other",
+    "aead": false,
+    "version": "1.2"
+   },
+   {
+    "id": 115,
+    "name": "TLS_BASH_PRG_AE2561_BASH256",
+    "kx": "other",
+    "aead": false,
+    "version": "1.2"
+   },
+   {
+    "id": 132,
+    "name": "TLS_RSA_WITH_CAMELLIA_256_CBC_SHA",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 133,
+    "name": "TLS_DH_DSS_WITH_CAMELLIA_256_CBC_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 134,
+    "name": "TLS_DH_RSA_WITH_CAMELLIA_256_CBC_SHA",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 135,
+    "name": "TLS_DHE_DSS_WITH_CAMELLIA_256_CBC_SHA",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 136,
+    "name": "TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 137,
+    "name": "TLS_DH_anon_WITH_CAMELLIA_256_CBC_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 138,
+    "name": "TLS_PSK_WITH_RC4_128_SHA",
+    "kx": "psk",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 139,
+    "name": "TLS_PSK_WITH_3DES_EDE_CBC_SHA",
+    "kx": "psk",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 140,
+    "name": "TLS_PSK_WITH_AES_128_CBC_SHA",
+    "kx": "psk",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 141,
+    "name": "TLS_PSK_WITH_AES_256_CBC_SHA",
+    "kx": "psk",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 142,
+    "name": "TLS_DHE_PSK_WITH_RC4_128_SHA",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 143,
+    "name": "TLS_DHE_PSK_WITH_3DES_EDE_CBC_SHA",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 144,
+    "name": "TLS_DHE_PSK_WITH_AES_128_CBC_SHA",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 145,
+    "name": "TLS_DHE_PSK_WITH_AES_256_CBC_SHA",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 146,
+    "name": "TLS_RSA_PSK_WITH_RC4_128_SHA",
+    "kx": "psk",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 147,
+    "name": "TLS_RSA_PSK_WITH_3DES_EDE_CBC_SHA",
+    "kx": "psk",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 148,
+    "name": "TLS_RSA_PSK_WITH_AES_128_CBC_SHA",
+    "kx": "psk",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 149,
+    "name": "TLS_RSA_PSK_WITH_AES_256_CBC_SHA",
+    "kx": "psk",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 150,
+    "name": "TLS_RSA_WITH_SEED_CBC_SHA",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 151,
+    "name": "TLS_DH_DSS_WITH_SEED_CBC_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 152,
+    "name": "TLS_DH_RSA_WITH_SEED_CBC_SHA",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 153,
+    "name": "TLS_DHE_DSS_WITH_SEED_CBC_SHA",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 154,
+    "name": "TLS_DHE_RSA_WITH_SEED_CBC_SHA",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 155,
+    "name": "TLS_DH_anon_WITH_SEED_CBC_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 156,
+    "name": "TLS_RSA_WITH_AES_128_GCM_SHA256",
+    "kx": "rsa",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 157,
+    "name": "TLS_RSA_WITH_AES_256_GCM_SHA384",
+    "kx": "rsa",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 158,
+    "name": "TLS_DHE_RSA_WITH_AES_128_GCM_SHA256",
+    "kx": "dhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 159,
+    "name": "TLS_DHE_RSA_WITH_AES_256_GCM_SHA384",
+    "kx": "dhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 160,
+    "name": "TLS_DH_RSA_WITH_AES_128_GCM_SHA256",
+    "kx": "rsa",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 161,
+    "name": "TLS_DH_RSA_WITH_AES_256_GCM_SHA384",
+    "kx": "rsa",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 162,
+    "name": "TLS_DHE_DSS_WITH_AES_128_GCM_SHA256",
+    "kx": "dhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 163,
+    "name": "TLS_DHE_DSS_WITH_AES_256_GCM_SHA384",
+    "kx": "dhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 164,
+    "name": "TLS_DH_DSS_WITH_AES_128_GCM_SHA256",
+    "kx": "other",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 165,
+    "name": "TLS_DH_DSS_WITH_AES_256_GCM_SHA384",
+    "kx": "other",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 166,
+    "name": "TLS_DH_anon_WITH_AES_128_GCM_SHA256",
+    "kx": "other",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 167,
+    "name": "TLS_DH_anon_WITH_AES_256_GCM_SHA384",
+    "kx": "other",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 168,
+    "name": "TLS_PSK_WITH_AES_128_GCM_SHA256",
+    "kx": "psk",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 169,
+    "name": "TLS_PSK_WITH_AES_256_GCM_SHA384",
+    "kx": "psk",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 170,
+    "name": "TLS_DHE_PSK_WITH_AES_128_GCM_SHA256",
+    "kx": "dhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 171,
+    "name": "TLS_DHE_PSK_WITH_AES_256_GCM_SHA384",
+    "kx": "dhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 172,
+    "name": "TLS_RSA_PSK_WITH_AES_128_GCM_SHA256",
+    "kx": "psk",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 173,
+    "name": "TLS_RSA_PSK_WITH_AES_256_GCM_SHA384",
+    "kx": "psk",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 174,
+    "name": "TLS_PSK_WITH_AES_128_CBC_SHA256",
+    "kx": "psk",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 175,
+    "name": "TLS_PSK_WITH_AES_256_CBC_SHA384",
+    "kx": "psk",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 176,
+    "name": "TLS_PSK_WITH_NULL_SHA256",
+    "kx": "psk",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 177,
+    "name": "TLS_PSK_WITH_NULL_SHA384",
+    "kx": "psk",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 178,
+    "name": "TLS_DHE_PSK_WITH_AES_128_CBC_SHA256",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 179,
+    "name": "TLS_DHE_PSK_WITH_AES_256_CBC_SHA384",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 180,
+    "name": "TLS_DHE_PSK_WITH_NULL_SHA256",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 181,
+    "name": "TLS_DHE_PSK_WITH_NULL_SHA384",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 182,
+    "name": "TLS_RSA_PSK_WITH_AES_128_CBC_SHA256",
+    "kx": "psk",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 183,
+    "name": "TLS_RSA_PSK_WITH_AES_256_CBC_SHA384",
+    "kx": "psk",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 184,
+    "name": "TLS_RSA_PSK_WITH_NULL_SHA256",
+    "kx": "psk",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 185,
+    "name": "TLS_RSA_PSK_WITH_NULL_SHA384",
+    "kx": "psk",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 186,
+    "name": "TLS_RSA_WITH_CAMELLIA_128_CBC_SHA256",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 187,
+    "name": "TLS_DH_DSS_WITH_CAMELLIA_128_CBC_SHA256",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 188,
+    "name": "TLS_DH_RSA_WITH_CAMELLIA_128_CBC_SHA256",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 189,
+    "name": "TLS_DHE_DSS_WITH_CAMELLIA_128_CBC_SHA256",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 190,
+    "name": "TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA256",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 191,
+    "name": "TLS_DH_anon_WITH_CAMELLIA_128_CBC_SHA256",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 192,
+    "name": "TLS_RSA_WITH_CAMELLIA_256_CBC_SHA256",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 193,
+    "name": "TLS_DH_DSS_WITH_CAMELLIA_256_CBC_SHA256",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 194,
+    "name": "TLS_DH_RSA_WITH_CAMELLIA_256_CBC_SHA256",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 195,
+    "name": "TLS_DHE_DSS_WITH_CAMELLIA_256_CBC_SHA256",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 196,
+    "name": "TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA256",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 197,
+    "name": "TLS_DH_anon_WITH_CAMELLIA_256_CBC_SHA256",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 198,
+    "name": "TLS_SM4_GCM_SM3",
+    "kx": "other",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 199,
+    "name": "TLS_SM4_CCM_SM3",
+    "kx": "other",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 255,
+    "name": "TLS_EMPTY_RENEGOTIATION_INFO_SCSV",
+    "kx": "other",
+    "aead": false,
+    "version": "1.2"
+   },
+   {
+    "id": 4865,
+    "name": "TLS_AES_128_GCM_SHA256",
+    "kx": "tls13",
+    "aead": true,
+    "version": "1.3"
+   },
+   {
+    "id": 4866,
+    "name": "TLS_AES_256_GCM_SHA384",
+    "kx": "tls13",
+    "aead": true,
+    "version": "1.3"
+   },
+   {
+    "id": 4867,
+    "name": "TLS_CHACHA20_POLY1305_SHA256",
+    "kx": "tls13",
+    "aead": true,
+    "version": "1.3"
+   },
+   {
+    "id": 4868,
+    "name": "TLS_AES_128_CCM_SHA256",
+    "kx": "tls13",
+    "aead": true,
+    "version": "1.3"
+   },
+   {
+    "id": 4869,
+    "name": "TLS_AES_128_CCM_8_SHA256",
+    "kx": "tls13",
+    "aead": true,
+    "version": "1.3"
+   },
+   {
+    "id": 4870,
+    "name": "TLS_AEGIS_256_SHA512",
+    "kx": "other",
+    "aead": false,
+    "version": "1.2"
+   },
+   {
+    "id": 4871,
+    "name": "TLS_AEGIS_128L_SHA256",
+    "kx": "other",
+    "aead": false,
+    "version": "1.2"
+   },
+   {
+    "id": 22016,
+    "name": "TLS_FALLBACK_SCSV",
+    "kx": "other",
+    "aead": false,
+    "version": "1.2"
+   },
+   {
+    "id": 49153,
+    "name": "TLS_ECDH_ECDSA_WITH_NULL_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49154,
+    "name": "TLS_ECDH_ECDSA_WITH_RC4_128_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49155,
+    "name": "TLS_ECDH_ECDSA_WITH_3DES_EDE_CBC_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49156,
+    "name": "TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49157,
+    "name": "TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49158,
+    "name": "TLS_ECDHE_ECDSA_WITH_NULL_SHA",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49159,
+    "name": "TLS_ECDHE_ECDSA_WITH_RC4_128_SHA",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49160,
+    "name": "TLS_ECDHE_ECDSA_WITH_3DES_EDE_CBC_SHA",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49161,
+    "name": "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49162,
+    "name": "TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49163,
+    "name": "TLS_ECDH_RSA_WITH_NULL_SHA",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49164,
+    "name": "TLS_ECDH_RSA_WITH_RC4_128_SHA",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49165,
+    "name": "TLS_ECDH_RSA_WITH_3DES_EDE_CBC_SHA",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49166,
+    "name": "TLS_ECDH_RSA_WITH_AES_128_CBC_SHA",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49167,
+    "name": "TLS_ECDH_RSA_WITH_AES_256_CBC_SHA",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49168,
+    "name": "TLS_ECDHE_RSA_WITH_NULL_SHA",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49169,
+    "name": "TLS_ECDHE_RSA_WITH_RC4_128_SHA",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49170,
+    "name": "TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49171,
+    "name": "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49172,
+    "name": "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49173,
+    "name": "TLS_ECDH_anon_WITH_NULL_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49174,
+    "name": "TLS_ECDH_anon_WITH_RC4_128_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49175,
+    "name": "TLS_ECDH_anon_WITH_3DES_EDE_CBC_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49176,
+    "name": "TLS_ECDH_anon_WITH_AES_128_CBC_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49177,
+    "name": "TLS_ECDH_anon_WITH_AES_256_CBC_SHA",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49178,
+    "name": "TLS_SRP_SHA_WITH_3DES_EDE_CBC_SHA",
+    "kx": "srp",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49179,
+    "name": "TLS_SRP_SHA_RSA_WITH_3DES_EDE_CBC_SHA",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49180,
+    "name": "TLS_SRP_SHA_DSS_WITH_3DES_EDE_CBC_SHA",
+    "kx": "srp",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49181,
+    "name": "TLS_SRP_SHA_WITH_AES_128_CBC_SHA",
+    "kx": "srp",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49182,
+    "name": "TLS_SRP_SHA_RSA_WITH_AES_128_CBC_SHA",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49183,
+    "name": "TLS_SRP_SHA_DSS_WITH_AES_128_CBC_SHA",
+    "kx": "srp",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49184,
+    "name": "TLS_SRP_SHA_WITH_AES_256_CBC_SHA",
+    "kx": "srp",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49185,
+    "name": "TLS_SRP_SHA_RSA_WITH_AES_256_CBC_SHA",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49186,
+    "name": "TLS_SRP_SHA_DSS_WITH_AES_256_CBC_SHA",
+    "kx": "srp",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49187,
+    "name": "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49188,
+    "name": "TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49189,
+    "name": "TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA256",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49190,
+    "name": "TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA384",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49191,
+    "name": "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49192,
+    "name": "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49193,
+    "name": "TLS_ECDH_RSA_WITH_AES_128_CBC_SHA256",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49194,
+    "name": "TLS_ECDH_RSA_WITH_AES_256_CBC_SHA384",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49195,
+    "name": "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
+    "kx": "ecdhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49196,
+    "name": "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384",
+    "kx": "ecdhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49197,
+    "name": "TLS_ECDH_ECDSA_WITH_AES_128_GCM_SHA256",
+    "kx": "other",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49198,
+    "name": "TLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384",
+    "kx": "other",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49199,
+    "name": "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
+    "kx": "ecdhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49200,
+    "name": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+    "kx": "ecdhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49201,
+    "name": "TLS_ECDH_RSA_WITH_AES_128_GCM_SHA256",
+    "kx": "rsa",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49202,
+    "name": "TLS_ECDH_RSA_WITH_AES_256_GCM_SHA384",
+    "kx": "rsa",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49203,
+    "name": "TLS_ECDHE_PSK_WITH_RC4_128_SHA",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49204,
+    "name": "TLS_ECDHE_PSK_WITH_3DES_EDE_CBC_SHA",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49205,
+    "name": "TLS_ECDHE_PSK_WITH_AES_128_CBC_SHA",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49206,
+    "name": "TLS_ECDHE_PSK_WITH_AES_256_CBC_SHA",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49207,
+    "name": "TLS_ECDHE_PSK_WITH_AES_128_CBC_SHA256",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49208,
+    "name": "TLS_ECDHE_PSK_WITH_AES_256_CBC_SHA384",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49209,
+    "name": "TLS_ECDHE_PSK_WITH_NULL_SHA",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49210,
+    "name": "TLS_ECDHE_PSK_WITH_NULL_SHA256",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49211,
+    "name": "TLS_ECDHE_PSK_WITH_NULL_SHA384",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49212,
+    "name": "TLS_RSA_WITH_ARIA_128_CBC_SHA256",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49213,
+    "name": "TLS_RSA_WITH_ARIA_256_CBC_SHA384",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49214,
+    "name": "TLS_DH_DSS_WITH_ARIA_128_CBC_SHA256",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49215,
+    "name": "TLS_DH_DSS_WITH_ARIA_256_CBC_SHA384",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49216,
+    "name": "TLS_DH_RSA_WITH_ARIA_128_CBC_SHA256",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49217,
+    "name": "TLS_DH_RSA_WITH_ARIA_256_CBC_SHA384",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49218,
+    "name": "TLS_DHE_DSS_WITH_ARIA_128_CBC_SHA256",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49219,
+    "name": "TLS_DHE_DSS_WITH_ARIA_256_CBC_SHA384",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49220,
+    "name": "TLS_DHE_RSA_WITH_ARIA_128_CBC_SHA256",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49221,
+    "name": "TLS_DHE_RSA_WITH_ARIA_256_CBC_SHA384",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49222,
+    "name": "TLS_DH_anon_WITH_ARIA_128_CBC_SHA256",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49223,
+    "name": "TLS_DH_anon_WITH_ARIA_256_CBC_SHA384",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49224,
+    "name": "TLS_ECDHE_ECDSA_WITH_ARIA_128_CBC_SHA256",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49225,
+    "name": "TLS_ECDHE_ECDSA_WITH_ARIA_256_CBC_SHA384",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49226,
+    "name": "TLS_ECDH_ECDSA_WITH_ARIA_128_CBC_SHA256",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49227,
+    "name": "TLS_ECDH_ECDSA_WITH_ARIA_256_CBC_SHA384",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49228,
+    "name": "TLS_ECDHE_RSA_WITH_ARIA_128_CBC_SHA256",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49229,
+    "name": "TLS_ECDHE_RSA_WITH_ARIA_256_CBC_SHA384",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49230,
+    "name": "TLS_ECDH_RSA_WITH_ARIA_128_CBC_SHA256",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49231,
+    "name": "TLS_ECDH_RSA_WITH_ARIA_256_CBC_SHA384",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49232,
+    "name": "TLS_RSA_WITH_ARIA_128_GCM_SHA256",
+    "kx": "rsa",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49233,
+    "name": "TLS_RSA_WITH_ARIA_256_GCM_SHA384",
+    "kx": "rsa",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49234,
+    "name": "TLS_DHE_RSA_WITH_ARIA_128_GCM_SHA256",
+    "kx": "dhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49235,
+    "name": "TLS_DHE_RSA_WITH_ARIA_256_GCM_SHA384",
+    "kx": "dhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49236,
+    "name": "TLS_DH_RSA_WITH_ARIA_128_GCM_SHA256",
+    "kx": "rsa",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49237,
+    "name": "TLS_DH_RSA_WITH_ARIA_256_GCM_SHA384",
+    "kx": "rsa",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49238,
+    "name": "TLS_DHE_DSS_WITH_ARIA_128_GCM_SHA256",
+    "kx": "dhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49239,
+    "name": "TLS_DHE_DSS_WITH_ARIA_256_GCM_SHA384",
+    "kx": "dhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49240,
+    "name": "TLS_DH_DSS_WITH_ARIA_128_GCM_SHA256",
+    "kx": "other",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49241,
+    "name": "TLS_DH_DSS_WITH_ARIA_256_GCM_SHA384",
+    "kx": "other",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49242,
+    "name": "TLS_DH_anon_WITH_ARIA_128_GCM_SHA256",
+    "kx": "other",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49243,
+    "name": "TLS_DH_anon_WITH_ARIA_256_GCM_SHA384",
+    "kx": "other",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49244,
+    "name": "TLS_ECDHE_ECDSA_WITH_ARIA_128_GCM_SHA256",
+    "kx": "ecdhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49245,
+    "name": "TLS_ECDHE_ECDSA_WITH_ARIA_256_GCM_SHA384",
+    "kx": "ecdhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49246,
+    "name": "TLS_ECDH_ECDSA_WITH_ARIA_128_GCM_SHA256",
+    "kx": "other",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49247,
+    "name": "TLS_ECDH_ECDSA_WITH_ARIA_256_GCM_SHA384",
+    "kx": "other",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49248,
+    "name": "TLS_ECDHE_RSA_WITH_ARIA_128_GCM_SHA256",
+    "kx": "ecdhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49249,
+    "name": "TLS_ECDHE_RSA_WITH_ARIA_256_GCM_SHA384",
+    "kx": "ecdhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49250,
+    "name": "TLS_ECDH_RSA_WITH_ARIA_128_GCM_SHA256",
+    "kx": "rsa",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49251,
+    "name": "TLS_ECDH_RSA_WITH_ARIA_256_GCM_SHA384",
+    "kx": "rsa",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49252,
+    "name": "TLS_PSK_WITH_ARIA_128_CBC_SHA256",
+    "kx": "psk",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49253,
+    "name": "TLS_PSK_WITH_ARIA_256_CBC_SHA384",
+    "kx": "psk",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49254,
+    "name": "TLS_DHE_PSK_WITH_ARIA_128_CBC_SHA256",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49255,
+    "name": "TLS_DHE_PSK_WITH_ARIA_256_CBC_SHA384",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49256,
+    "name": "TLS_RSA_PSK_WITH_ARIA_128_CBC_SHA256",
+    "kx": "psk",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49257,
+    "name": "TLS_RSA_PSK_WITH_ARIA_256_CBC_SHA384",
+    "kx": "psk",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49258,
+    "name": "TLS_PSK_WITH_ARIA_128_GCM_SHA256",
+    "kx": "psk",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49259,
+    "name": "TLS_PSK_WITH_ARIA_256_GCM_SHA384",
+    "kx": "psk",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49260,
+    "name": "TLS_DHE_PSK_WITH_ARIA_128_GCM_SHA256",
+    "kx": "dhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49261,
+    "name": "TLS_DHE_PSK_WITH_ARIA_256_GCM_SHA384",
+    "kx": "dhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49262,
+    "name": "TLS_RSA_PSK_WITH_ARIA_128_GCM_SHA256",
+    "kx": "psk",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49263,
+    "name": "TLS_RSA_PSK_WITH_ARIA_256_GCM_SHA384",
+    "kx": "psk",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49264,
+    "name": "TLS_ECDHE_PSK_WITH_ARIA_128_CBC_SHA256",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49265,
+    "name": "TLS_ECDHE_PSK_WITH_ARIA_256_CBC_SHA384",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49266,
+    "name": "TLS_ECDHE_ECDSA_WITH_CAMELLIA_128_CBC_SHA256",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49267,
+    "name": "TLS_ECDHE_ECDSA_WITH_CAMELLIA_256_CBC_SHA384",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49268,
+    "name": "TLS_ECDH_ECDSA_WITH_CAMELLIA_128_CBC_SHA256",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49269,
+    "name": "TLS_ECDH_ECDSA_WITH_CAMELLIA_256_CBC_SHA384",
+    "kx": "other",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49270,
+    "name": "TLS_ECDHE_RSA_WITH_CAMELLIA_128_CBC_SHA256",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49271,
+    "name": "TLS_ECDHE_RSA_WITH_CAMELLIA_256_CBC_SHA384",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49272,
+    "name": "TLS_ECDH_RSA_WITH_CAMELLIA_128_CBC_SHA256",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49273,
+    "name": "TLS_ECDH_RSA_WITH_CAMELLIA_256_CBC_SHA384",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49274,
+    "name": "TLS_RSA_WITH_CAMELLIA_128_GCM_SHA256",
+    "kx": "rsa",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49275,
+    "name": "TLS_RSA_WITH_CAMELLIA_256_GCM_SHA384",
+    "kx": "rsa",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49276,
+    "name": "TLS_DHE_RSA_WITH_CAMELLIA_128_GCM_SHA256",
+    "kx": "dhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49277,
+    "name": "TLS_DHE_RSA_WITH_CAMELLIA_256_GCM_SHA384",
+    "kx": "dhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49278,
+    "name": "TLS_DH_RSA_WITH_CAMELLIA_128_GCM_SHA256",
+    "kx": "rsa",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49279,
+    "name": "TLS_DH_RSA_WITH_CAMELLIA_256_GCM_SHA384",
+    "kx": "rsa",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49280,
+    "name": "TLS_DHE_DSS_WITH_CAMELLIA_128_GCM_SHA256",
+    "kx": "dhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49281,
+    "name": "TLS_DHE_DSS_WITH_CAMELLIA_256_GCM_SHA384",
+    "kx": "dhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49282,
+    "name": "TLS_DH_DSS_WITH_CAMELLIA_128_GCM_SHA256",
+    "kx": "other",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49283,
+    "name": "TLS_DH_DSS_WITH_CAMELLIA_256_GCM_SHA384",
+    "kx": "other",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49284,
+    "name": "TLS_DH_anon_WITH_CAMELLIA_128_GCM_SHA256",
+    "kx": "other",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49285,
+    "name": "TLS_DH_anon_WITH_CAMELLIA_256_GCM_SHA384",
+    "kx": "other",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49286,
+    "name": "TLS_ECDHE_ECDSA_WITH_CAMELLIA_128_GCM_SHA256",
+    "kx": "ecdhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49287,
+    "name": "TLS_ECDHE_ECDSA_WITH_CAMELLIA_256_GCM_SHA384",
+    "kx": "ecdhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49288,
+    "name": "TLS_ECDH_ECDSA_WITH_CAMELLIA_128_GCM_SHA256",
+    "kx": "other",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49289,
+    "name": "TLS_ECDH_ECDSA_WITH_CAMELLIA_256_GCM_SHA384",
+    "kx": "other",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49290,
+    "name": "TLS_ECDHE_RSA_WITH_CAMELLIA_128_GCM_SHA256",
+    "kx": "ecdhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49291,
+    "name": "TLS_ECDHE_RSA_WITH_CAMELLIA_256_GCM_SHA384",
+    "kx": "ecdhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49292,
+    "name": "TLS_ECDH_RSA_WITH_CAMELLIA_128_GCM_SHA256",
+    "kx": "rsa",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49293,
+    "name": "TLS_ECDH_RSA_WITH_CAMELLIA_256_GCM_SHA384",
+    "kx": "rsa",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49294,
+    "name": "TLS_PSK_WITH_CAMELLIA_128_GCM_SHA256",
+    "kx": "psk",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49295,
+    "name": "TLS_PSK_WITH_CAMELLIA_256_GCM_SHA384",
+    "kx": "psk",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49296,
+    "name": "TLS_DHE_PSK_WITH_CAMELLIA_128_GCM_SHA256",
+    "kx": "dhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49297,
+    "name": "TLS_DHE_PSK_WITH_CAMELLIA_256_GCM_SHA384",
+    "kx": "dhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49298,
+    "name": "TLS_RSA_PSK_WITH_CAMELLIA_128_GCM_SHA256",
+    "kx": "psk",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49299,
+    "name": "TLS_RSA_PSK_WITH_CAMELLIA_256_GCM_SHA384",
+    "kx": "psk",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49300,
+    "name": "TLS_PSK_WITH_CAMELLIA_128_CBC_SHA256",
+    "kx": "psk",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49301,
+    "name": "TLS_PSK_WITH_CAMELLIA_256_CBC_SHA384",
+    "kx": "psk",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49302,
+    "name": "TLS_DHE_PSK_WITH_CAMELLIA_128_CBC_SHA256",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49303,
+    "name": "TLS_DHE_PSK_WITH_CAMELLIA_256_CBC_SHA384",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49304,
+    "name": "TLS_RSA_PSK_WITH_CAMELLIA_128_CBC_SHA256",
+    "kx": "psk",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49305,
+    "name": "TLS_RSA_PSK_WITH_CAMELLIA_256_CBC_SHA384",
+    "kx": "psk",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49306,
+    "name": "TLS_ECDHE_PSK_WITH_CAMELLIA_128_CBC_SHA256",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49307,
+    "name": "TLS_ECDHE_PSK_WITH_CAMELLIA_256_CBC_SHA384",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.0"
+   },
+   {
+    "id": 49308,
+    "name": "TLS_RSA_WITH_AES_128_CCM",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.2"
+   },
+   {
+    "id": 49309,
+    "name": "TLS_RSA_WITH_AES_256_CCM",
+    "kx": "rsa",
+    "aead": false,
+    "version": "1.2"
+   },
+   {
+    "id": 49310,
+    "name": "TLS_DHE_RSA_WITH_AES_128_CCM",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.2"
+   },
+   {
+    "id": 49311,
+    "name": "TLS_DHE_RSA_WITH_AES_256_CCM",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.2"
+   },
+   {
+    "id": 49312,
+    "name": "TLS_RSA_WITH_AES_128_CCM_8",
+    "kx": "rsa",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49313,
+    "name": "TLS_RSA_WITH_AES_256_CCM_8",
+    "kx": "rsa",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49314,
+    "name": "TLS_DHE_RSA_WITH_AES_128_CCM_8",
+    "kx": "dhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49315,
+    "name": "TLS_DHE_RSA_WITH_AES_256_CCM_8",
+    "kx": "dhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49316,
+    "name": "TLS_PSK_WITH_AES_128_CCM",
+    "kx": "psk",
+    "aead": false,
+    "version": "1.2"
+   },
+   {
+    "id": 49317,
+    "name": "TLS_PSK_WITH_AES_256_CCM",
+    "kx": "psk",
+    "aead": false,
+    "version": "1.2"
+   },
+   {
+    "id": 49318,
+    "name": "TLS_DHE_PSK_WITH_AES_128_CCM",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.2"
+   },
+   {
+    "id": 49319,
+    "name": "TLS_DHE_PSK_WITH_AES_256_CCM",
+    "kx": "dhe",
+    "aead": false,
+    "version": "1.2"
+   },
+   {
+    "id": 49320,
+    "name": "TLS_PSK_WITH_AES_128_CCM_8",
+    "kx": "psk",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49321,
+    "name": "TLS_PSK_WITH_AES_256_CCM_8",
+    "kx": "psk",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49322,
+    "name": "TLS_PSK_DHE_WITH_AES_128_CCM_8",
+    "kx": "dhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49323,
+    "name": "TLS_PSK_DHE_WITH_AES_256_CCM_8",
+    "kx": "dhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49324,
+    "name": "TLS_ECDHE_ECDSA_WITH_AES_128_CCM",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.2"
+   },
+   {
+    "id": 49325,
+    "name": "TLS_ECDHE_ECDSA_WITH_AES_256_CCM",
+    "kx": "ecdhe",
+    "aead": false,
+    "version": "1.2"
+   },
+   {
+    "id": 49326,
+    "name": "TLS_ECDHE_ECDSA_WITH_AES_128_CCM_8",
+    "kx": "ecdhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49327,
+    "name": "TLS_ECDHE_ECDSA_WITH_AES_256_CCM_8",
+    "kx": "ecdhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49328,
+    "name": "TLS_ECCPWD_WITH_AES_128_GCM_SHA256",
+    "kx": "other",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49329,
+    "name": "TLS_ECCPWD_WITH_AES_256_GCM_SHA384",
+    "kx": "other",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49330,
+    "name": "TLS_ECCPWD_WITH_AES_128_CCM_SHA256",
+    "kx": "other",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49331,
+    "name": "TLS_ECCPWD_WITH_AES_256_CCM_SHA384",
+    "kx": "other",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 49332,
+    "name": "TLS_SHA256_SHA256",
+    "kx": "other",
+    "aead": false,
+    "version": "1.2"
+   },
+   {
+    "id": 49333,
+    "name": "TLS_SHA384_SHA384",
+    "kx": "other",
+    "aead": false,
+    "version": "1.2"
+   },
+   {
+    "id": 49408,
+    "name": "TLS_GOSTR341112_256_WITH_KUZNYECHIK_CTR_OMAC",
+    "kx": "other",
+    "aead": false,
+    "version": "1.2"
+   },
+   {
+    "id": 49409,
+    "name": "TLS_GOSTR341112_256_WITH_MAGMA_CTR_OMAC",
+    "kx": "other",
+    "aead": false,
+    "version": "1.2"
+   },
+   {
+    "id": 49410,
+    "name": "TLS_GOSTR341112_256_WITH_28147_CNT_IMIT",
+    "kx": "other",
+    "aead": false,
+    "version": "1.2"
+   },
+   {
+    "id": 49411,
+    "name": "TLS_GOSTR341112_256_WITH_KUZNYECHIK_MGM_L",
+    "kx": "other",
+    "aead": false,
+    "version": "1.2"
+   },
+   {
+    "id": 49412,
+    "name": "TLS_GOSTR341112_256_WITH_MAGMA_MGM_L",
+    "kx": "other",
+    "aead": false,
+    "version": "1.2"
+   },
+   {
+    "id": 49413,
+    "name": "TLS_GOSTR341112_256_WITH_KUZNYECHIK_MGM_S",
+    "kx": "other",
+    "aead": false,
+    "version": "1.2"
+   },
+   {
+    "id": 49414,
+    "name": "TLS_GOSTR341112_256_WITH_MAGMA_MGM_S",
+    "kx": "other",
+    "aead": false,
+    "version": "1.2"
+   },
+   {
+    "id": 52392,
+    "name": "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256",
+    "kx": "ecdhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 52393,
+    "name": "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256",
+    "kx": "ecdhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 52394,
+    "name": "TLS_DHE_RSA_WITH_CHACHA20_POLY1305_SHA256",
+    "kx": "dhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 52395,
+    "name": "TLS_PSK_WITH_CHACHA20_POLY1305_SHA256",
+    "kx": "psk",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 52396,
+    "name": "TLS_ECDHE_PSK_WITH_CHACHA20_POLY1305_SHA256",
+    "kx": "ecdhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 52397,
+    "name": "TLS_DHE_PSK_WITH_CHACHA20_POLY1305_SHA256",
+    "kx": "dhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 52398,
+    "name": "TLS_RSA_PSK_WITH_CHACHA20_POLY1305_SHA256",
+    "kx": "psk",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 53249,
+    "name": "TLS_ECDHE_PSK_WITH_AES_128_GCM_SHA256",
+    "kx": "ecdhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 53250,
+    "name": "TLS_ECDHE_PSK_WITH_AES_256_GCM_SHA384",
+    "kx": "ecdhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 53251,
+    "name": "TLS_ECDHE_PSK_WITH_AES_128_CCM_8_SHA256",
+    "kx": "ecdhe",
+    "aead": true,
+    "version": "1.2"
+   },
+   {
+    "id": 53253,
+    "name": "TLS_ECDHE_PSK_WITH_AES_128_CCM_SHA256",
+    "kx": "ecdhe",
+    "aead": true,
+    "version": "1.2"
+   }
+  ],
+  "signature_schemes": [
+   {
+    "id": 513,
+    "name": "rsa_pkcs1_sha1"
+   },
+   {
+    "id": 515,
+    "name": "ecdsa_sha1"
+   },
+   {
+    "id": 1025,
+    "name": "rsa_pkcs1_sha256"
+   },
+   {
+    "id": 1027,
+    "name": "ecdsa_secp256r1_sha256"
+   },
+   {
+    "id": 1056,
+    "name": "rsa_pkcs1_sha256_legacy"
+   },
+   {
+    "id": 1281,
+    "name": "rsa_pkcs1_sha384"
+   },
+   {
+    "id": 1283,
+    "name": "ecdsa_secp384r1_sha384"
+   },
+   {
+    "id": 1312,
+    "name": "rsa_pkcs1_sha384_legacy"
+   },
+   {
+    "id": 1537,
+    "name": "rsa_pkcs1_sha512"
+   },
+   {
+    "id": 1539,
+    "name": "ecdsa_secp521r1_sha512"
+   },
+   {
+    "id": 1568,
+    "name": "rsa_pkcs1_sha512_legacy"
+   },
+   {
+    "id": 1796,
+    "name": "eccsi_sha256"
+   },
+   {
+    "id": 1797,
+    "name": "iso_ibs1"
+   },
+   {
+    "id": 1798,
+    "name": "iso_ibs2"
+   },
+   {
+    "id": 1799,
+    "name": "iso_chinese_ibs"
+   },
+   {
+    "id": 1800,
+    "name": "sm2sig_sm3"
+   },
+   {
+    "id": 1801,
+    "name": "gostr34102012_256a"
+   },
+   {
+    "id": 1802,
+    "name": "gostr34102012_256b"
+   },
+   {
+    "id": 1803,
+    "name": "gostr34102012_256c"
+   },
+   {
+    "id": 1804,
+    "name": "gostr34102012_256d"
+   },
+   {
+    "id": 1805,
+    "name": "gostr34102012_512a"
+   },
+   {
+    "id": 1806,
+    "name": "gostr34102012_512b"
+   },
+   {
+    "id": 1807,
+    "name": "gostr34102012_512c"
+   },
+   {
+    "id": 1808,
+    "name": "bign-with-hbelt"
+   },
+   {
+    "id": 1809,
+    "name": "bign-with-bash384"
+   },
+   {
+    "id": 1810,
+    "name": "bign-with-bash512"
+   },
+   {
+    "id": 2052,
+    "name": "rsa_pss_rsae_sha256"
+   },
+   {
+    "id": 2053,
+    "name": "rsa_pss_rsae_sha384"
+   },
+   {
+    "id": 2054,
+    "name": "rsa_pss_rsae_sha512"
+   },
+   {
+    "id": 2055,
+    "name": "ed25519"
+   },
+   {
+    "id": 2056,
+    "name": "ed448"
+   },
+   {
+    "id": 2057,
+    "name": "rsa_pss_pss_sha256"
+   },
+   {
+    "id": 2058,
+    "name": "rsa_pss_pss_sha384"
+   },
+   {
+    "id": 2059,
+    "name": "rsa_pss_pss_sha512"
+   },
+   {
+    "id": 2074,
+    "name": "ecdsa_brainpoolP256r1tls13_sha256"
+   },
+   {
+    "id": 2075,
+    "name": "ecdsa_brainpoolP384r1tls13_sha384"
+   },
+   {
+    "id": 2076,
+    "name": "ecdsa_brainpoolP512r1tls13_sha512"
+   },
+   {
+    "id": 2308,
+    "name": "mldsa44"
+   },
+   {
+    "id": 2309,
+    "name": "mldsa65"
+   },
+   {
+    "id": 2310,
+    "name": "mldsa87"
+   },
+   {
+    "id": 2321,
+    "name": "slhdsa_sha2_128s"
+   },
+   {
+    "id": 2322,
+    "name": "slhdsa_sha2_128f"
+   },
+   {
+    "id": 2323,
+    "name": "slhdsa_sha2_192s"
+   },
+   {
+    "id": 2324,
+    "name": "slhdsa_sha2_192f"
+   },
+   {
+    "id": 2325,
+    "name": "slhdsa_sha2_256s"
+   },
+   {
+    "id": 2326,
+    "name": "slhdsa_sha2_256f"
+   },
+   {
+    "id": 2327,
+    "name": "slhdsa_shake_128s"
+   },
+   {
+    "id": 2328,
+    "name": "slhdsa_shake_128f"
+   },
+   {
+    "id": 2329,
+    "name": "slhdsa_shake_192s"
+   },
+   {
+    "id": 2330,
+    "name": "slhdsa_shake_192f"
+   },
+   {
+    "id": 2331,
+    "name": "slhdsa_shake_256s"
+   },
+   {
+    "id": 2332,
+    "name": "slhdsa_shake_256f"
+   }
+  ],
+  "groups": [
+   {
+    "id": 1,
+    "name": "sect163k1"
+   },
+   {
+    "id": 2,
+    "name": "sect163r1"
+   },
+   {
+    "id": 3,
+    "name": "sect163r2"
+   },
+   {
+    "id": 4,
+    "name": "sect193r1"
+   },
+   {
+    "id": 5,
+    "name": "sect193r2"
+   },
+   {
+    "id": 6,
+    "name": "sect233k1"
+   },
+   {
+    "id": 7,
+    "name": "sect233r1"
+   },
+   {
+    "id": 8,
+    "name": "sect239k1"
+   },
+   {
+    "id": 9,
+    "name": "sect283k1"
+   },
+   {
+    "id": 10,
+    "name": "sect283r1"
+   },
+   {
+    "id": 11,
+    "name": "sect409k1"
+   },
+   {
+    "id": 12,
+    "name": "sect409r1"
+   },
+   {
+    "id": 13,
+    "name": "sect571k1"
+   },
+   {
+    "id": 14,
+    "name": "sect571r1"
+   },
+   {
+    "id": 15,
+    "name": "secp160k1"
+   },
+   {
+    "id": 16,
+    "name": "secp160r1"
+   },
+   {
+    "id": 17,
+    "name": "secp160r2"
+   },
+   {
+    "id": 18,
+    "name": "secp192k1"
+   },
+   {
+    "id": 19,
+    "name": "secp192r1"
+   },
+   {
+    "id": 20,
+    "name": "secp224k1"
+   },
+   {
+    "id": 21,
+    "name": "secp224r1"
+   },
+   {
+    "id": 22,
+    "name": "secp256k1"
+   },
+   {
+    "id": 23,
+    "name": "secp256r1"
+   },
+   {
+    "id": 24,
+    "name": "secp384r1"
+   },
+   {
+    "id": 25,
+    "name": "secp521r1"
+   },
+   {
+    "id": 26,
+    "name": "brainpoolP256r1"
+   },
+   {
+    "id": 27,
+    "name": "brainpoolP384r1"
+   },
+   {
+    "id": 28,
+    "name": "brainpoolP512r1"
+   },
+   {
+    "id": 29,
+    "name": "x25519"
+   },
+   {
+    "id": 30,
+    "name": "x448"
+   },
+   {
+    "id": 31,
+    "name": "brainpoolP256r1tls13"
+   },
+   {
+    "id": 32,
+    "name": "brainpoolP384r1tls13"
+   },
+   {
+    "id": 33,
+    "name": "brainpoolP512r1tls13"
+   },
+   {
+    "id": 34,
+    "name": "GC256A"
+   },
+   {
+    "id": 35,
+    "name": "GC256B"
+   },
+   {
+    "id": 36,
+    "name": "GC256C"
+   },
+   {
+    "id": 37,
+    "name": "GC256D"
+   },
+   {
+    "id": 38,
+    "name": "GC512A"
+   },
+   {
+    "id": 39,
+    "name": "GC512B"
+   },
+   {
+    "id": 40,
+    "name": "GC512C"
+   },
+   {
+    "id": 41,
+    "name": "curveSM2"
+   },
+   {
+    "id": 42,
+    "name": "bign-curve256v1"
+   },
+   {
+    "id": 43,
+    "name": "bign-curve384v1"
+   },
+   {
+    "id": 44,
+    "name": "bign-curve512v1"
+   },
+   {
+    "id": 256,
+    "name": "ffdhe2048"
+   },
+   {
+    "id": 257,
+    "name": "ffdhe3072"
+   },
+   {
+    "id": 258,
+    "name": "ffdhe4096"
+   },
+   {
+    "id": 259,
+    "name": "ffdhe6144"
+   },
+   {
+    "id": 260,
+    "name": "ffdhe8192"
+   },
+   {
+    "id": 512,
+    "name": "MLKEM512"
+   },
+   {
+    "id": 513,
+    "name": "MLKEM768"
+   },
+   {
+    "id": 514,
+    "name": "MLKEM1024"
+   },
+   {
+    "id": 4585,
+    "name": "SecP256r1MLKEM512"
+   },
+   {
+    "id": 4586,
+    "name": "MLKEM512X25519"
+   },
+   {
+    "id": 4587,
+    "name": "SecP256r1MLKEM768"
+   },
+   {
+    "id": 4588,
+    "name": "X25519MLKEM768"
+   },
+   {
+    "id": 4589,
+    "name": "SecP384r1MLKEM1024"
+   },
+   {
+    "id": 4590,
+    "name": "curveSM2MLKEM768"
+   },
+   {
+    "id": 4591,
+    "name": "MLKEM1024X448"
+   },
+   {
+    "id": 25497,
+    "name": "X25519Kyber768Draft00 (OBSOLETE)"
+   },
+   {
+    "id": 25498,
+    "name": "SecP256r1Kyber768Draft00 (OBSOLETE)"
+   },
+   {
+    "id": 65281,
+    "name": "arbitrary_explicit_prime_curves"
+   },
+   {
+    "id": 65282,
+    "name": "arbitrary_explicit_char2_curves"
+   }
+  ],
+  "extensions": [
+   {
+    "id": 0,
+    "name": "server_name"
+   },
+   {
+    "id": 1,
+    "name": "max_fragment_length"
+   },
+   {
+    "id": 2,
+    "name": "client_certificate_url"
+   },
+   {
+    "id": 3,
+    "name": "trusted_ca_keys"
+   },
+   {
+    "id": 4,
+    "name": "truncated_hmac"
+   },
+   {
+    "id": 5,
+    "name": "status_request"
+   },
+   {
+    "id": 6,
+    "name": "user_mapping"
+   },
+   {
+    "id": 7,
+    "name": "client_authz"
+   },
+   {
+    "id": 8,
+    "name": "server_authz"
+   },
+   {
+    "id": 9,
+    "name": "cert_type"
+   },
+   {
+    "id": 10,
+    "name": "supported_groups (renamed from \"elliptic_curves\")"
+   },
+   {
+    "id": 11,
+    "name": "ec_point_formats"
+   },
+   {
+    "id": 12,
+    "name": "srp"
+   },
+   {
+    "id": 13,
+    "name": "signature_algorithms"
+   },
+   {
+    "id": 14,
+    "name": "use_srtp"
+   },
+   {
+    "id": 15,
+    "name": "heartbeat"
+   },
+   {
+    "id": 16,
+    "name": "application_layer_protocol_negotiation"
+   },
+   {
+    "id": 17,
+    "name": "status_request_v2"
+   },
+   {
+    "id": 18,
+    "name": "signed_certificate_timestamp"
+   },
+   {
+    "id": 19,
+    "name": "client_certificate_type"
+   },
+   {
+    "id": 20,
+    "name": "server_certificate_type"
+   },
+   {
+    "id": 21,
+    "name": "padding"
+   },
+   {
+    "id": 22,
+    "name": "encrypt_then_mac"
+   },
+   {
+    "id": 23,
+    "name": "extended_main_secret"
+   },
+   {
+    "id": 24,
+    "name": "token_binding"
+   },
+   {
+    "id": 25,
+    "name": "cached_info"
+   },
+   {
+    "id": 26,
+    "name": "tls_lts"
+   },
+   {
+    "id": 27,
+    "name": "compress_certificate"
+   },
+   {
+    "id": 28,
+    "name": "record_size_limit"
+   },
+   {
+    "id": 29,
+    "name": "pwd_protect"
+   },
+   {
+    "id": 30,
+    "name": "pwd_clear"
+   },
+   {
+    "id": 31,
+    "name": "password_salt"
+   },
+   {
+    "id": 32,
+    "name": "ticket_pinning"
+   },
+   {
+    "id": 33,
+    "name": "tls_cert_with_extern_psk"
+   },
+   {
+    "id": 34,
+    "name": "delegated_credential"
+   },
+   {
+    "id": 35,
+    "name": "session_ticket (renamed from \"SessionTicket TLS\")"
+   },
+   {
+    "id": 36,
+    "name": "TLMSP"
+   },
+   {
+    "id": 37,
+    "name": "TLMSP_proxying"
+   },
+   {
+    "id": 38,
+    "name": "TLMSP_delegate"
+   },
+   {
+    "id": 39,
+    "name": "supported_ekt_ciphers"
+   },
+   {
+    "id": 41,
+    "name": "pre_shared_key"
+   },
+   {
+    "id": 42,
+    "name": "early_data"
+   },
+   {
+    "id": 43,
+    "name": "supported_versions"
+   },
+   {
+    "id": 44,
+    "name": "cookie"
+   },
+   {
+    "id": 45,
+    "name": "psk_key_exchange_modes"
+   },
+   {
+    "id": 47,
+    "name": "certificate_authorities"
+   },
+   {
+    "id": 48,
+    "name": "oid_filters"
+   },
+   {
+    "id": 49,
+    "name": "post_handshake_auth"
+   },
+   {
+    "id": 50,
+    "name": "signature_algorithms_cert"
+   },
+   {
+    "id": 51,
+    "name": "key_share"
+   },
+   {
+    "id": 52,
+    "name": "transparency_info"
+   },
+   {
+    "id": 53,
+    "name": "connection_id (deprecated)"
+   },
+   {
+    "id": 54,
+    "name": "connection_id"
+   },
+   {
+    "id": 55,
+    "name": "external_id_hash"
+   },
+   {
+    "id": 56,
+    "name": "external_session_id"
+   },
+   {
+    "id": 57,
+    "name": "quic_transport_parameters"
+   },
+   {
+    "id": 58,
+    "name": "ticket_request"
+   },
+   {
+    "id": 59,
+    "name": "dnssec_chain"
+   },
+   {
+    "id": 60,
+    "name": "sequence_number_encryption_algorithms"
+   },
+   {
+    "id": 61,
+    "name": "rrc"
+   },
+   {
+    "id": 62,
+    "name": "tls_flags"
+   },
+   {
+    "id": 63,
+    "name": "dane_clientid"
+   },
+   {
+    "id": 64768,
+    "name": "ech_outer_extensions"
+   },
+   {
+    "id": 65037,
+    "name": "encrypted_client_hello"
+   },
+   {
+    "id": 65281,
+    "name": "renegotiation_info"
+   }
+  ],
+  "alpn": [
+   {
+    "id": "h2",
+    "description": "HTTP/2 over TLS"
+   },
+   {
+    "id": "h3",
+    "description": "HTTP/3 over QUIC"
+   },
+   {
+    "id": "http/1.1",
+    "description": "HTTP/1.1"
+   },
+   {
+    "id": "http/1.0",
+    "description": "HTTP/1.0"
+   },
+   {
+    "id": "spdy/3.1",
+    "description": "SPDY 3.1"
+   },
+   {
+    "id": "acme-tls/1",
+    "description": "ACME TLS-ALPN challenge"
+   },
+   {
+    "id": "coap",
+    "description": "Constrained Application Protocol"
+   },
+   {
+    "id": "coaps",
+    "description": "CoAP over TLS"
+   },
+   {
+    "id": "mqtt",
+    "description": "Message Queuing Telemetry Transport"
+   },
+   {
+    "id": "smtp",
+    "description": "Simple Mail Transfer Protocol"
+   },
+   {
+    "id": "imap",
+    "description": "Internet Message Access Protocol"
+   },
+   {
+    "id": "pop3",
+    "description": "Post Office Protocol 3"
+   },
+   {
+    "id": "ftp",
+    "description": "File Transfer Protocol"
+   },
+   {
+    "id": "dot",
+    "description": "DNS over TLS"
+   },
+   {
+    "id": "doq",
+    "description": "DNS over QUIC"
+   },
+   {
+    "id": "ntske/1",
+    "description": "Network Time Security key establishment"
+   },
+   {
+    "id": "sunrpc",
+    "description": "ONC RPC"
+   },
+   {
+    "id": "stun.turn",
+    "description": "Traversal Using Relays around NAT"
+   },
+   {
+    "id": "stun.nat-discovery",
+    "description": "NAT discovery with STUN"
+   },
+   {
+    "id": "webrtc",
+    "description": "WebRTC media"
+   },
+   {
+    "id": "c-webrtc",
+    "description": "WebRTC media (confidential)"
+   }
+  ]
+ },
+ "winerr": [
+  {
+   "code": 0,
+   "name": "ERROR_SUCCESS",
+   "message": "The operation completed successfully."
+  },
+  {
+   "code": 1,
+   "name": "ERROR_INVALID_FUNCTION",
+   "message": "Incorrect function."
+  },
+  {
+   "code": 2,
+   "name": "ERROR_FILE_NOT_FOUND",
+   "message": "The system cannot find the file specified."
+  },
+  {
+   "code": 3,
+   "name": "ERROR_PATH_NOT_FOUND",
+   "message": "The system cannot find the path specified."
+  },
+  {
+   "code": 4,
+   "name": "ERROR_TOO_MANY_OPEN_FILES",
+   "message": "The system cannot open the file."
+  },
+  {
+   "code": 5,
+   "name": "ERROR_ACCESS_DENIED",
+   "message": "Access is denied."
+  },
+  {
+   "code": 6,
+   "name": "ERROR_INVALID_HANDLE",
+   "message": "The handle is invalid."
+  },
+  {
+   "code": 7,
+   "name": "ERROR_ARENA_TRASHED",
+   "message": "The storage control blocks were destroyed."
+  },
+  {
+   "code": 8,
+   "name": "ERROR_NOT_ENOUGH_MEMORY",
+   "message": "Not enough memory resources are available to process this command."
+  },
+  {
+   "code": 9,
+   "name": "ERROR_INVALID_BLOCK",
+   "message": "The storage control block address is invalid."
+  },
+  {
+   "code": 10,
+   "name": "ERROR_BAD_ENVIRONMENT",
+   "message": "The environment is incorrect."
+  },
+  {
+   "code": 11,
+   "name": "ERROR_BAD_FORMAT",
+   "message": "An attempt was made to load a program with an incorrect format."
+  },
+  {
+   "code": 12,
+   "name": "ERROR_INVALID_ACCESS",
+   "message": "The access code is invalid."
+  },
+  {
+   "code": 13,
+   "name": "ERROR_INVALID_DATA",
+   "message": "The data is invalid."
+  },
+  {
+   "code": 14,
+   "name": "ERROR_OUTOFMEMORY",
+   "message": "Not enough memory resources are available to complete this operation."
+  },
+  {
+   "code": 15,
+   "name": "ERROR_INVALID_DRIVE",
+   "message": "The system cannot find the drive specified."
+  },
+  {
+   "code": 16,
+   "name": "ERROR_CURRENT_DIRECTORY",
+   "message": "The directory cannot be removed."
+  },
+  {
+   "code": 17,
+   "name": "ERROR_NOT_SAME_DEVICE",
+   "message": "The system cannot move the file to a different disk drive."
+  },
+  {
+   "code": 18,
+   "name": "ERROR_NO_MORE_FILES",
+   "message": "There are no more files."
+  },
+  {
+   "code": 19,
+   "name": "ERROR_WRITE_PROTECT",
+   "message": "The media is write protected."
+  },
+  {
+   "code": 20,
+   "name": "ERROR_BAD_UNIT",
+   "message": "The system cannot find the device specified."
+  },
+  {
+   "code": 21,
+   "name": "ERROR_NOT_READY",
+   "message": "The device is not ready."
+  },
+  {
+   "code": 22,
+   "name": "ERROR_BAD_COMMAND",
+   "message": "The device does not recognize the command."
+  },
+  {
+   "code": 23,
+   "name": "ERROR_CRC",
+   "message": "Data error (cyclic redundancy check)."
+  },
+  {
+   "code": 24,
+   "name": "ERROR_BAD_LENGTH",
+   "message": "The program issued a command but the command length is incorrect."
+  },
+  {
+   "code": 25,
+   "name": "ERROR_SEEK",
+   "message": "The drive cannot locate a specific area or track on the disk."
+  },
+  {
+   "code": 26,
+   "name": "ERROR_NOT_DOS_DISK",
+   "message": "The specified disk or diskette cannot be accessed."
+  },
+  {
+   "code": 27,
+   "name": "ERROR_SECTOR_NOT_FOUND",
+   "message": "The drive cannot find the sector requested."
+  },
+  {
+   "code": 28,
+   "name": "ERROR_OUT_OF_PAPER",
+   "message": "The printer is out of paper."
+  },
+  {
+   "code": 29,
+   "name": "ERROR_WRITE_FAULT",
+   "message": "The system cannot write to the specified device."
+  },
+  {
+   "code": 30,
+   "name": "ERROR_READ_FAULT",
+   "message": "The system cannot read from the specified device."
+  },
+  {
+   "code": 31,
+   "name": "ERROR_GEN_FAILURE",
+   "message": "A device attached to the system is not functioning."
+  },
+  {
+   "code": 32,
+   "name": "ERROR_SHARING_VIOLATION",
+   "message": "The process cannot access the file because it is being used by another process."
+  },
+  {
+   "code": 33,
+   "name": "ERROR_LOCK_VIOLATION",
+   "message": "The process cannot access the file because another process has locked a portion of the file."
+  },
+  {
+   "code": 34,
+   "name": "ERROR_WRONG_DISK",
+   "message": "The wrong diskette is in the drive."
+  },
+  {
+   "code": 36,
+   "name": "ERROR_SHARING_BUFFER_EXCEEDED",
+   "message": "Too many files opened for sharing."
+  },
+  {
+   "code": 38,
+   "name": "ERROR_HANDLE_EOF",
+   "message": "Reached the end of the file."
+  },
+  {
+   "code": 39,
+   "name": "ERROR_HANDLE_DISK_FULL",
+   "message": "The disk is full."
+  },
+  {
+   "code": 50,
+   "name": "ERROR_NOT_SUPPORTED",
+   "message": "The request is not supported."
+  },
+  {
+   "code": 51,
+   "name": "ERROR_REM_NOT_LIST",
+   "message": "Windows cannot find the network path."
+  },
+  {
+   "code": 52,
+   "name": "ERROR_DUP_NAME",
+   "message": "A duplicate name exists on the network."
+  },
+  {
+   "code": 53,
+   "name": "ERROR_BAD_NETPATH",
+   "message": "The network path was not found."
+  },
+  {
+   "code": 54,
+   "name": "ERROR_NETWORK_BUSY",
+   "message": "The network is busy."
+  },
+  {
+   "code": 55,
+   "name": "ERROR_DEV_NOT_EXIST",
+   "message": "The specified network resource or device is no longer available."
+  },
+  {
+   "code": 56,
+   "name": "ERROR_TOO_MANY_CMDS",
+   "message": "The network BIOS command limit has been reached."
+  },
+  {
+   "code": 57,
+   "name": "ERROR_ADAP_HDW_ERR",
+   "message": "A network adapter hardware error occurred."
+  },
+  {
+   "code": 58,
+   "name": "ERROR_BAD_NET_RESP",
+   "message": "The specified server cannot perform the requested operation."
+  },
+  {
+   "code": 59,
+   "name": "ERROR_UNEXP_NET_ERR",
+   "message": "An unexpected network error occurred."
+  },
+  {
+   "code": 60,
+   "name": "ERROR_BAD_REM_ADAP",
+   "message": "The remote adapter is not compatible."
+  },
+  {
+   "code": 61,
+   "name": "ERROR_PRINTQ_FULL",
+   "message": "The printer queue is full."
+  },
+  {
+   "code": 62,
+   "name": "ERROR_NO_SPOOL_SPACE",
+   "message": "Space to store the file waiting to be printed is not available on the server."
+  },
+  {
+   "code": 63,
+   "name": "ERROR_PRINT_CANCELLED",
+   "message": "Your file waiting to be printed was deleted."
+  },
+  {
+   "code": 64,
+   "name": "ERROR_NETNAME_DELETED",
+   "message": "The specified network name is no longer available."
+  },
+  {
+   "code": 65,
+   "name": "ERROR_NETWORK_ACCESS_DENIED",
+   "message": "Network access is denied."
+  },
+  {
+   "code": 66,
+   "name": "ERROR_BAD_DEV_TYPE",
+   "message": "The network resource type is not correct."
+  },
+  {
+   "code": 67,
+   "name": "ERROR_BAD_NET_NAME",
+   "message": "The network name cannot be found."
+  },
+  {
+   "code": 68,
+   "name": "ERROR_TOO_MANY_NAMES",
+   "message": "The name limit for the local computer network adapter card was exceeded."
+  },
+  {
+   "code": 69,
+   "name": "ERROR_TOO_MANY_SESS",
+   "message": "The network BIOS session limit was exceeded."
+  },
+  {
+   "code": 70,
+   "name": "ERROR_SHARING_PAUSED",
+   "message": "The remote server has been paused or is in the process of being started."
+  },
+  {
+   "code": 71,
+   "name": "ERROR_REQ_NOT_ACCEP",
+   "message": "No more connections can be made to this remote computer at this time."
+  },
+  {
+   "code": 72,
+   "name": "ERROR_REDIR_PAUSED",
+   "message": "The specified printer or disk device has been paused."
+  },
+  {
+   "code": 80,
+   "name": "ERROR_FILE_EXISTS",
+   "message": "The file exists."
+  },
+  {
+   "code": 82,
+   "name": "ERROR_CANNOT_MAKE",
+   "message": "The directory or file cannot be created."
+  },
+  {
+   "code": 83,
+   "name": "ERROR_FAIL_I24",
+   "message": "Fail on INT 24."
+  },
+  {
+   "code": 84,
+   "name": "ERROR_OUT_OF_STRUCTURES",
+   "message": "Storage to process this request is not available."
+  },
+  {
+   "code": 85,
+   "name": "ERROR_ALREADY_ASSIGNED",
+   "message": "The local device name is already in use."
+  },
+  {
+   "code": 86,
+   "name": "ERROR_INVALID_PASSWORD",
+   "message": "The specified network password is not correct."
+  },
+  {
+   "code": 87,
+   "name": "ERROR_INVALID_PARAMETER",
+   "message": "The parameter is incorrect."
+  },
+  {
+   "code": 88,
+   "name": "ERROR_NET_WRITE_FAULT",
+   "message": "A write fault occurred on the network."
+  },
+  {
+   "code": 89,
+   "name": "ERROR_NO_PROC_SLOTS",
+   "message": "The system cannot start another process at this time."
+  },
+  {
+   "code": 100,
+   "name": "ERROR_TOO_MANY_SEMAPHORES",
+   "message": "Cannot create another system semaphore."
+  },
+  {
+   "code": 101,
+   "name": "ERROR_EXCL_SEM_ALREADY_OWNED",
+   "message": "The exclusive semaphore is owned by another process."
+  },
+  {
+   "code": 102,
+   "name": "ERROR_SEM_IS_SET",
+   "message": "The semaphore is set and cannot be closed."
+  },
+  {
+   "code": 103,
+   "name": "ERROR_TOO_MANY_SEM_REQUESTS",
+   "message": "The semaphore cannot be set again."
+  },
+  {
+   "code": 104,
+   "name": "ERROR_INVALID_AT_INTERRUPT_TIME",
+   "message": "Cannot request exclusive semaphores at interrupt time."
+  },
+  {
+   "code": 105,
+   "name": "ERROR_SEM_OWNER_DIED",
+   "message": "The previous ownership of this semaphore has ended."
+  },
+  {
+   "code": 107,
+   "name": "ERROR_DISK_CHANGE",
+   "message": "The program stopped because an alternate diskette was not inserted."
+  },
+  {
+   "code": 108,
+   "name": "ERROR_DRIVE_LOCKED",
+   "message": "The disk is in use or locked by another process."
+  },
+  {
+   "code": 109,
+   "name": "ERROR_BROKEN_PIPE",
+   "message": "The pipe has been ended."
+  },
+  {
+   "code": 110,
+   "name": "ERROR_OPEN_FAILED",
+   "message": "The system cannot open the device or file specified."
+  },
+  {
+   "code": 111,
+   "name": "ERROR_BUFFER_OVERFLOW",
+   "message": "The file name is too long."
+  },
+  {
+   "code": 112,
+   "name": "ERROR_DISK_FULL",
+   "message": "There is not enough space on the disk."
+  },
+  {
+   "code": 113,
+   "name": "ERROR_NO_MORE_SEARCH_HANDLES",
+   "message": "No more internal file identifiers available."
+  },
+  {
+   "code": 114,
+   "name": "ERROR_INVALID_TARGET_HANDLE",
+   "message": "The target internal file identifier is incorrect."
+  },
+  {
+   "code": 117,
+   "name": "ERROR_INVALID_CATEGORY",
+   "message": "The IOCTL call made by the application program is not correct."
+  },
+  {
+   "code": 118,
+   "name": "ERROR_INVALID_VERIFY_SWITCH",
+   "message": "The verify-on-write switch parameter value is not correct."
+  },
+  {
+   "code": 119,
+   "name": "ERROR_BAD_DRIVER_LEVEL",
+   "message": "The system does not support the command requested."
+  },
+  {
+   "code": 120,
+   "name": "ERROR_CALL_NOT_IMPLEMENTED",
+   "message": "This function is not supported on this system."
+  },
+  {
+   "code": 121,
+   "name": "ERROR_SEM_TIMEOUT",
+   "message": "The semaphore timeout period has expired."
+  },
+  {
+   "code": 122,
+   "name": "ERROR_INSUFFICIENT_BUFFER",
+   "message": "The data area passed to a system call is too small."
+  },
+  {
+   "code": 123,
+   "name": "ERROR_INVALID_NAME",
+   "message": "The filename, directory name, or volume label syntax is incorrect."
+  },
+  {
+   "code": 124,
+   "name": "ERROR_INVALID_LEVEL",
+   "message": "The system call level is not correct."
+  },
+  {
+   "code": 125,
+   "name": "ERROR_NO_VOLUME_LABEL",
+   "message": "The disk has no volume label."
+  },
+  {
+   "code": 126,
+   "name": "ERROR_MOD_NOT_FOUND",
+   "message": "The specified module could not be found."
+  },
+  {
+   "code": 127,
+   "name": "ERROR_PROC_NOT_FOUND",
+   "message": "The specified procedure could not be found."
+  },
+  {
+   "code": 128,
+   "name": "ERROR_WAIT_NO_CHILDREN",
+   "message": "There are no child processes to wait for."
+  },
+  {
+   "code": 130,
+   "name": "ERROR_DIRECT_ACCESS_HANDLE",
+   "message": "Attempt to use a file handle to an open disk partition for an operation other than raw disk I/O."
+  },
+  {
+   "code": 131,
+   "name": "ERROR_NEGATIVE_SEEK",
+   "message": "An attempt was made to move the file pointer before the beginning of the file."
+  },
+  {
+   "code": 132,
+   "name": "ERROR_SEEK_ON_DEVICE",
+   "message": "The file pointer cannot be set on the specified device or file."
+  },
+  {
+   "code": 183,
+   "name": "ERROR_ALREADY_EXISTS",
+   "message": "Cannot create a file when that file already exists."
+  },
+  {
+   "code": 203,
+   "name": "ERROR_ENVVAR_NOT_FOUND",
+   "message": "The system could not find the environment option that was entered."
+  },
+  {
+   "code": 206,
+   "name": "ERROR_FILENAME_EXCED_RANGE",
+   "message": "The filename or extension is too long."
+  },
+  {
+   "code": 259,
+   "name": "ERROR_NO_MORE_ITEMS",
+   "message": "No more data is available."
+  },
+  {
+   "code": 267,
+   "name": "ERROR_DIRECTORY",
+   "message": "The directory name is invalid."
+  },
+  {
+   "code": 487,
+   "name": "ERROR_INVALID_ADDRESS",
+   "message": "Attempt to access invalid address."
+  },
+  {
+   "code": 534,
+   "name": "ERROR_ARITHMETIC_OVERFLOW",
+   "message": "Arithmetic result exceeded 32 bits."
+  },
+  {
+   "code": 535,
+   "name": "ERROR_PIPE_CONNECTED",
+   "message": "There is a process on the other end of the pipe."
+  },
+  {
+   "code": 536,
+   "name": "ERROR_PIPE_LISTENING",
+   "message": "Waiting for a process to open the other end of the pipe."
+  },
+  {
+   "code": 995,
+   "name": "ERROR_OPERATION_ABORTED",
+   "message": "The I/O operation has been aborted because of either a thread exit or an application request."
+  },
+  {
+   "code": 996,
+   "name": "ERROR_IO_INCOMPLETE",
+   "message": "Overlapped I/O event is not in a signaled state."
+  },
+  {
+   "code": 997,
+   "name": "ERROR_IO_PENDING",
+   "message": "Overlapped I/O operation is in progress."
+  },
+  {
+   "code": 998,
+   "name": "ERROR_NOACCESS",
+   "message": "Invalid access to memory location."
+  },
+  {
+   "code": 1003,
+   "name": "ERROR_CAN_NOT_COMPLETE",
+   "message": "An attempt was made to reference a token that does not exist."
+  },
+  {
+   "code": 1004,
+   "name": "ERROR_INVALID_FLAGS",
+   "message": "The flags are invalid."
+  },
+  {
+   "code": 1015,
+   "name": "ERROR_REGISTRY_CORRUPT",
+   "message": "The configuration registry database is corrupt."
+  },
+  {
+   "code": 1016,
+   "name": "ERROR_REGISTRY_IO_FAILED",
+   "message": "The configuration registry database could not be written."
+  },
+  {
+   "code": 1017,
+   "name": "ERROR_NOT_REGISTRY_FILE",
+   "message": "The file cannot be opened as a registry hive."
+  },
+  {
+   "code": 1018,
+   "name": "ERROR_KEY_DELETED",
+   "message": "The registry key could not be deleted."
+  },
+  {
+   "code": 1019,
+   "name": "ERROR_NO_LOG_SPACE",
+   "message": "Some of the registry entries could not be written."
+  },
+  {
+   "code": 1020,
+   "name": "ERROR_KEY_HAS_CHILDREN",
+   "message": "A registry key cannot be deleted because it has child keys."
+  },
+  {
+   "code": 1021,
+   "name": "ERROR_CHILD_MUST_BE_VOLATILE",
+   "message": "A registry key cannot be created as volatile."
+  },
+  {
+   "code": 1022,
+   "name": "ERROR_NOTIFY_ENUM_DIR",
+   "message": "The requested notification could not be honored."
+  },
+  {
+   "code": 1052,
+   "name": "ERROR_INVALID_SERVICE_CONTROL",
+   "message": "The requested control is not valid for this service."
+  },
+  {
+   "code": 1053,
+   "name": "ERROR_SERVICE_REQUEST_TIMEOUT",
+   "message": "The service did not respond to the start or control request in a timely fashion."
+  },
+  {
+   "code": 1054,
+   "name": "ERROR_SERVICE_NO_THREAD",
+   "message": "A thread could not be created for the service."
+  },
+  {
+   "code": 1055,
+   "name": "ERROR_SERVICE_DATABASE_LOCKED",
+   "message": "The service database is locked."
+  },
+  {
+   "code": 1056,
+   "name": "ERROR_SERVICE_ALREADY_RUNNING",
+   "message": "An instance of the service is already running."
+  },
+  {
+   "code": 1057,
+   "name": "ERROR_INVALID_SERVICE_ACCOUNT",
+   "message": "The account name is invalid or does not exist, or the password is invalid for the account name specified."
+  },
+  {
+   "code": 1058,
+   "name": "ERROR_SERVICE_DISABLED",
+   "message": "The service cannot be started, either because it is disabled or because it has no enabled devices associated with it."
+  },
+  {
+   "code": 1059,
+   "name": "ERROR_CIRCULAR_DEPENDENCY",
+   "message": "Circular service dependency was specified."
+  },
+  {
+   "code": 1060,
+   "name": "ERROR_SERVICE_DOES_NOT_EXIST",
+   "message": "The specified service does not exist as an installed service."
+  },
+  {
+   "code": 1061,
+   "name": "ERROR_SERVICE_CANNOT_ACCEPT_CTRL",
+   "message": "The service cannot accept control messages at this time."
+  },
+  {
+   "code": 1062,
+   "name": "ERROR_SERVICE_NOT_ACTIVE",
+   "message": "The service has not been started."
+  },
+  {
+   "code": 1063,
+   "name": "ERROR_FAILED_SERVICE_CONTROLLER_CONNECT",
+   "message": "The service process could not connect to the service controller."
+  },
+  {
+   "code": 1064,
+   "name": "ERROR_EXCEPTION_IN_SERVICE",
+   "message": "An exception occurred in the service when handling the control request."
+  },
+  {
+   "code": 1065,
+   "name": "ERROR_DATABASE_DOES_NOT_EXIST",
+   "message": "The database specified does not exist."
+  },
+  {
+   "code": 1066,
+   "name": "ERROR_SERVICE_SPECIFIC_ERROR",
+   "message": "The service has returned a service-specific error code."
+  },
+  {
+   "code": 1067,
+   "name": "ERROR_PROCESS_ABORTED",
+   "message": "The process terminated unexpectedly."
+  },
+  {
+   "code": 1068,
+   "name": "ERROR_SERVICE_DEPENDENCY_FAIL",
+   "message": "The dependency service or group failed to start."
+  },
+  {
+   "code": 1069,
+   "name": "ERROR_SERVICE_LOGON_FAILED",
+   "message": "The service did not start due to a logon failure."
+  },
+  {
+   "code": 1070,
+   "name": "ERROR_SERVICE_START_HANG",
+   "message": "After starting, the service hung in a start-pending state."
+  },
+  {
+   "code": 1071,
+   "name": "ERROR_INVALID_SERVICE_LOCK",
+   "message": "The specified service database lock is invalid."
+  },
+  {
+   "code": 1072,
+   "name": "ERROR_SERVICE_MARKED_FOR_DELETE",
+   "message": "The specified service has been marked for deletion."
+  },
+  {
+   "code": 1073,
+   "name": "ERROR_SERVICE_EXISTS",
+   "message": "The specified service already exists."
+  },
+  {
+   "code": 1075,
+   "name": "ERROR_SERVICE_DEPENDENCY_DELETED",
+   "message": "The dependency service does not exist or has been marked for deletion."
+  },
+  {
+   "code": 1078,
+   "name": "ERROR_DUPLICATE_SERVICE_NAME",
+   "message": "The name is already in use as either a service name or a service display name."
+  },
+  {
+   "code": 1100,
+   "name": "ERROR_END_OF_MEDIA",
+   "message": "The physical end of the tape has been reached."
+  },
+  {
+   "code": 1114,
+   "name": "ERROR_DLL_INIT_FAILED",
+   "message": "A dynamic link library (DLL) initialization routine failed."
+  },
+  {
+   "code": 1115,
+   "name": "ERROR_SHUTDOWN_IN_PROGRESS",
+   "message": "A system shutdown is in progress."
+  },
+  {
+   "code": 1116,
+   "name": "ERROR_NO_SHUTDOWN_IN_PROGRESS",
+   "message": "Unable to abort the system shutdown because no shutdown was in progress."
+  },
+  {
+   "code": 1117,
+   "name": "ERROR_IO_DEVICE",
+   "message": "The request could not be performed because of an I/O device error."
+  },
+  {
+   "code": 1118,
+   "name": "ERROR_SERIAL_NO_DEVICE",
+   "message": "No serial device was successfully initialized."
+  },
+  {
+   "code": 1150,
+   "name": "ERROR_OLD_WIN_VERSION",
+   "message": "The specified program requires a newer version of Windows."
+  },
+  {
+   "code": 1151,
+   "name": "ERROR_APP_WRONG_OS",
+   "message": "The specified program is not a Windows or MS-DOS program."
+  },
+  {
+   "code": 1152,
+   "name": "ERROR_SINGLE_INSTANCE_APP",
+   "message": "Cannot start more than one instance of the specified program."
+  },
+  {
+   "code": 1153,
+   "name": "ERROR_RMODE_APP",
+   "message": "The specified program was written for an earlier version of Windows."
+  },
+  {
+   "code": 1154,
+   "name": "ERROR_INVALID_DLL",
+   "message": "One of the library files needed to run this application is damaged."
+  },
+  {
+   "code": 1155,
+   "name": "ERROR_NO_ASSOCIATION",
+   "message": "No application is associated with the specified file for this operation."
+  },
+  {
+   "code": 1156,
+   "name": "ERROR_DDE_FAIL",
+   "message": "An error occurred in sending the command to the application."
+  },
+  {
+   "code": 1157,
+   "name": "ERROR_DLL_NOT_FOUND",
+   "message": "One of the library files needed to run this application cannot be found."
+  },
+  {
+   "code": 1158,
+   "name": "ERROR_NO_MORE_USER_HANDLES",
+   "message": "The current process has used all of its system allowance of handles for Window Manager objects."
+  },
+  {
+   "code": 1159,
+   "name": "ERROR_MESSAGE_SYNC_ONLY",
+   "message": "The message can be used only with synchronous operations."
+  },
+  {
+   "code": 1160,
+   "name": "ERROR_SOURCE_ELEMENT_EMPTY",
+   "message": "The indicated source element has no media."
+  },
+  {
+   "code": 1161,
+   "name": "ERROR_DESTINATION_ELEMENT_FULL",
+   "message": "The indicated destination element already contains media."
+  },
+  {
+   "code": 1162,
+   "name": "ERROR_ILLEGAL_ELEMENT_ADDRESS",
+   "message": "The indicated element does not exist."
+  },
+  {
+   "code": 1163,
+   "name": "ERROR_MAGAZINE_NOT_PRESENT",
+   "message": "The indicated element is part of a magazine that is not present."
+  },
+  {
+   "code": 1164,
+   "name": "ERROR_DEVICE_REINITIALIZATION_NEEDED",
+   "message": "The indicated device requires reinitialization due to hardware errors."
+  },
+  {
+   "code": 1165,
+   "name": "ERROR_DEVICE_REQUIRES_CLEANING",
+   "message": "The device has indicated that cleaning is required before further operations are attempted."
+  },
+  {
+   "code": 1166,
+   "name": "ERROR_DEVICE_DOOR_OPEN",
+   "message": "The device has indicated that its door is open."
+  },
+  {
+   "code": 1167,
+   "name": "ERROR_DEVICE_NOT_CONNECTED",
+   "message": "The device is not connected."
+  },
+  {
+   "code": 1168,
+   "name": "ERROR_NOT_FOUND",
+   "message": "Element not found."
+  },
+  {
+   "code": 1169,
+   "name": "ERROR_NO_MATCH",
+   "message": "There was no match for the specified key in the index."
+  },
+  {
+   "code": 1170,
+   "name": "ERROR_SET_NOT_FOUND",
+   "message": "The property set specified does not exist on the object."
+  },
+  {
+   "code": 1171,
+   "name": "ERROR_POINT_NOT_FOUND",
+   "message": "The point passed to GetMouseMovePoints is not in the buffer."
+  },
+  {
+   "code": 1172,
+   "name": "ERROR_NO_TRACKING_SERVICE",
+   "message": "The tracking (workstation) service is not running."
+  },
+  {
+   "code": 1173,
+   "name": "ERROR_NO_VOLUME_ID",
+   "message": "The Volume ID could not be found."
+  },
+  {
+   "code": 1200,
+   "name": "ERROR_BAD_DEVICE",
+   "message": "The specified device name is invalid."
+  },
+  {
+   "code": 1201,
+   "name": "ERROR_CONNECTION_UNAVAIL",
+   "message": "The device is not currently connected but it is a remembered connection."
+  },
+  {
+   "code": 1202,
+   "name": "ERROR_DEVICE_ALREADY_REMEMBERED",
+   "message": "The local device name has a remembered connection to another network resource."
+  },
+  {
+   "code": 1203,
+   "name": "ERROR_NO_NET_OR_BAD_PATH",
+   "message": "The network path was either typed incorrectly, does not exist, or the network provider is not currently available."
+  },
+  {
+   "code": 1204,
+   "name": "ERROR_BAD_PROVIDER",
+   "message": "The specified network provider name is invalid."
+  },
+  {
+   "code": 1205,
+   "name": "ERROR_CANNOT_OPEN_PROFILE",
+   "message": "Unable to open the network connection profile."
+  },
+  {
+   "code": 1206,
+   "name": "ERROR_BAD_PROFILE",
+   "message": "The network connection profile is corrupt."
+  },
+  {
+   "code": 1207,
+   "name": "ERROR_NOT_CONTAINER",
+   "message": "Cannot enumerate a noncontainer."
+  },
+  {
+   "code": 1208,
+   "name": "ERROR_EXTENDED_ERROR",
+   "message": "An extended error has occurred."
+  },
+  {
+   "code": 1209,
+   "name": "ERROR_INVALID_GROUPNAME",
+   "message": "The format of the specified group name is invalid."
+  },
+  {
+   "code": 1210,
+   "name": "ERROR_INVALID_COMPUTERNAME",
+   "message": "The format of the specified computer name is invalid."
+  },
+  {
+   "code": 1211,
+   "name": "ERROR_INVALID_EVENTNAME",
+   "message": "The format of the specified event name is invalid."
+  },
+  {
+   "code": 1212,
+   "name": "ERROR_INVALID_DOMAINNAME",
+   "message": "The format of the specified domain name is invalid."
+  },
+  {
+   "code": 1213,
+   "name": "ERROR_INVALID_SERVICENAME",
+   "message": "The format of the specified service name is invalid."
+  },
+  {
+   "code": 1214,
+   "name": "ERROR_INVALID_NETNAME",
+   "message": "The format of the specified network name is invalid."
+  },
+  {
+   "code": 1215,
+   "name": "ERROR_INVALID_SHARENAME",
+   "message": "The format of the specified share name is invalid."
+  },
+  {
+   "code": 1216,
+   "name": "ERROR_INVALID_PASSWORDNAME",
+   "message": "The format of the specified password is invalid."
+  },
+  {
+   "code": 1217,
+   "name": "ERROR_INVALID_MESSAGENAME",
+   "message": "The format of the specified message name is invalid."
+  },
+  {
+   "code": 1218,
+   "name": "ERROR_INVALID_MESSAGEDEST",
+   "message": "The format of the specified message destination is invalid."
+  },
+  {
+   "code": 1219,
+   "name": "ERROR_SESSION_CREDENTIAL_CONFLICT",
+   "message": "Multiple connections to a server or shared resource by the same user, using more than one user name, are not allowed."
+  },
+  {
+   "code": 1220,
+   "name": "ERROR_REMOTE_SESSION_LIMIT_EXCEEDED",
+   "message": "An attempt was made to establish a session to a network server, but there are already too many sessions established to that server."
+  },
+  {
+   "code": 1221,
+   "name": "ERROR_DUP_DOMAINNAME",
+   "message": "The workgroup or domain name is already in use by another computer on the network."
+  },
+  {
+   "code": 1222,
+   "name": "ERROR_NO_NETWORK",
+   "message": "The network is not present or not started."
+  },
+  {
+   "code": 1223,
+   "name": "ERROR_CANCELLED",
+   "message": "The operation was canceled by the user."
+  },
+  {
+   "code": 1224,
+   "name": "ERROR_USER_MAPPED_FILE",
+   "message": "The requested operation cannot be performed on a file with a user-mapped section open."
+  },
+  {
+   "code": 1225,
+   "name": "ERROR_CONNECTION_REFUSED",
+   "message": "The remote computer refused the network connection."
+  },
+  {
+   "code": 1226,
+   "name": "ERROR_GRACEFUL_DISCONNECT",
+   "message": "The network connection was gracefully closed."
+  },
+  {
+   "code": 1227,
+   "name": "ERROR_ADDRESS_ALREADY_ASSOCIATED",
+   "message": "The network transport endpoint already has an address associated with it."
+  },
+  {
+   "code": 1228,
+   "name": "ERROR_ADDRESS_NOT_ASSOCIATED",
+   "message": "An address has not yet been associated with the network endpoint."
+  },
+  {
+   "code": 1229,
+   "name": "ERROR_CONNECTION_INVALID",
+   "message": "An operation was attempted on a nonexistent network connection."
+  },
+  {
+   "code": 1230,
+   "name": "ERROR_CONNECTION_ACTIVE",
+   "message": "An invalid operation was attempted on an active network connection."
+  },
+  {
+   "code": 1231,
+   "name": "ERROR_NETWORK_UNREACHABLE",
+   "message": "The network location cannot be reached."
+  },
+  {
+   "code": 1232,
+   "name": "ERROR_HOST_UNREACHABLE",
+   "message": "The network location cannot be reached."
+  },
+  {
+   "code": 1233,
+   "name": "ERROR_PROTOCOL_UNREACHABLE",
+   "message": "The network location cannot be reached."
+  },
+  {
+   "code": 1234,
+   "name": "ERROR_PORT_UNREACHABLE",
+   "message": "No service is operating at the destination network endpoint on the remote system."
+  },
+  {
+   "code": 1235,
+   "name": "ERROR_REQUEST_ABORTED",
+   "message": "The request was aborted."
+  },
+  {
+   "code": 1236,
+   "name": "ERROR_CONNECTION_ABORTED",
+   "message": "The network connection was aborted by the local system."
+  },
+  {
+   "code": 1237,
+   "name": "ERROR_RETRY",
+   "message": "The operation could not be completed. A retry should be performed."
+  },
+  {
+   "code": 1238,
+   "name": "ERROR_CONNECTION_COUNT_LIMIT",
+   "message": "A connection to the server could not be made because the limit on the number of concurrent connections for this account has been reached."
+  },
+  {
+   "code": 1239,
+   "name": "ERROR_LOGIN_TIME_RESTRICTION",
+   "message": "Attempting to log in during an unauthorized time of day for this account."
+  },
+  {
+   "code": 1240,
+   "name": "ERROR_LOGIN_WKSTA_RESTRICTION",
+   "message": "The account is not authorized to log in from this station."
+  },
+  {
+   "code": 1241,
+   "name": "ERROR_INCORRECT_ADDRESS",
+   "message": "The network address could not be used for the operation requested."
+  },
+  {
+   "code": 1242,
+   "name": "ERROR_ALREADY_REGISTERED",
+   "message": "The service is already registered."
+  },
+  {
+   "code": 1243,
+   "name": "ERROR_SERVICE_NOT_FOUND",
+   "message": "The specified service does not exist."
+  },
+  {
+   "code": 1244,
+   "name": "ERROR_NOT_AUTHENTICATED",
+   "message": "The operation being requested was not performed because the user has not been authenticated."
+  },
+  {
+   "code": 1245,
+   "name": "ERROR_NOT_LOGGED_ON",
+   "message": "The operation being requested was not performed because the user has not logged on to the network."
+  },
+  {
+   "code": 1246,
+   "name": "ERROR_CONTINUE",
+   "message": "Continue with work in progress."
+  },
+  {
+   "code": 1247,
+   "name": "ERROR_ALREADY_INITIALIZED",
+   "message": "An attempt was made to perform an initialization operation when initialization has already been completed."
+  },
+  {
+   "code": 1248,
+   "name": "ERROR_NO_MORE_DEVICES",
+   "message": "No more local devices."
+  },
+  {
+   "code": 1249,
+   "name": "ERROR_NO_SUCH_SITE",
+   "message": "The specified site does not exist."
+  },
+  {
+   "code": 1265,
+   "name": "ERROR_DOWNGRADE_DETECTED",
+   "message": "A downgrade was detected."
+  },
+  {
+   "code": 1300,
+   "name": "ERROR_NOT_ALL_ASSIGNED",
+   "message": "Not all privileges or groups referenced are assigned to the caller."
+  },
+  {
+   "code": 1301,
+   "name": "ERROR_SOME_NOT_MAPPED",
+   "message": "Some mapping between account names and security IDs was not done."
+  },
+  {
+   "code": 1302,
+   "name": "ERROR_NO_QUOTAS_FOR_ACCOUNT",
+   "message": "No system quota limits are specifically set for this account."
+  },
+  {
+   "code": 1303,
+   "name": "ERROR_LOCAL_USER_SESSION_KEY",
+   "message": "No encryption key is available."
+  },
+  {
+   "code": 1304,
+   "name": "ERROR_NULL_LM_PASSWORD",
+   "message": "The password cannot be changed."
+  },
+  {
+   "code": 1305,
+   "name": "ERROR_UNKNOWN_REVISION",
+   "message": "The revision level is unknown."
+  },
+  {
+   "code": 1306,
+   "name": "ERROR_REVISION_MISMATCH",
+   "message": "Indicates two revision levels are incompatible."
+  },
+  {
+   "code": 1307,
+   "name": "ERROR_INVALID_OWNER",
+   "message": "This security ID may not be assigned as the owner of this object."
+  },
+  {
+   "code": 1308,
+   "name": "ERROR_INVALID_PRIMARY_GROUP",
+   "message": "This security ID may not be assigned as the primary group of an object."
+  },
+  {
+   "code": 1309,
+   "name": "ERROR_NO_IMPERSONATION_TOKEN",
+   "message": "An attempt has been made to operate on an impersonation token by a thread that is not currently impersonating a client."
+  },
+  {
+   "code": 1310,
+   "name": "ERROR_CANT_DISABLE_MANDATORY",
+   "message": "The group may not be disabled."
+  },
+  {
+   "code": 1311,
+   "name": "ERROR_NO_LOGON_SERVERS",
+   "message": "There are currently no logon servers available to service the logon request."
+  },
+  {
+   "code": 1312,
+   "name": "ERROR_NO_SUCH_LOGON_SESSION",
+   "message": "A specified logon session does not exist."
+  },
+  {
+   "code": 1313,
+   "name": "ERROR_NO_SUCH_PRIVILEGE",
+   "message": "A specified privilege does not exist."
+  },
+  {
+   "code": 1314,
+   "name": "ERROR_PRIVILEGE_NOT_HELD",
+   "message": "A required privilege is not held by the client."
+  },
+  {
+   "code": 1315,
+   "name": "ERROR_INVALID_ACCOUNT_NAME",
+   "message": "The name provided is not a properly formed account name."
+  },
+  {
+   "code": 1316,
+   "name": "ERROR_USER_EXISTS",
+   "message": "The specified account already exists."
+  },
+  {
+   "code": 1317,
+   "name": "ERROR_NO_SUCH_USER",
+   "message": "The specified account does not exist."
+  },
+  {
+   "code": 1318,
+   "name": "ERROR_GROUP_EXISTS",
+   "message": "The specified group already exists."
+  },
+  {
+   "code": 1319,
+   "name": "ERROR_NO_SUCH_GROUP",
+   "message": "The specified group does not exist."
+  },
+  {
+   "code": 1320,
+   "name": "ERROR_MEMBER_IN_GROUP",
+   "message": "The specified user account is already in the specified group account."
+  },
+  {
+   "code": 1321,
+   "name": "ERROR_MEMBER_NOT_IN_GROUP",
+   "message": "The specified user account is not a member of the specified group account."
+  },
+  {
+   "code": 1322,
+   "name": "ERROR_LAST_ADMIN",
+   "message": "The last remaining administration account cannot be disabled or deleted."
+  },
+  {
+   "code": 1323,
+   "name": "ERROR_WRONG_PASSWORD",
+   "message": "Unable to update the password. The value provided as the current password is incorrect."
+  },
+  {
+   "code": 1324,
+   "name": "ERROR_ILL_FORMED_PASSWORD",
+   "message": "Unable to update the password. The value provided for the new password contains values that are not allowed in passwords."
+  },
+  {
+   "code": 1325,
+   "name": "ERROR_PASSWORD_RESTRICTION",
+   "message": "Unable to update the password. The value provided for the new password does not meet the length, complexity, or history requirements of the domain."
+  },
+  {
+   "code": 1326,
+   "name": "ERROR_LOGON_FAILURE",
+   "message": "The user name or password is incorrect."
+  },
+  {
+   "code": 1327,
+   "name": "ERROR_ACCOUNT_RESTRICTION",
+   "message": "Logon failure: account restriction."
+  },
+  {
+   "code": 1328,
+   "name": "ERROR_INVALID_LOGON_HOURS",
+   "message": "Logon failure: account logon time restriction violation."
+  },
+  {
+   "code": 1329,
+   "name": "ERROR_INVALID_WORKSTATION",
+   "message": "Logon failure: user not allowed to log on to this computer."
+  },
+  {
+   "code": 1330,
+   "name": "ERROR_PASSWORD_EXPIRED",
+   "message": "Logon failure: the specified account password has expired."
+  },
+  {
+   "code": 1331,
+   "name": "ERROR_ACCOUNT_DISABLED",
+   "message": "Logon failure: account currently disabled."
+  },
+  {
+   "code": 1332,
+   "name": "ERROR_NONE_MAPPED",
+   "message": "No mapping between account names and security IDs was done."
+  },
+  {
+   "code": 1355,
+   "name": "ERROR_NO_SUCH_DOMAIN",
+   "message": "The specified domain either does not exist or could not be contacted."
+  },
+  {
+   "code": 1356,
+   "name": "ERROR_DOMAIN_EXISTS",
+   "message": "The specified domain already exists."
+  },
+  {
+   "code": 1357,
+   "name": "ERROR_DOMAIN_LIMIT_EXCEEDED",
+   "message": "An attempt was made to exceed the limit on the number of domains per server."
+  },
+  {
+   "code": 1358,
+   "name": "ERROR_INTERNAL_DB_CORRUPTION",
+   "message": "Unable to complete the requested operation because of either a catastrophic media failure or a data structure corruption on the disk."
+  },
+  {
+   "code": 1359,
+   "name": "ERROR_INTERNAL_ERROR",
+   "message": "An internal error occurred."
+  },
+  {
+   "code": 1360,
+   "name": "ERROR_GENERIC_NOT_MAPPED",
+   "message": "Generic access types were contained in an access mask which should already be mapped to nongeneric types."
+  },
+  {
+   "code": 1361,
+   "name": "ERROR_BAD_DESCRIPTOR_FORMAT",
+   "message": "A security descriptor is not in the right format."
+  },
+  {
+   "code": 1362,
+   "name": "ERROR_NOT_LOGON_PROCESS",
+   "message": "The requested action is restricted for use by logon processes only."
+  },
+  {
+   "code": 1363,
+   "name": "ERROR_LOGON_SESSION_EXISTS",
+   "message": "Cannot start a new logon session with an ID that is already in use."
+  },
+  {
+   "code": 1364,
+   "name": "ERROR_NO_SUCH_PACKAGE",
+   "message": "A specified authentication package is unknown."
+  },
+  {
+   "code": 1365,
+   "name": "ERROR_BAD_LOGON_SESSION_STATE",
+   "message": "The logon session is not in a state that is consistent with the requested operation."
+  },
+  {
+   "code": 1366,
+   "name": "ERROR_LOGON_SESSION_COLLISION",
+   "message": "The logon session ID is already in use."
+  },
+  {
+   "code": 1367,
+   "name": "ERROR_INVALID_LOGON_TYPE",
+   "message": "A logon request contained an invalid logon type value."
+  },
+  {
+   "code": 1368,
+   "name": "ERROR_CANNOT_IMPERSONATE",
+   "message": "Unable to impersonate using a named pipe until data has been read from that pipe."
+  },
+  {
+   "code": 1375,
+   "name": "ERROR_TOKEN_ALREADY_IN_USE",
+   "message": "The token is already in use as a primary token."
+  },
+  {
+   "code": 1376,
+   "name": "ERROR_NO_SUCH_ALIAS",
+   "message": "The specified local group does not exist."
+  },
+  {
+   "code": 1377,
+   "name": "ERROR_MEMBER_NOT_IN_ALIAS",
+   "message": "The specified account name is not a member of the local group."
+  },
+  {
+   "code": 1378,
+   "name": "ERROR_MEMBER_IN_ALIAS",
+   "message": "The specified account name is already a member of the local group."
+  },
+  {
+   "code": 1379,
+   "name": "ERROR_ALIAS_EXISTS",
+   "message": "The specified local group already exists."
+  },
+  {
+   "code": 1380,
+   "name": "ERROR_LOGON_NOT_GRANTED",
+   "message": "Logon failure: the user has not been granted the requested logon type at this computer."
+  },
+  {
+   "code": 1381,
+   "name": "ERROR_TOO_MANY_SECRETS",
+   "message": "The maximum number of secrets that may be stored in a single system has been exceeded."
+  },
+  {
+   "code": 1382,
+   "name": "ERROR_SECRET_TOO_LONG",
+   "message": "The length of a secret exceeds the maximum length allowed."
+  },
+  {
+   "code": 1383,
+   "name": "ERROR_INTERNAL_DB_ERROR",
+   "message": "The local security authority database contains an internal inconsistency."
+  },
+  {
+   "code": 1384,
+   "name": "ERROR_TOO_MANY_CONTEXT_IDS",
+   "message": "During a logon attempt, the user's security context accumulated too many security IDs."
+  },
+  {
+   "code": 1385,
+   "name": "ERROR_LOGON_TYPE_NOT_GRANTED",
+   "message": "Logon failure: the user has not been granted the requested logon type at this computer."
+  },
+  {
+   "code": 1392,
+   "name": "ERROR_FILE_CORRUPT",
+   "message": "The file or directory is corrupted and unreadable."
+  },
+  {
+   "code": 1393,
+   "name": "ERROR_DISK_CORRUPT",
+   "message": "The disk structure is corrupted and unreadable."
+  },
+  {
+   "code": 1394,
+   "name": "ERROR_NO_USER_SESSION_KEY",
+   "message": "There is no user session key for the specified logon session."
+  },
+  {
+   "code": 1395,
+   "name": "ERROR_LICENSE_QUOTA_EXCEEDED",
+   "message": "The service being accessed is licensed for a particular number of connections."
+  },
+  {
+   "code": 1396,
+   "name": "ERROR_WRONG_TARGET_NAME",
+   "message": "The target account name is incorrect."
+  },
+  {
+   "code": 1397,
+   "name": "ERROR_MUTUAL_AUTH_FAILED",
+   "message": "Mutual authentication failed."
+  },
+  {
+   "code": 1398,
+   "name": "ERROR_TIME_SKEW",
+   "message": "There is a time and/or date difference between the client and server."
+  },
+  {
+   "code": 1399,
+   "name": "ERROR_CURRENT_DOMAIN_NOT_ALLOWED",
+   "message": "This operation cannot be performed on the current domain."
+  },
+  {
+   "code": 1400,
+   "name": "ERROR_INVALID_WINDOW_HANDLE",
+   "message": "Invalid window handle."
+  },
+  {
+   "code": 1401,
+   "name": "ERROR_INVALID_MENU_HANDLE",
+   "message": "Invalid menu handle."
+  },
+  {
+   "code": 1402,
+   "name": "ERROR_INVALID_CURSOR_HANDLE",
+   "message": "Invalid cursor handle."
+  },
+  {
+   "code": 1403,
+   "name": "ERROR_INVALID_ACCEL_HANDLE",
+   "message": "Invalid accelerator table handle."
+  },
+  {
+   "code": 1404,
+   "name": "ERROR_INVALID_HOOK_HANDLE",
+   "message": "Invalid hook handle."
+  },
+  {
+   "code": 1406,
+   "name": "ERROR_TLW_WITH_WSCHILD",
+   "message": "Cannot create a top-level child window."
+  },
+  {
+   "code": 1407,
+   "name": "ERROR_CANNOT_FIND_WND_CLASS",
+   "message": "Cannot find window class."
+  },
+  {
+   "code": 1408,
+   "name": "ERROR_WINDOW_OF_OTHER_THREAD",
+   "message": "Invalid window; it belongs to another thread."
+  },
+  {
+   "code": 1409,
+   "name": "ERROR_HOTKEY_ALREADY_REGISTERED",
+   "message": "Hot key is already registered."
+  },
+  {
+   "code": 1410,
+   "name": "ERROR_CLASS_ALREADY_EXISTS",
+   "message": "Class already exists."
+  },
+  {
+   "code": 1411,
+   "name": "ERROR_CLASS_DOES_NOT_EXIST",
+   "message": "Class does not exist."
+  },
+  {
+   "code": 1413,
+   "name": "ERROR_INVALID_INDEX",
+   "message": "Invalid index."
+  },
+  {
+   "code": 1414,
+   "name": "ERROR_INVALID_ICON_HANDLE",
+   "message": "Invalid icon handle."
+  },
+  {
+   "code": 1418,
+   "name": "ERROR_CLIPBOARD_NOT_OPEN",
+   "message": "Thread does not have a clipboard open."
+  },
+  {
+   "code": 1419,
+   "name": "ERROR_HOTKEY_NOT_REGISTERED",
+   "message": "Hot key is not registered."
+  },
+  {
+   "code": 1420,
+   "name": "ERROR_WINDOW_NOT_DIALOG",
+   "message": "The window is not a valid dialog window."
+  },
+  {
+   "code": 1421,
+   "name": "ERROR_CONTROL_ID_NOT_FOUND",
+   "message": "Control ID not found."
+  },
+  {
+   "code": 1425,
+   "name": "ERROR_DC_NOT_FOUND",
+   "message": "Invalid device context (DC) handle."
+  },
+  {
+   "code": 1426,
+   "name": "ERROR_INVALID_HOOK_FILTER",
+   "message": "Invalid hook procedure type."
+  },
+  {
+   "code": 1427,
+   "name": "ERROR_INVALID_FILTER_PROC",
+   "message": "Invalid hook procedure."
+  },
+  {
+   "code": 1428,
+   "name": "ERROR_HOOK_NEEDS_HMOD",
+   "message": "Cannot set nonlocal hook without a module handle."
+  },
+  {
+   "code": 1429,
+   "name": "ERROR_GLOBAL_ONLY_HOOK",
+   "message": "This hook procedure can only be set globally."
+  },
+  {
+   "code": 1430,
+   "name": "ERROR_JOURNAL_HOOK_SET",
+   "message": "The journal hook procedure is already installed."
+  },
+  {
+   "code": 1431,
+   "name": "ERROR_HOOK_NOT_INSTALLED",
+   "message": "The hook procedure is not installed."
+  },
+  {
+   "code": 1438,
+   "name": "ERROR_INVALID_MSGBOX_STYLE",
+   "message": "Invalid message box style."
+  },
+  {
+   "code": 1439,
+   "name": "ERROR_INVALID_SPI_VALUE",
+   "message": "Invalid system-wide (SPI_*) parameter."
+  },
+  {
+   "code": 1440,
+   "name": "ERROR_SCREEN_ALREADY_LOCKED",
+   "message": "Screen already locked."
+  },
+  {
+   "code": 1442,
+   "name": "ERROR_NOT_CHILD_WINDOW",
+   "message": "The window is not a child window."
+  },
+  {
+   "code": 1443,
+   "name": "ERROR_INVALID_GW_COMMAND",
+   "message": "Invalid GW_* command."
+  },
+  {
+   "code": 1444,
+   "name": "ERROR_INVALID_THREAD_ID",
+   "message": "Invalid thread identifier."
+  },
+  {
+   "code": 1446,
+   "name": "ERROR_POPUP_ALREADY_ACTIVE",
+   "message": "Popup menu already active."
+  },
+  {
+   "code": 1447,
+   "name": "ERROR_NO_SCROLLBARS",
+   "message": "The window does not have scroll bars."
+  },
+  {
+   "code": 1449,
+   "name": "ERROR_INVALID_SHOWWIN_COMMAND",
+   "message": "Invalid show window command."
+  },
+  {
+   "code": 1450,
+   "name": "ERROR_NO_SYSTEM_RESOURCES",
+   "message": "Insufficient system resources exist to complete the requested service."
+  },
+  {
+   "code": 1453,
+   "name": "ERROR_WORKING_SET_QUOTA",
+   "message": "Insufficient quota to complete the requested service."
+  },
+  {
+   "code": 1454,
+   "name": "ERROR_PAGEFILE_QUOTA",
+   "message": "Insufficient quota to complete the requested service."
+  },
+  {
+   "code": 1455,
+   "name": "ERROR_COMMITMENT_LIMIT",
+   "message": "The paging file is too small for this operation to complete."
+  },
+  {
+   "code": 1456,
+   "name": "ERROR_MENU_ITEM_NOT_FOUND",
+   "message": "A menu item was not found."
+  },
+  {
+   "code": 1457,
+   "name": "ERROR_INVALID_KEYBOARD_HANDLE",
+   "message": "Invalid keyboard layout handle."
+  },
+  {
+   "code": 1458,
+   "name": "ERROR_HOOK_TYPE_NOT_ALLOWED",
+   "message": "Hook type not allowed."
+  },
+  {
+   "code": 1459,
+   "name": "ERROR_REQUIRES_INTERACTIVE_WINDOWSTATION",
+   "message": "This operation requires an interactive window station."
+  },
+  {
+   "code": 1460,
+   "name": "ERROR_TIMEOUT",
+   "message": "This operation returned because the timeout period expired."
+  },
+  {
+   "code": 1461,
+   "name": "ERROR_INVALID_MONITOR_HANDLE",
+   "message": "Invalid monitor handle."
+  },
+  {
+   "code": 1462,
+   "name": "ERROR_INCORRECT_SIZE",
+   "message": "Incorrect size argument."
+  },
+  {
+   "code": 1463,
+   "name": "ERROR_SYMLINK_CLASS_DISABLED",
+   "message": "The symbolic link cannot be followed because its type is disabled."
+  },
+  {
+   "code": 1464,
+   "name": "ERROR_SYMLINK_NOT_SUPPORTED",
+   "message": "This application does not support the current operation on symbolic links."
+  },
+  {
+   "code": 1465,
+   "name": "ERROR_XML_PARSE_ERROR",
+   "message": "Windows was unable to parse the requested XML data."
+  },
+  {
+   "code": 1466,
+   "name": "ERROR_XMLDSIG_ERROR",
+   "message": "An error was encountered while processing an XML digital signature."
+  },
+  {
+   "code": 1467,
+   "name": "ERROR_RESTART_APPLICATION",
+   "message": "This application must be restarted."
+  },
+  {
+   "code": 1468,
+   "name": "ERROR_WRONG_COMPARTMENT",
+   "message": "The caller made the connection request in the wrong routing compartment."
+  },
+  {
+   "code": 1469,
+   "name": "ERROR_AUTHIP_FAILURE",
+   "message": "There was an AuthIP failure when attempting to connect to the remote host."
+  },
+  {
+   "code": 1500,
+   "name": "ERROR_EVENTLOG_FILE_CORRUPT",
+   "message": "The event log file is corrupted."
+  },
+  {
+   "code": 1501,
+   "name": "ERROR_EVENTLOG_CANT_START",
+   "message": "No event log file could be opened, so the event logging service did not start."
+  },
+  {
+   "code": 1502,
+   "name": "ERROR_LOG_FILE_FULL",
+   "message": "The event log file is full."
+  },
+  {
+   "code": 1503,
+   "name": "ERROR_EVENTLOG_FILE_CHANGED",
+   "message": "The event log file has changed between read operations."
+  },
+  {
+   "code": 1601,
+   "name": "ERROR_INSTALL_SERVICE_FAILURE",
+   "message": "The Windows Installer service could not be accessed."
+  },
+  {
+   "code": 1602,
+   "name": "ERROR_INSTALL_USEREXIT",
+   "message": "The user canceled installation."
+  },
+  {
+   "code": 1603,
+   "name": "ERROR_INSTALL_FAILURE",
+   "message": "A fatal error occurred during installation."
+  },
+  {
+   "code": 1604,
+   "name": "ERROR_INSTALL_SUSPEND",
+   "message": "Installation suspended, incomplete."
+  },
+  {
+   "code": 1605,
+   "name": "ERROR_UNKNOWN_PRODUCT",
+   "message": "This action is only valid for products that are currently installed."
+  },
+  {
+   "code": 1606,
+   "name": "ERROR_UNKNOWN_FEATURE",
+   "message": "Feature ID not registered."
+  },
+  {
+   "code": 1607,
+   "name": "ERROR_UNKNOWN_COMPONENT",
+   "message": "Component ID not registered."
+  },
+  {
+   "code": 1608,
+   "name": "ERROR_UNKNOWN_PROPERTY",
+   "message": "Unknown property."
+  },
+  {
+   "code": 1609,
+   "name": "ERROR_INVALID_HANDLE_STATE",
+   "message": "Handle is in an invalid state."
+  },
+  {
+   "code": 1610,
+   "name": "ERROR_BAD_CONFIGURATION",
+   "message": "The configuration data for this product is corrupt."
+  },
+  {
+   "code": 1611,
+   "name": "ERROR_INDEX_ABSENT",
+   "message": "Component qualifier not present."
+  },
+  {
+   "code": 1612,
+   "name": "ERROR_INSTALL_SOURCE_ABSENT",
+   "message": "The installation source for this product is not available."
+  },
+  {
+   "code": 1613,
+   "name": "ERROR_INSTALL_PACKAGE_VERSION",
+   "message": "This installation package cannot be installed by the Windows Installer service."
+  },
+  {
+   "code": 1614,
+   "name": "ERROR_PRODUCT_UNINSTALLED",
+   "message": "Product is uninstalled."
+  },
+  {
+   "code": 1615,
+   "name": "ERROR_BAD_QUERY_SYNTAX",
+   "message": "SQL query syntax invalid or unsupported."
+  },
+  {
+   "code": 1618,
+   "name": "ERROR_INSTALL_ALREADY_RUNNING",
+   "message": "Another installation is already in progress."
+  },
+  {
+   "code": 1619,
+   "name": "ERROR_INSTALL_PACKAGE_OPEN_FAILED",
+   "message": "This installation package could not be opened."
+  },
+  {
+   "code": 1620,
+   "name": "ERROR_INSTALL_PACKAGE_INVALID",
+   "message": "This installation package could not be opened. Contact the application vendor to verify that this is a valid Windows Installer package."
+  },
+  {
+   "code": 1621,
+   "name": "ERROR_INSTALL_UI_FAILURE",
+   "message": "There was an error starting the Windows Installer service user interface."
+  },
+  {
+   "code": 1622,
+   "name": "ERROR_INSTALL_LOG_FAILURE",
+   "message": "Error opening installation log file."
+  },
+  {
+   "code": 1623,
+   "name": "ERROR_INSTALL_LANGUAGE_UNSUPPORTED",
+   "message": "The language of this installation package is not supported by your system."
+  },
+  {
+   "code": 1624,
+   "name": "ERROR_INSTALL_TRANSFORM_FAILURE",
+   "message": "Error applying transforms."
+  },
+  {
+   "code": 1625,
+   "name": "ERROR_INSTALL_PACKAGE_REJECTED",
+   "message": "This installation is forbidden by system policy."
+  },
+  {
+   "code": 1626,
+   "name": "ERROR_FUNCTION_NOT_CALLED",
+   "message": "Function could not be executed."
+  },
+  {
+   "code": 1627,
+   "name": "ERROR_FUNCTION_FAILED",
+   "message": "Function failed during execution."
+  },
+  {
+   "code": 1628,
+   "name": "ERROR_INVALID_TABLE",
+   "message": "Invalid or unknown table specified."
+  },
+  {
+   "code": 1629,
+   "name": "ERROR_DATATYPE_MISMATCH",
+   "message": "Data supplied is of wrong type."
+  },
+  {
+   "code": 1630,
+   "name": "ERROR_UNSUPPORTED_TYPE",
+   "message": "Data of this type is not supported."
+  },
+  {
+   "code": 1631,
+   "name": "ERROR_CREATE_FAILED",
+   "message": "The Windows Installer service failed to start."
+  },
+  {
+   "code": 1632,
+   "name": "ERROR_INSTALL_TEMP_UNWRITABLE",
+   "message": "The Temp folder is on a drive that is full or is inaccessible."
+  },
+  {
+   "code": 1633,
+   "name": "ERROR_INSTALL_PLATFORM_UNSUPPORTED",
+   "message": "This installation package is not supported by this processor type."
+  },
+  {
+   "code": 1634,
+   "name": "ERROR_INSTALL_NOTUSED",
+   "message": "Component not used on this computer."
+  },
+  {
+   "code": 1635,
+   "name": "ERROR_PATCH_PACKAGE_OPEN_FAILED",
+   "message": "This update package could not be opened."
+  },
+  {
+   "code": 1636,
+   "name": "ERROR_PATCH_PACKAGE_INVALID",
+   "message": "This update package could not be opened."
+  },
+  {
+   "code": 1637,
+   "name": "ERROR_PATCH_PACKAGE_UNSUPPORTED",
+   "message": "This update package cannot be processed by the Windows Installer service."
+  },
+  {
+   "code": 1638,
+   "name": "ERROR_PRODUCT_VERSION",
+   "message": "Another version of this product is already installed."
+  },
+  {
+   "code": 1639,
+   "name": "ERROR_INVALID_COMMAND_LINE",
+   "message": "Invalid command line argument."
+  },
+  {
+   "code": 1640,
+   "name": "ERROR_INSTALL_REMOTE_DISALLOWED",
+   "message": "The Windows Installer does not permit installation from a Remote Desktop Connection."
+  },
+  {
+   "code": 1642,
+   "name": "ERROR_PATCH_TARGET_NOT_FOUND",
+   "message": "The Windows Installer service cannot update one or more protected Windows files."
+  },
+  {
+   "code": 1647,
+   "name": "ERROR_UNKNOWN_PATCH",
+   "message": "The update is not applied to this product."
+  },
+  {
+   "code": 1648,
+   "name": "ERROR_PATCH_NO_SEQUENCE",
+   "message": "No valid sequence could be found for the set of updates."
+  },
+  {
+   "code": 1650,
+   "name": "ERROR_INVALID_PATCH_XML",
+   "message": "The XML update data is invalid."
+  },
+  {
+   "code": 1652,
+   "name": "ERROR_INSTALL_SERVICE_SAFEBOOT",
+   "message": "The Windows Installer service is not accessible in Safe Mode."
+  },
+  {
+   "code": 1653,
+   "name": "ERROR_FAIL_FAST_EXCEPTION",
+   "message": "A fail fast exception occurred."
+  },
+  {
+   "code": 1654,
+   "name": "ERROR_INSTALL_REJECTED",
+   "message": "The app that you are trying to run is not supported on this version of Windows."
+  },
+  {
+   "code": 1816,
+   "name": "ERROR_NOT_ENOUGH_QUOTA",
+   "message": "Not enough quota is available to process this command."
+  },
+  {
+   "code": 1907,
+   "name": "ERROR_PASSWORD_MUST_CHANGE",
+   "message": "The user's password must be changed before signing in."
+  },
+  {
+   "code": 1908,
+   "name": "ERROR_DOMAIN_CONTROLLER_NOT_FOUND",
+   "message": "A domain controller with the specified name could not be found."
+  },
+  {
+   "code": 1909,
+   "name": "ERROR_ACCOUNT_LOCKED_OUT",
+   "message": "The referenced account is currently locked out and may not be logged on to."
+  },
+  {
+   "code": 6000,
+   "name": "ERROR_ENCRYPTION_FAILED",
+   "message": "The specified file could not be encrypted."
+  },
+  {
+   "code": 6001,
+   "name": "ERROR_DECRYPTION_FAILED",
+   "message": "The specified file could not be decrypted."
+  },
+  {
+   "code": 6002,
+   "name": "ERROR_FILE_ENCRYPTED",
+   "message": "The specified file is encrypted and the user does not have the ability to decrypt it."
+  },
+  {
+   "code": 6003,
+   "name": "ERROR_NO_RECOVERY_POLICY",
+   "message": "There is no valid encryption recovery policy configured for this system."
+  },
+  {
+   "code": 6004,
+   "name": "ERROR_NO_EFS",
+   "message": "The required encryption driver is not loaded for this system."
+  },
+  {
+   "code": 6006,
+   "name": "ERROR_NO_USER_KEYS",
+   "message": "There are no EFS keys defined for the user."
+  },
+  {
+   "code": 6007,
+   "name": "ERROR_FILE_NOT_ENCRYPTED",
+   "message": "The specified file is not encrypted."
+  },
+  {
+   "code": 6009,
+   "name": "ERROR_FILE_READ_ONLY",
+   "message": "The specified file is read only."
+  },
+  {
+   "code": 6010,
+   "name": "ERROR_DIR_EFS_DISALLOWED",
+   "message": "The directory has been disabled for encryption."
+  },
+  {
+   "code": 6015,
+   "name": "ERROR_EFS_DISABLED",
+   "message": "This machine is disabled for file encryption."
+  },
+  {
+   "code": 6016,
+   "name": "ERROR_EFS_VERSION_NOT_SUPPORT",
+   "message": "A newer system is required to decrypt this encrypted file."
+  },
+  {
+   "code": 8206,
+   "name": "ERROR_DS_BUSY",
+   "message": "The directory service is busy."
+  },
+  {
+   "code": 8207,
+   "name": "ERROR_DS_UNAVAILABLE",
+   "message": "The directory service is unavailable."
+  },
+  {
+   "code": 8208,
+   "name": "ERROR_DS_NO_RIDS_ALLOCATED",
+   "message": "The directory service was unable to allocate a relative identifier."
+  },
+  {
+   "code": 8209,
+   "name": "ERROR_DS_NO_MORE_RIDS",
+   "message": "The directory service has exhausted the pool of relative identifiers."
+  },
+  {
+   "code": 10004,
+   "name": "WSAEINTR",
+   "message": "Interrupted function call."
+  },
+  {
+   "code": 10009,
+   "name": "WSAEBADF",
+   "message": "File handle is not valid."
+  },
+  {
+   "code": 10013,
+   "name": "WSAEACCES",
+   "message": "Permission denied."
+  },
+  {
+   "code": 10014,
+   "name": "WSAEFAULT",
+   "message": "Bad address."
+  },
+  {
+   "code": 10022,
+   "name": "WSAEINVAL",
+   "message": "Invalid argument."
+  },
+  {
+   "code": 10024,
+   "name": "WSAEMFILE",
+   "message": "Too many open files."
+  },
+  {
+   "code": 10035,
+   "name": "WSAEWOULDBLOCK",
+   "message": "Resource temporarily unavailable."
+  },
+  {
+   "code": 10036,
+   "name": "WSAEINPROGRESS",
+   "message": "Operation now in progress."
+  },
+  {
+   "code": 10037,
+   "name": "WSAEALREADY",
+   "message": "Operation already in progress."
+  },
+  {
+   "code": 10038,
+   "name": "WSAENOTSOCK",
+   "message": "Socket operation on nonsocket."
+  },
+  {
+   "code": 10039,
+   "name": "WSAEDESTADDRREQ",
+   "message": "Destination address required."
+  },
+  {
+   "code": 10040,
+   "name": "WSAEMSGSIZE",
+   "message": "Message too long."
+  },
+  {
+   "code": 10041,
+   "name": "WSAEPROTOTYPE",
+   "message": "Protocol wrong type for socket."
+  },
+  {
+   "code": 10042,
+   "name": "WSAENOPROTOOPT",
+   "message": "Bad protocol option."
+  },
+  {
+   "code": 10043,
+   "name": "WSAEPROTONOSUPPORT",
+   "message": "Protocol not supported."
+  },
+  {
+   "code": 10044,
+   "name": "WSAESOCKTNOSUPPORT",
+   "message": "Socket type not supported."
+  },
+  {
+   "code": 10045,
+   "name": "WSAEOPNOTSUPP",
+   "message": "Operation not supported."
+  },
+  {
+   "code": 10046,
+   "name": "WSAEPFNOSUPPORT",
+   "message": "Protocol family not supported."
+  },
+  {
+   "code": 10047,
+   "name": "WSAEAFNOSUPPORT",
+   "message": "Address family not supported by protocol family."
+  },
+  {
+   "code": 10048,
+   "name": "WSAEADDRINUSE",
+   "message": "Address already in use."
+  },
+  {
+   "code": 10049,
+   "name": "WSAEADDRNOTAVAIL",
+   "message": "Cannot assign requested address."
+  },
+  {
+   "code": 10050,
+   "name": "WSAENETDOWN",
+   "message": "Network is down."
+  },
+  {
+   "code": 10051,
+   "name": "WSAENETUNREACH",
+   "message": "Network is unreachable."
+  },
+  {
+   "code": 10052,
+   "name": "WSAENETRESET",
+   "message": "Network dropped connection on reset."
+  },
+  {
+   "code": 10053,
+   "name": "WSAECONNABORTED",
+   "message": "Software caused connection abort."
+  },
+  {
+   "code": 10054,
+   "name": "WSAECONNRESET",
+   "message": "Connection reset by peer."
+  },
+  {
+   "code": 10055,
+   "name": "WSAENOBUFS",
+   "message": "No buffer space available."
+  },
+  {
+   "code": 10056,
+   "name": "WSAEISCONN",
+   "message": "Socket is already connected."
+  },
+  {
+   "code": 10057,
+   "name": "WSAENOTCONN",
+   "message": "Socket is not connected."
+  },
+  {
+   "code": 10058,
+   "name": "WSAESHUTDOWN",
+   "message": "Cannot send after socket shutdown."
+  },
+  {
+   "code": 10059,
+   "name": "WSAETOOMANYREFS",
+   "message": "Too many references."
+  },
+  {
+   "code": 10060,
+   "name": "WSAETIMEDOUT",
+   "message": "Connection timed out."
+  },
+  {
+   "code": 10061,
+   "name": "WSAECONNREFUSED",
+   "message": "Connection refused."
+  },
+  {
+   "code": 10062,
+   "name": "WSAELOOP",
+   "message": "Cannot translate name."
+  },
+  {
+   "code": 10063,
+   "name": "WSAENAMETOOLONG",
+   "message": "Name too long."
+  },
+  {
+   "code": 10064,
+   "name": "WSAEHOSTDOWN",
+   "message": "Host is down."
+  },
+  {
+   "code": 10065,
+   "name": "WSAEHOSTUNREACH",
+   "message": "No route to host."
+  },
+  {
+   "code": 10066,
+   "name": "WSAENOTEMPTY",
+   "message": "Directory not empty."
+  },
+  {
+   "code": 10067,
+   "name": "WSAEPROCLIM",
+   "message": "Too many processes."
+  },
+  {
+   "code": 10068,
+   "name": "WSAEUSERS",
+   "message": "User quota exceeded."
+  },
+  {
+   "code": 10069,
+   "name": "WSAEDQUOT",
+   "message": "Disk quota exceeded."
+  },
+  {
+   "code": 10070,
+   "name": "WSAESTALE",
+   "message": "Stale file handle reference."
+  },
+  {
+   "code": 10071,
+   "name": "WSAEREMOTE",
+   "message": "Item is remote."
+  },
+  {
+   "code": 10091,
+   "name": "WSASYSNOTREADY",
+   "message": "Network subsystem is unavailable."
+  },
+  {
+   "code": 10092,
+   "name": "WSAVERNOTSUPPORTED",
+   "message": "Winsock version not supported."
+  },
+  {
+   "code": 10093,
+   "name": "WSANOTINITIALISED",
+   "message": "Successful WSAStartup not yet performed."
+  },
+  {
+   "code": 10101,
+   "name": "WSAEDISCON",
+   "message": "Graceful shutdown in progress."
+  },
+  {
+   "code": 10102,
+   "name": "WSAENOMORE",
+   "message": "No more results."
+  },
+  {
+   "code": 10103,
+   "name": "WSAECANCELLED",
+   "message": "Call has been cancelled."
+  },
+  {
+   "code": 10104,
+   "name": "WSAEINVALIDPROCTABLE",
+   "message": "Procedure call table is invalid."
+  },
+  {
+   "code": 10105,
+   "name": "WSAEINVALIDPROVIDER",
+   "message": "Service provider is invalid."
+  },
+  {
+   "code": 10106,
+   "name": "WSAEPROVIDERFAILEDINIT",
+   "message": "Service provider failed to initialize."
+  },
+  {
+   "code": 10107,
+   "name": "WSASYSCALLFAILURE",
+   "message": "System call failure."
+  },
+  {
+   "code": 10108,
+   "name": "WSASERVICE_NOT_FOUND",
+   "message": "Service not found."
+  },
+  {
+   "code": 10109,
+   "name": "WSATYPE_NOT_FOUND",
+   "message": "Class type not found."
+  },
+  {
+   "code": 10110,
+   "name": "WSA_E_NO_MORE",
+   "message": "No more results."
+  },
+  {
+   "code": 10111,
+   "name": "WSA_E_CANCELLED",
+   "message": "Call was cancelled."
+  },
+  {
+   "code": 10112,
+   "name": "WSAEREFUSED",
+   "message": "Database query was refused."
+  },
+  {
+   "code": 11001,
+   "name": "WSAHOST_NOT_FOUND",
+   "message": "Host not found."
+  },
+  {
+   "code": 11002,
+   "name": "WSATRY_AGAIN",
+   "message": "Nonauthoritative host not found."
+  },
+  {
+   "code": 11003,
+   "name": "WSANO_RECOVERY",
+   "message": "This is a nonrecoverable error."
+  },
+  {
+   "code": 11004,
+   "name": "WSANO_DATA",
+   "message": "Valid name, no data record of requested type."
+  },
+  {
+   "code": 11005,
+   "name": "WSA_QOS_RECEIVERS",
+   "message": "QoS receivers."
+  },
+  {
+   "code": 11006,
+   "name": "WSA_QOS_SENDERS",
+   "message": "QoS senders."
+  },
+  {
+   "code": 11007,
+   "name": "WSA_QOS_NO_SENDERS",
+   "message": "QoS no senders."
+  },
+  {
+   "code": 11008,
+   "name": "WSA_QOS_NO_RECEIVERS",
+   "message": "QoS no receivers."
+  },
+  {
+   "code": 11009,
+   "name": "WSA_QOS_REQUEST_CONFIRMED",
+   "message": "QoS request confirmed."
+  },
+  {
+   "code": 11010,
+   "name": "WSA_QOS_ADMISSION_FAILURE",
+   "message": "QoS admission error."
+  },
+  {
+   "code": 11011,
+   "name": "WSA_QOS_POLICY_FAILURE",
+   "message": "QoS policy failure."
+  },
+  {
+   "code": 11012,
+   "name": "WSA_QOS_BAD_STYLE",
+   "message": "QoS bad style."
+  },
+  {
+   "code": 11013,
+   "name": "WSA_QOS_BAD_OBJECT",
+   "message": "QoS bad object."
+  },
+  {
+   "code": 11014,
+   "name": "WSA_QOS_TRAFFIC_CTRL_ERROR",
+   "message": "QoS traffic control error."
+  },
+  {
+   "code": 11015,
+   "name": "WSA_QOS_GENERIC_ERROR",
+   "message": "QoS generic error."
+  },
+  {
+   "code": 11016,
+   "name": "WSA_QOS_ESERVICETYPE",
+   "message": "QoS service type error."
+  },
+  {
+   "code": 11017,
+   "name": "WSA_QOS_EFLOWSPEC",
+   "message": "QoS flowspec error."
+  },
+  {
+   "code": 11018,
+   "name": "WSA_QOS_EPROVSPECBUF",
+   "message": "Invalid QoS provider buffer."
+  },
+  {
+   "code": 11019,
+   "name": "WSA_QOS_EFILTERSTYLE",
+   "message": "Invalid QoS filter style."
+  },
+  {
+   "code": 11020,
+   "name": "WSA_QOS_EFILTERTYPE",
+   "message": "Invalid QoS filter type."
+  },
+  {
+   "code": 11021,
+   "name": "WSA_QOS_EFILTERCOUNT",
+   "message": "Incorrect QoS filter count."
+  },
+  {
+   "code": 11022,
+   "name": "WSA_QOS_EOBJLENGTH",
+   "message": "Invalid QoS object length."
+  },
+  {
+   "code": 11023,
+   "name": "WSA_QOS_EFLOWCOUNT",
+   "message": "Incorrect QoS flow count."
+  },
+  {
+   "code": 11024,
+   "name": "WSA_QOS_EUNKNOWNPSOBJ",
+   "message": "Unrecognized QoS object."
+  },
+  {
+   "code": 11025,
+   "name": "WSA_QOS_EPOLICYOBJ",
+   "message": "Invalid QoS policy object."
+  },
+  {
+   "code": 11026,
+   "name": "WSA_QOS_EFLOWDESC",
+   "message": "Invalid QoS flow descriptor."
+  },
+  {
+   "code": 11027,
+   "name": "WSA_QOS_EPSFLOWSPEC",
+   "message": "Invalid QoS provider-specific flowspec."
+  },
+  {
+   "code": 11028,
+   "name": "WSA_QOS_EPSFILTERSPEC",
+   "message": "Invalid QoS provider-specific filterspec."
+  },
+  {
+   "code": 11029,
+   "name": "WSA_QOS_ESDMODEOBJ",
+   "message": "Invalid QoS shape discard mode object."
+  },
+  {
+   "code": 11030,
+   "name": "WSA_QOS_ESHAPERATEOBJ",
+   "message": "Invalid QoS shaping rate object."
+  },
+  {
+   "code": 11031,
+   "name": "WSA_QOS_RESERVED_PETYPE",
+   "message": "Reserved policy QoS element type."
+  },
+  {
+   "code": 11032,
+   "name": "WSA_SECURE_HOST_NOT_FOUND",
+   "message": "No such host is known securely."
+  },
+  {
+   "code": 11033,
+   "name": "WSA_IPSEC_NAME_POLICY_ERROR",
+   "message": "Name policy error."
+  }
+ ]
+}

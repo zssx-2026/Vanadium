@@ -25,6 +25,13 @@
 .PARAMETER KeepTemp
   Keep the temporary repository under %TEMP% for inspection.
 
+.PARAMETER RequireNativeTransport
+  Enforce the 0.5.0 native-transport guardrail: inv doctor must report
+  "transport  native (winsock2 + schannel)" (step 4b) and a plain download from
+  the local range server must return rc=0 with a matching sha256 (step 8b).
+  Off by default, where 4b still runs as an ADVISORY line and 8b is skipped
+  entirely (it starts a python server, which the routine run does not need).
+
 .EXAMPLE
   powershell -NoProfile -ExecutionPolicy Bypass -File tools\acceptance.ps1
 #>
@@ -34,7 +41,8 @@ param(
   [string]$Version = '',
   [string]$LogDir = '',
   [int]$TimeoutSeconds = 120,
-  [switch]$KeepTemp
+  [switch]$KeepTemp,
+  [switch]$RequireNativeTransport
 )
 
 $ErrorActionPreference = 'Stop'
@@ -81,6 +89,17 @@ function Add-Result {
   $msg = 'step ' + $Step + ' ' + $Status + ' - ' + $Name
   if ($Detail) { $msg = $msg + ' :: ' + $Detail }
   Write-Log $msg $lvl
+}
+
+# Guardrails land before the feature they protect: they always print a line,
+# but only count towards ACCEPTANCE_RESULT when the matching -Require* switch
+# is on. That keeps 0.4.x runs green while the 0.5.0 transport rewrite lands.
+function Add-Advisory {
+  param([int]$Step, [string]$Name, [string]$Status, [string]$Detail = '', [switch]$Enforce, [string]$Hint = '')
+  if ($Enforce) { Add-Result $Step $Name $Status $Detail; return }
+  $suffix = ''
+  if ($Hint) { $suffix = ' (advisory; enable with ' + $Hint + ')' }
+  Write-Log ($Status + ' - ' + $Name + ' :: ' + $Detail + $suffix) 'ADVISORY'
 }
 
 function Show-CliOutput {
@@ -160,6 +179,23 @@ function Invoke-SetupExe {
   if ($Timeout -le 0) { $Timeout = 300 }
   $p = Start-Process -FilePath $Exe -ArgumentList $Arguments -PassThru -Wait
   return $p.ExitCode
+}
+
+# Native commands write to stderr when the peer is not listening yet; with
+# $ErrorActionPreference = 'Stop' PowerShell 5.1 turns that into a terminating
+# error, so every probe helper runs under 'Continue' and swallows stderr.
+function Invoke-CurlText {
+  param([string]$Curl, [string]$Url, [int]$MaxTime = 2)
+  $previous = $ErrorActionPreference
+  $ErrorActionPreference = 'Continue'
+  try {
+    $out = & $Curl -s --max-time $MaxTime $Url 2>$null
+    return ([string]($out | Out-String)).Trim()
+  } catch {
+    return ''
+  } finally {
+    $ErrorActionPreference = $previous
+  }
 }
 
 function Get-JsonProp {
@@ -274,7 +310,7 @@ function Get-ExpectedVersion {
     $v = (Get-Content -LiteralPath $vf -TotalCount 1)
     if ($v) { return $v.Trim() }
   }
-  return '0.3.0'
+  return '0.4.0'
 }
 
 function Get-PathEntries {
@@ -425,6 +461,39 @@ if (-not $step2ok) {
   }
 }
 
+# --- step 4b: native transport (0.5.0 winsock2 + Schannel) ----------------
+# Guardrail for the WinHTTP removal: inv doctor has to report the native stack.
+# Advisory until -RequireNativeTransport is passed, so the check ships ahead of
+# the feature and turns into a hard failure with one flag.
+$transportPattern = '(?m)^\s*transport\s+native\s+\(winsock2\s*\+\s*schannel\)\s*$'
+if (-not $step2ok) {
+  Add-Advisory -Step 4 -Name 'native transport (winsock2 + schannel)' -Status 'SKIP' -Detail 'not installed' -Enforce:$RequireNativeTransport -Hint '-RequireNativeTransport'
+} else {
+  $tr = Invoke-Inv -Arguments 'doctor'
+  Show-CliOutput 'inv doctor' $tr
+  $transportOk = ($tr.ExitCode -eq 0) -and ($tr.StdOut -match $transportPattern)
+  $transportStatus = 'FAIL'
+  if ($transportOk) { $transportStatus = 'PASS' }
+  Add-Advisory -Step 4 -Name 'native transport (winsock2 + schannel)' -Status $transportStatus -Detail ('doctor exit=' + $tr.ExitCode + ' pattern=[' + $transportPattern + ']') -Enforce:$RequireNativeTransport -Hint '-RequireNativeTransport'
+}
+
+# --- step 4c (no new step number): kernel ABI tag is still part of the contract
+# The 0.5.0 rewrite swaps the network stack, not the ABI. The shell and the Java
+# sidecar both key on "abi vanadium-abi-1"; a silent rename breaks every consumer
+# at load time. Unconditional on purpose: it is one cheap CLI call and green today.
+if (-not $step2ok) {
+  Add-Result 4 'kernel abi vanadium-abi-1' 'SKIP' 'not installed'
+} else {
+  $ab = Invoke-Inv -Arguments 'version'
+  Show-CliOutput 'inv version (abi)' $ab
+  $abiOk = ($ab.ExitCode -eq 0) -and ($ab.StdOut -match 'abi\s+vanadium-abi-1\b')
+  if ($abiOk) {
+    Add-Result 4 'kernel abi vanadium-abi-1' 'PASS' ($ab.StdOut.Trim())
+  } else {
+    Add-Result 4 'kernel abi vanadium-abi-1' 'FAIL' ('exit=' + $ab.ExitCode + ' out=[' + $ab.StdOut.Trim() + ']')
+  }
+}
+
 # --- step 5: help lists every command -------------------------------------
 $step5ok = $false
 if (-not $step2ok) {
@@ -481,11 +550,20 @@ if (-not $step2ok) {
   Show-CliOutput 'inv set lang (en)' $le
   $langZh = ($lz.StdOut -match '=\s*zh-cn\s*$')
   $langEn = ($le.StdOut -match '=\s*en\s*$')
-  if ($w.ExitCode -eq 0 -and $g.ExitCode -eq 0 -and $readBack -match ('=\s*' + [regex]::Escape($probeValue) + '\s*$') -and $restored -and $langZh -and $langEn) {
-    Add-Result 6 'set/get roundtrip' 'PASS' ($key + '=' + $probeValue + ' round-tripped, original [' + $origValue + '] restored, lang zh-cn/en switchable')
+  # new switch (0.4.0): "set -list" prints the header, one "  <key> = <value>" line per
+  # declared key and the dynamic url_<name> placeholder. The max_branch value is not
+  # pinned (the user may have changed it); only the line shape is asserted.
+  $sl = Invoke-Inv -Arguments 'set -list'
+  Show-CliOutput 'inv set -list' $sl
+  $listHeader = ($sl.StdOut -match '(?m)^Current settings\s*$')
+  $listMaxBranch = ($sl.StdOut -match '(?m)^\s+max_branch\s+= \d+\s*$')
+  $listLang = ($sl.StdOut -match '(?m)^\s+lang\s+= en\s*$')
+  $listDynamic = ($sl.StdOut -match 'url_<name>')
+  if ($w.ExitCode -eq 0 -and $g.ExitCode -eq 0 -and $readBack -match ('=\s*' + [regex]::Escape($probeValue) + '\s*$') -and $restored -and $langZh -and $langEn -and $sl.ExitCode -eq 0 -and $listHeader -and $listMaxBranch -and $listLang -and $listDynamic) {
+    Add-Result 6 'set/get roundtrip + set -list' 'PASS' ($key + '=' + $probeValue + ' round-tripped, original [' + $origValue + '] restored, lang zh-cn/en switchable, set -list header+max_branch+lang+dynamic')
     $step6ok = $true
   } else {
-    Add-Result 6 'set/get roundtrip' 'FAIL' ('write exit=' + $w.ExitCode + ' read exit=' + $g.ExitCode + ' read=[' + $readBack + '] restored=' + $restored + ' orig=[' + $origValue + '] langZh=' + $langZh + ' langEn=' + $langEn)
+    Add-Result 6 'set/get roundtrip + set -list' 'FAIL' ('write exit=' + $w.ExitCode + ' read exit=' + $g.ExitCode + ' read=[' + $readBack + '] restored=' + $restored + ' orig=[' + $origValue + '] langZh=' + $langZh + ' langEn=' + $langEn + ' listExit=' + $sl.ExitCode + ' listHeader=' + $listHeader + ' listMaxBranch=' + $listMaxBranch + ' listLang=' + $listLang + ' listDynamic=' + $listDynamic + ' listOut=[' + $sl.StdOut.Trim() + ']')
   }
 }
 
@@ -523,16 +601,37 @@ if (-not $step2ok) {
   # commit has to leave the working tree clean.
   $d = Invoke-Inv -Arguments 'diff' -WorkingDirectory $repo
   Show-CliOutput 'inv diff' $d
+  # new switches (0.4.0): status -short / log -oneline / list -sys / search -name.
+  # Contracts observed on the 0.4.0 kernel:
+  #   status -short  -> "0 changed, 0 deleted" (single line) on a clean tree
+  #   log -oneline   -> "@1 <8 hex> <subject>" (no ISO timestamp)
+  #   list -sys      -> system branches: "branches/" tree plus releases/tag|rawdata/v1.0
+  #   search -name   -> "<path>  <n>B" hits by file name (substring match, NOT a glob)
+  $ss = Invoke-Inv -Arguments 'status -short' -WorkingDirectory $repo
+  Show-CliOutput 'inv status -short' $ss
+  $lo = Invoke-Inv -Arguments 'log -oneline' -WorkingDirectory $repo
+  Show-CliOutput 'inv log -oneline' $lo
+  $lsys = Invoke-Inv -Arguments 'list -sys' -WorkingDirectory $repo
+  Show-CliOutput 'inv list -sys' $lsys
+  $sn = Invoke-Inv -Arguments 'search -name beta.txt' -WorkingDirectory $repo
+  Show-CliOutput 'inv search -name beta.txt' $sn
+  $snm = Invoke-Inv -Arguments 'search -name zzz.txt' -WorkingDirectory $repo
+  Show-CliOutput 'inv search -name zzz.txt' $snm
   $flatRoot = ($l.StdOut -match '(?m)^/\s+@1\s+[0-9a-f]{12}\s+\[system\]')
   $flatSub = ($l.StdOut -match '(?m)^/sub\s+@1\s+[0-9a-f]{12}')
   $treeOk = ($t.StdOut -match 'branches/' -and $t.StdOut -match '\|\-\-\s+sub')
   $filesOk = ($f.StdOut -match 'beta\.txt')
   $diffClean = ($d.StdOut -match 'Nothing to do')
-  if ($i.ExitCode -eq 0 -and $g.ExitCode -eq 0 -and $s.ExitCode -eq 0 -and $l.ExitCode -eq 0 -and $t.ExitCode -eq 0 -and $f.ExitCode -eq 0 -and $d.ExitCode -eq 0 -and $flatRoot -and $flatSub -and $treeOk -and $filesOk -and $diffClean) {
-    Add-Result 7 'repo init/reg + list flat/tree + diff clean' 'PASS' ('repo ' + $repo)
+  $shortOk = ($ss.StdOut.Trim() -eq '0 changed, 0 deleted')
+  $onelineOk = (($lo.StdOut -match '(?m)^@1 [0-9a-f]{8} register\s*$') -and ($lo.StdOut -notmatch '\d{4}-\d{2}-\d{2}T'))
+  $sysOk = (($lsys.StdOut -match 'branches/') -and ($lsys.StdOut -match 'releases/tag/v1\.0') -and ($lsys.StdOut -match 'releases/rawdata/v1\.0') -and ($l.StdOut -notmatch 'releases/'))
+  $nameOk = (($sn.StdOut -match '(?m)^/sub\s+beta\.txt\s+\d+B\s*$') -and ($sn.StdOut -match 'Matches found: 2'))
+  $nameMissOk = (($snm.ExitCode -eq 0) -and ($snm.StdOut -match 'No matches found'))
+  if ($i.ExitCode -eq 0 -and $g.ExitCode -eq 0 -and $s.ExitCode -eq 0 -and $l.ExitCode -eq 0 -and $t.ExitCode -eq 0 -and $f.ExitCode -eq 0 -and $d.ExitCode -eq 0 -and $ss.ExitCode -eq 0 -and $lo.ExitCode -eq 0 -and $lsys.ExitCode -eq 0 -and $sn.ExitCode -eq 0 -and $snm.ExitCode -eq 0 -and $flatRoot -and $flatSub -and $treeOk -and $filesOk -and $diffClean -and $shortOk -and $onelineOk -and $sysOk -and $nameOk -and $nameMissOk) {
+    Add-Result 7 'repo init/reg + list flat/tree + diff clean + new switches' 'PASS' ('repo ' + $repo)
     $step7ok = $true
   } else {
-    Add-Result 7 'repo init/reg + list flat/tree + diff clean' 'FAIL' ('init=' + $i.ExitCode + ' reg=' + $g.ExitCode + ' regsub=' + $s.ExitCode + ' list=' + $l.ExitCode + ' tree=' + $t.ExitCode + ' files=' + $f.ExitCode + ' diff=' + $d.ExitCode + ' flatRoot=' + $flatRoot + ' flatSub=' + $flatSub + ' treeOk=' + $treeOk + ' filesOk=' + $filesOk + ' diffClean=' + $diffClean + ' listOut=[' + $l.StdOut.Trim() + '] treeOut=[' + $t.StdOut.Trim() + '] fileOut=[' + $f.StdOut.Trim() + '] diffOut=[' + $d.StdOut.Trim() + ']')
+    Add-Result 7 'repo init/reg + list flat/tree + diff clean + new switches' 'FAIL' ('init=' + $i.ExitCode + ' reg=' + $g.ExitCode + ' regsub=' + $s.ExitCode + ' list=' + $l.ExitCode + ' tree=' + $t.ExitCode + ' files=' + $f.ExitCode + ' diff=' + $d.ExitCode + ' status=' + $ss.ExitCode + ' log=' + $lo.ExitCode + ' listsys=' + $lsys.ExitCode + ' search=' + $sn.ExitCode + ' searchmiss=' + $snm.ExitCode + ' flatRoot=' + $flatRoot + ' flatSub=' + $flatSub + ' treeOk=' + $treeOk + ' filesOk=' + $filesOk + ' diffClean=' + $diffClean + ' short=' + $shortOk + ' oneline=' + $onelineOk + ' sys=' + $sysOk + ' name=' + $nameOk + ' nameMiss=' + $nameMissOk + ' listOut=[' + $l.StdOut.Trim() + '] treeOut=[' + $t.StdOut.Trim() + '] fileOut=[' + $f.StdOut.Trim() + '] diffOut=[' + $d.StdOut.Trim() + '] shortOut=[' + $ss.StdOut.Trim() + '] onelineOut=[' + $lo.StdOut.Trim() + '] sysOut=[' + $lsys.StdOut.Trim() + '] searchOut=[' + $sn.StdOut.Trim() + '] searchMissOut=[' + $snm.StdOut.Trim() + ']')
   }
 }
 
@@ -566,6 +665,74 @@ if (-not $step7ok) {
   }
 }
 
+# --- step 8b: downloader regression against the local range server -------
+# The native stack must keep plain transfers byte-exact. tests\range_server.py
+# serves a deterministic blob and publishes its sha256 at /hash?gen=0, so the
+# contract is exactly rc=0 + file sha256 == server hash (+ no validator warning).
+# Gated behind -RequireNativeTransport: starting python and pulling the blob
+# costs a few seconds, which the routine run does not need. The server script is
+# the same one tests\validator_repro.ps1 uses (its "normal" case, no drops).
+$dlName = 'downloader local range server (rc=0 + sha256)'
+if (-not $step2ok) {
+  Add-Advisory -Step 8 -Name $dlName -Status 'SKIP' -Detail 'not installed' -Enforce:$RequireNativeTransport -Hint '-RequireNativeTransport'
+} elseif (-not $RequireNativeTransport) {
+  Add-Advisory -Step 8 -Name $dlName -Status 'SKIP' -Detail 'gated behind -RequireNativeTransport (local python server + ~200 KB transfer)' -Enforce:$RequireNativeTransport -Hint '-RequireNativeTransport'
+} else {
+  $py = Get-Command python -ErrorAction SilentlyContinue
+  $curl = Get-Command curl.exe -ErrorAction SilentlyContinue
+  $serverScript = Join-Path $script:Root 'tests\range_server.py'
+  if (-not $py -or -not $curl -or -not (Test-Path -LiteralPath $serverScript)) {
+    Add-Advisory -Step 8 -Name $dlName -Status 'SKIP' -Detail ('needs python=' + [bool]$py + ' curl=' + [bool]$curl + ' server=' + (Test-Path -LiteralPath $serverScript)) -Enforce:$RequireNativeTransport -Hint '-RequireNativeTransport'
+  } else {
+    $dlDir = Join-Path $env:TEMP ('inv-accept-dl-' + $stamp)
+    New-Item -ItemType Directory -Path $dlDir -Force | Out-Null
+    $dlFile = Join-Path $dlDir 'data.bin'
+    $dlPort = 0
+    $dlProc = $null
+    $serverHash = ''
+    try {
+      foreach ($candidate in @(18191, 18192, 18193, 18194, 18195)) {
+        # the repo path contains spaces: the script path must reach python quoted
+        $dlProc = Start-Process -FilePath $py.Source -ArgumentList @('"' + $serverScript + '"', '--port', "$candidate") -PassThru -WindowStyle Hidden
+        $ready = $false
+        for ($i = 0; $i -lt 40; $i++) {
+          Start-Sleep -Milliseconds 250
+          $probe = Invoke-CurlText -Curl $curl.Source -Url ('http://127.0.0.1:' + $candidate + '/hash?gen=0')
+          if ($probe.Length -eq 64) { $ready = $true; break }
+        }
+        if ($ready) {
+          $dlPort = $candidate
+          $serverHash = $probe.ToLowerInvariant()
+          break
+        }
+        try { Stop-Process -Id $dlProc.Id -Force -ErrorAction SilentlyContinue } catch { }
+        $dlProc = $null
+      }
+      if (-not $dlPort) {
+        Add-Advisory -Step 8 -Name $dlName -Status 'FAIL' -Detail 'range server did not come up on ports 18191-18195' -Enforce:$RequireNativeTransport -Hint '-RequireNativeTransport'
+      } else {
+        $dl = Invoke-Inv -Arguments ('download http://127.0.0.1:' + $dlPort + '/data.bin -path "' + $dlFile + '" -thread 2') -Timeout 180
+        Show-CliOutput 'inv download (local range server)' $dl
+        $dlRc = $dl.ExitCode
+        $dlLog = [string]$dl.StdOut + [string]$dl.StdErr
+        $dlHash = ''
+        if (Test-Path -LiteralPath $dlFile) { $dlHash = (Get-FileHash -LiteralPath $dlFile -Algorithm SHA256).Hash.ToLowerInvariant() }
+        $hashOk = ($dlHash -ne '') -and ($dlHash -eq $serverHash)
+        $warnOk = ($dlLog -notmatch 'validator changed')
+        $dlStatus = 'FAIL'
+        if ($dlRc -eq 0 -and $hashOk -and $warnOk) { $dlStatus = 'PASS' }
+        Add-Advisory -Step 8 -Name $dlName -Status $dlStatus -Detail ('port=' + $dlPort + ' rc=' + $dlRc + ' hashMatch=' + $hashOk + ' noValidatorWarn=' + $warnOk + ' file=' + $dlHash) -Enforce:$RequireNativeTransport -Hint '-RequireNativeTransport'
+      }
+    } catch {
+      # a probe crash must land as a step result, never as a dead run without a summary
+      Add-Advisory -Step 8 -Name $dlName -Status 'FAIL' -Detail ('probe threw: ' + $_.Exception.Message) -Enforce:$RequireNativeTransport -Hint '-RequireNativeTransport'
+    } finally {
+      if ($dlProc) { try { Stop-Process -Id $dlProc.Id -Force -ErrorAction SilentlyContinue } catch { } }
+      try { Remove-Item -LiteralPath $dlDir -Recurse -Force -ErrorAction SilentlyContinue } catch { }
+    }
+  }
+}
+
 # --- step 9: verify -------------------------------------------------------
 $step9ok = $false
 if (-not $step7ok) {
@@ -578,11 +745,17 @@ if (-not $step7ok) {
   # object/bad counters so a silent failure cannot pass as a PASS.
   $verifyCounts = [regex]::Match($v.StdOut, '(\d+)\s+objects?,\s*(\d+)\s+bad')
   $verifyOk = ($v.ExitCode -eq 0 -and $verifyCounts.Success -and [int]$verifyCounts.Groups[2].Value -eq 0)
-  if ($verifyOk) {
-    Add-Result 9 'inv verify' 'PASS' $v.StdOut.Trim()
+  # new switch (0.4.0): "verify -summary" prints exactly one compact line
+  # "Verification summary: <n> objects, <m> bad" and nothing else.
+  $vs = Invoke-Inv -Arguments 'verify -summary' -WorkingDirectory $repo
+  Show-CliOutput 'inv verify -summary' $vs
+  $summaryLines = @($vs.StdOut -split "\r?\n" | Where-Object { $_.Trim() -ne '' })
+  $summaryOk = ($vs.ExitCode -eq 0 -and $summaryLines.Count -eq 1 -and $summaryLines[0] -match '^Verification summary: \d+ objects?, 0 bad$')
+  if ($verifyOk -and $summaryOk) {
+    Add-Result 9 'inv verify + verify -summary' 'PASS' ($v.StdOut.Trim() + ' | summary: ' + $vs.StdOut.Trim())
     $step9ok = $true
   } else {
-    Add-Result 9 'inv verify' 'FAIL' ('exit=' + $v.ExitCode + ' counts=' + $verifyCounts.Success + ' out=[' + $v.StdOut.Trim() + ']')
+    Add-Result 9 'inv verify + verify -summary' 'FAIL' ('exit=' + $v.ExitCode + ' counts=' + $verifyCounts.Success + ' out=[' + $v.StdOut.Trim() + '] summaryExit=' + $vs.ExitCode + ' summaryLines=' + $summaryLines.Count + ' summaryOk=' + $summaryOk + ' summaryOut=[' + $vs.StdOut.Trim() + ']')
   }
 }
 

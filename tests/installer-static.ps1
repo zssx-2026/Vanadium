@@ -8,14 +8,24 @@
     - checks inv.nsi encoding, required directives and the no-MessageBox rule
     - compiles inv.nsi with -DDRYRUN to prove the script is valid
     - checks license.txt is present
+    - reports the 0.5.0 transport guardrails (no WinHTTP, native imports)
   Prints one PASS/FAIL line per check and ends with STATIC_RESULT=PASS|FAIL.
+
+.PARAMETER RequireNativeTransport
+  Enforce the 0.5.0 native-transport guardrails: no WinHTTP references in
+  src/include/CMakeLists.txt and a winsock2 + schannel import table. Off by
+  default, where both checks print ADVISORY lines instead of failing.
 
 .EXAMPLE
   powershell -NoProfile -ExecutionPolicy Bypass -File tests\installer-static.ps1
+
+.EXAMPLE
+  powershell -NoProfile -ExecutionPolicy Bypass -File tests\installer-static.ps1 -RequireNativeTransport
 #>
 [CmdletBinding()]
 param(
-  [string]$Version = ''
+  [string]$Version = '',
+  [switch]$RequireNativeTransport
 )
 
 $ErrorActionPreference = 'Stop'
@@ -34,6 +44,96 @@ function Write-Check {
   Write-Host $line
 }
 
+# Guardrails land before the feature they protect: they always print a line,
+# but only count towards STATIC_RESULT when the matching switch is on. That
+# keeps the 0.4.x tree green while the 0.5.0 transport rewrite is in flight.
+function Write-AdvisoryCheck {
+  param([string]$Name, [bool]$Ok, [string]$Detail = '', [string]$Hint = '')
+  if ($RequireNativeTransport) { Write-Check $Name $Ok $Detail; return }
+  $status = 'FAIL'
+  if ($Ok) { $status = 'PASS' }
+  $suffix = ''
+  if ($Hint) { $suffix = ' (advisory; enable with ' + $Hint + ')' }
+  Write-Host ('ADVISORY ' + $status + ' ' + $Name + ' :: ' + $Detail + $suffix)
+}
+
+function Get-Objdump {
+  $cmd = Get-Command objdump -ErrorAction SilentlyContinue
+  if ($cmd) { return $cmd.Source }
+  foreach ($p in @('C:Program Filesmingw64inobjdump.exe', 'C:msys64mingw64inobjdump.exe')) {
+    if (Test-Path -LiteralPath $p) { return $p }
+  }
+  return $null
+}
+
+function Read-PeU16 {
+  param([byte[]]$B, [int]$O)
+  return ([int]$B[$O]) -bor ((([int]$B[$O + 1])) -shl 8)
+}
+
+function Read-PeU32 {
+  param([byte[]]$B, [int]$O)
+  return ([long]$B[$O]) -bor ((([long]$B[$O + 1]) -shl 8)) -bor ((([long]$B[$O + 2]) -shl 16)) -bor ((([long]$B[$O + 3]) -shl 24))
+}
+
+# Reads the import directory of a PE image without dumpbin or objdump, so the
+# check keeps working on machines that only carry the NSIS toolchain.
+function Get-PeImportNames {
+  param([string]$Path)
+  $B = [System.IO.File]::ReadAllBytes($Path)
+  if ($B.Length -lt 0x40) { throw 'file too small for a DOS header' }
+  if ($B[0] -ne 0x4D -or $B[1] -ne 0x5A) { throw 'missing MZ signature' }
+  $peOff = [int](Read-PeU32 $B 0x3C)
+  if (($peOff + 24) -gt $B.Length) { throw 'e_lfanew out of range' }
+  if ($B[$peOff] -ne 0x50 -or $B[$peOff + 1] -ne 0x45) { throw 'missing PE signature' }
+  $coff = $peOff + 4
+  $numSections = [int](Read-PeU16 $B ($coff + 2))
+  $optSize = [int](Read-PeU16 $B ($coff + 16))
+  $opt = $coff + 20
+  $magic = [int](Read-PeU16 $B $opt)
+  $ddOff = $opt + 112
+  if ($magic -eq 0x10B) { $ddOff = $opt + 96 }
+  $impRva = [long](Read-PeU32 $B ($ddOff + 8))
+  if ($impRva -eq 0) { return @() }
+  $sec = $opt + $optSize
+  $sections = @()
+  for ($i = 0; $i -lt $numSections; $i++) {
+    $s = $sec + ($i * 40)
+    $sections += [pscustomobject]@{
+      VirtualSize    = [long](Read-PeU32 $B ($s + 8))
+      VirtualAddress = [long](Read-PeU32 $B ($s + 12))
+      RawSize        = [long](Read-PeU32 $B ($s + 16))
+      RawPointer     = [long](Read-PeU32 $B ($s + 20))
+    }
+  }
+  $toOffset = {
+    param([long]$Rva)
+    foreach ($s in $sections) {
+      $size = $s.VirtualSize
+      if ($size -eq 0) { $size = $s.RawSize }
+      if ($Rva -ge $s.VirtualAddress -and $Rva -lt ($s.VirtualAddress + $size)) {
+        return [int]($s.RawPointer + ($Rva - $s.VirtualAddress))
+      }
+    }
+    return -1
+  }
+  $off = & $toOffset $impRva
+  if ($off -lt 0) { throw 'the import directory is not mapped by any section' }
+  $names = New-Object System.Collections.ArrayList
+  while (($off + 20) -le $B.Length) {
+    $thunkRva = [long](Read-PeU32 $B $off)
+    $nameRva = [long](Read-PeU32 $B ($off + 12))
+    if ($nameRva -eq 0 -and $thunkRva -eq 0) { break }
+    $no = & $toOffset $nameRva
+    if ($no -lt 0) { break }
+    $end = $no
+    while ($end -lt $B.Length -and $B[$end] -ne 0) { $end++ }
+    if ($end -gt $no) { $null = $names.Add([System.Text.Encoding]::ASCII.GetString($B, $no, $end - $no)) }
+    $off += 20
+  }
+  return @($names)
+}
+
 function Get-ExpectedVersion {
   if ($Version) { return $Version.Trim() }
   $vf = Join-Path $script:Root 'VERSION'
@@ -41,7 +141,7 @@ function Get-ExpectedVersion {
     $v = (Get-Content -LiteralPath $vf -TotalCount 1)
     if ($v) { return $v.Trim() }
   }
-  return '0.3.0'
+  return '0.4.0'
 }
 
 function Get-Makensis {
@@ -188,6 +288,75 @@ if (Test-Path -LiteralPath $peTest) {
   Remove-Item -LiteralPath $peLog -Force -ErrorAction SilentlyContinue
 } else {
   Write-Check 'PE export reader baseline' $false 'missing tests\pe-export-test.ps1'
+}
+
+# --- 10. no WinHTTP left in the sources (0.5.0 transport rewrite) ----------
+# The remote layer moves from WinHTTP to the kernel's own winsock2 + Schannel
+# stack. Advisory until -RequireNativeTransport is passed.
+$winhttpHits = 0
+$winhttpWhere = @()
+$scanTargets = @()
+# Scope is src/, include/ and CMakeLists.txt only: the repo root is never walked,
+# so scratch directories at the top level (init/, branches/, objects/) cannot leak
+# into the hit count no matter what a stray probe leaves behind.
+foreach ($rel in @('src', 'include')) {
+  $full = Join-Path $script:Root $rel
+  if (Test-Path -LiteralPath $full) {
+    $scanTargets += @(Get-ChildItem -LiteralPath $full -Recurse -File -ErrorAction SilentlyContinue)
+  }
+}
+$cmakeFile = Join-Path $script:Root 'CMakeLists.txt'
+if (Test-Path -LiteralPath $cmakeFile) { $scanTargets += @(Get-Item -LiteralPath $cmakeFile) }
+foreach ($sf in $scanTargets) {
+  if ($sf.Length -gt 8MB) { continue }
+  $text = ''
+  try { $text = [System.IO.File]::ReadAllText($sf.FullName) } catch { continue }
+  $n = ([regex]::Matches($text, '(?i)winhttp')).Count
+  if ($n -gt 0) {
+    $winhttpHits += $n
+    $relName = $sf.FullName
+    if ($relName.StartsWith($script:Root)) { $relName = $relName.Substring($script:Root.Length).TrimStart('\') }
+    $winhttpWhere += ($relName + '(' + $n + ')')
+  }
+}
+Write-AdvisoryCheck 'no WinHTTP references in src/include/CMakeLists.txt' ($winhttpHits -eq 0) ('matches=' + $winhttpHits + ' files=[' + (($winhttpWhere | Select-Object -First 8) -join ', ') + ']') '-RequireNativeTransport'
+
+# --- 11. native transport imports in the built kernel ---------------------
+# winsock2 + Schannel replace WinHTTP, so the import table must show WS2_32,
+# CRYPT32 and SECUR32 and must no longer name WINHTTP.dll.
+$kernelDll = Join-Path $script:Root 'build\cmake\vanadium.dll'
+$requiredDlls = @('WS2_32.dll', 'CRYPT32.dll', 'SECUR32.dll')
+if (-not (Test-Path -LiteralPath $kernelDll)) {
+  Write-AdvisoryCheck 'native transport imports (winsock2 + schannel)' $false ('no kernel build at ' + $kernelDll) '-RequireNativeTransport'
+} else {
+  $imports = @()
+  $importSource = 'none'
+  $importErr = ''
+  $objdump = Get-Objdump
+  if ($objdump) {
+    try {
+      $raw = (& $objdump -p $kernelDll 2>$null | Out-String)
+      $imports = @([regex]::Matches($raw, 'DLL Name:\s*(\S+)') | ForEach-Object { $_.Groups[1].Value })
+      if ($imports.Count -gt 0) { $importSource = 'objdump' }
+    } catch { $importErr = $_.Exception.Message }
+  }
+  if ($imports.Count -eq 0) {
+    try {
+      $imports = @(Get-PeImportNames -Path $kernelDll)
+      $importSource = 'pe-parser'
+    } catch { $importErr = $_.Exception.Message }
+  }
+  Write-Host ('  imports| source=' + $importSource + ' ' + ($imports -join ', '))
+  $forbidden = @($imports | Where-Object { $_ -match '(?i)^WINHTTP\.dll$' })
+  $missing = @()
+  foreach ($rd in $requiredDlls) {
+    $found = @($imports | Where-Object { $_ -match ('(?i)^' + [regex]::Escape($rd) + '$') })
+    if ($found.Count -eq 0) { $missing += $rd }
+  }
+  $nativeOk = ($imports.Count -gt 0) -and ($forbidden.Count -eq 0) -and ($missing.Count -eq 0)
+  $detail = 'source=' + $importSource + ' imports=' + $imports.Count + ' forbidden=[' + ($forbidden -join ',') + '] missing=[' + ($missing -join ',') + ']'
+  if ($importErr) { $detail = $detail + ' error=' + $importErr }
+  Write-AdvisoryCheck 'native transport imports (winsock2 + schannel)' $nativeOk $detail '-RequireNativeTransport'
 }
 
 # --- summary --------------------------------------------------------------

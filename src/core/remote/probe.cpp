@@ -1,4 +1,4 @@
-/* Standalone WinHTTP probe for the remote layer.
+/* Standalone transport probe for the remote layer.
    Not part of the main build: it links the real transport code plus a minimal
    core shim so the remote module can be exercised before the kernel lands.
    Build: see docs/IDM-NOTES.md. */
@@ -7,7 +7,7 @@
 
 #include "vanadium/core.h"
 #include "vanadium/remote.h"
-#include "winhttp_util.h"
+#include "transport.h"
 
 namespace {
 
@@ -30,15 +30,17 @@ int on_event(void*, const vd_event* ev) {
 }  // namespace
 
 int main() {
+  std::setvbuf(stdout, nullptr, _IONBF, 0); /* keep the log when a case crashes */
   using namespace vd;
   using namespace vd::remote;
 
+  try {
   const std::string api = "https://api.github.com/rate_limit";
   const std::string file = "https://proof.ovh.net/files/1Mb.dat";
   const u64 expected = 1048576;
 
   vd::Emitter ui(on_event, nullptr);
-  std::printf("INV_PROBE transport=winhttp\n");
+  std::printf("INV_PROBE transport=native\n");
 
   /* 1. Plain API GET. */
   HttpResponse rate = get(api, "", 30000);
@@ -105,11 +107,27 @@ int main() {
 
   /* 8. A missing resource must be reported, not silently accepted. */
   std::string missing;
+  {
+    HttpOptions mo;
+    HttpResponse mr = request("https://api.github.com/inv-probe-missing-resource", mo);
+    std::printf("PROBE diag 404 status=%d bytes=%zu head=%.90s\n", mr.status, mr.body.size(),
+                mr.body.c_str());
+  }
   bool missing_ok = fetch_range("https://api.github.com/inv-probe-missing-resource", 0, 9,
                                 missing, 20000);
   check(!missing_ok, "fetch_range_404", std::string("returned=") + (missing_ok ? "true" : "false"));
 
   if (fs::exists(out)) fs::remove_file(out);
+
+  } catch (const Failure& f) {
+    std::printf("PROBE exception: %s | %s\n", f.message.c_str(), f.detail.c_str());
+    std::printf("INV_PROBE_VERDICT=FAIL\n");
+    return 1;
+  } catch (const std::exception& e) {
+    std::printf("PROBE exception: %s\n", e.what());
+    std::printf("INV_PROBE_VERDICT=FAIL\n");
+    return 1;
+  }
 
   std::printf("PROBE cases=%d bad=%d\n", g_cases, g_bad);
   std::printf("INV_PROBE_VERDICT=%s\n", g_bad == 0 ? "PASS" : "FAIL");

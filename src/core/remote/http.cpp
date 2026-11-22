@@ -4,7 +4,7 @@
 
 #include "vanadium/core.h"
 #include "vanadium/remote.h"
-#include "winhttp_util.h"
+#include "transport.h"
 
 namespace vd::remote {
 namespace {
