@@ -231,6 +231,10 @@ int cmd_download(App& app, const std::vector<std::string>& args) {
   const bool ok = remote::download_segmented(url, out_path, threads, &app.ui, &rep);
   app.ui.clear_status();
   if (!ok) {
+    if (app.ui.cancelled()) {
+      app.ui.line(msg("ui.cancelled"));
+      return 130;
+    }
     app.ui.error(4003, msgf("download.failed", url));
     return 1;
   }
@@ -338,6 +342,10 @@ int cmd_pull(App& app, const std::vector<std::string>& args) {
   const bool ok = remote::download_segmented(url, tmp, threads_from(args), &app.ui, nullptr);
   app.ui.clear_status();
   if (!ok) {
+    if (app.ui.cancelled()) {
+      app.ui.line(msg("ui.cancelled"));
+      return 130;
+    }
     app.ui.error(4009, msg("pull.download_failed"));
     return 1;
   }

@@ -24,7 +24,7 @@ void Emitter::status(const std::string& key, const std::string& text) const {
   ev.kind = VD_EV_STATUS;
   ev.a = key.c_str();
   ev.b = text.c_str();
-  cb_(user_, &ev);
+  if (cb_(user_, &ev) < 0) cancelled_ = true;
 }
 
 void Emitter::clear_status() const {
@@ -44,7 +44,7 @@ void Emitter::progress(const std::string& phase, long long done, long long total
   ev.i2 = total;
   ev.i3 = bytes;
   ev.i4 = flags;
-  cb_(user_, &ev);
+  if (cb_(user_, &ev) < 0) cancelled_ = true;
 }
 
 bool Emitter::prompt(const std::string& question, const std::string& hint) const {
