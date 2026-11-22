@@ -91,7 +91,7 @@ MSG = [
     ("verify.corrupt", "Corrupt object", "对象损坏"),
     ("verify.repaired", "Repaired from remote", "已从远程修复"),
     ("verify.done", "Verification finished", "校验完成"),
-    ("verify.summary", "Verification summary", "校验摘要"),
+    ("verify.summary", "Verification summary: %1 objects, %2 bad", "校验摘要：%1 个对象，%2 个损坏", "校驗摘要：%1 個物件，%2 個損毀"),
     # ---- rollback ---------------------------------------------------------
     ("rb.start", "Rolling back", "正在回滚"),
     ("rb.done", "Rollback finished", "回滚完成"),

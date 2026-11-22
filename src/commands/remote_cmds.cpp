@@ -159,7 +159,10 @@ Archive open_here(App& app) {
 }
 
 int threads_from(const std::vector<std::string>& args) {
-  const std::string t = opt_value(args, "-thread", "8");
+  /* "-threads" is the spelling in the command reference; "-thread" is the older
+     alias kept for existing scripts. */
+  std::string t = opt_value(args, "-threads", std::string());
+  if (t.empty()) t = opt_value(args, "-thread", "8");
   int n = std::atoi(t.c_str());
   if (n < 1) n = 1;
   if (n > 16) n = 16;
@@ -169,7 +172,10 @@ int threads_from(const std::vector<std::string>& args) {
 }  // namespace
 
 int cmd_login(App& app, const std::vector<std::string>& args) {
-  const std::string url = need_arg(args, 1, "<url>");
+  load_settings(app);
+  const std::vector<std::string> pos = positionals(args);
+  std::string url = pos.size() > 1 ? pos[1] : app.settings.get("defult_remote_basic_url");
+  if (url.empty()) url = "https://github.com";
   std::string host = "github.com";
   if (starts_with(url, "http")) {
     std::string rest = url.substr(url.find("://") + 3);
@@ -205,7 +211,8 @@ int cmd_download(App& app, const std::vector<std::string>& args) {
   }
   std::string url_name = fs::filename(clean_url);
   if (url_name.empty()) url_name = "download.bin";
-  std::string out_path = opt_value(args, "-path", std::string());
+  std::string out_path = opt_value(args, "-out", std::string());
+  if (out_path.empty()) out_path = opt_value(args, "-path", std::string());
   if (out_path.empty()) {
     out_path = fs::join(app.cwd, url_name);
   } else {
@@ -227,25 +234,31 @@ int cmd_download(App& app, const std::vector<std::string>& args) {
     app.ui.error(4003, msgf("download.failed", url));
     return 1;
   }
-  const std::string data = fs::read_file(out_path);
-  const std::string sha = Sha256::hex(data.data(), data.size());
-  const u64 crc = crc64(data.data(), data.size());
-  app.ui.line("sha256 " + sha);
-  app.ui.line("crc64  " + crc64_hex(crc));
-  app.ui.line("size   " + human_size(static_cast<i64>(data.size())));
+  const bool no_verify = has_flag(args, "-noverify");
   const std::string want_sha = opt_value(args, "-sha256", std::string());
   const std::string want_crc = opt_value(args, "-crc64", std::string());
+  /* -noverify without an expected digest skips hashing altogether: a 20 GB
+     asset should not be read twice just to print numbers nobody asked for. */
+  const bool need_hash = !no_verify || !want_sha.empty() || !want_crc.empty();
+  const std::string data = need_hash ? fs::read_file(out_path) : std::string();
+  const std::string sha = need_hash ? Sha256::hex(data.data(), data.size()) : std::string();
+  const u64 crc = need_hash ? crc64(data.data(), data.size()) : 0;
+  if (need_hash) {
+    app.ui.line("sha256 " + sha);
+    app.ui.line("crc64  " + crc64_hex(crc));
+  }
+  const i64 out_bytes = fs::size(out_path);
+  app.ui.line("size   " + human_size(out_bytes));
   bool verified = true;
-  if (!want_sha.empty() && to_lower(want_sha) != sha) {
+  if (!no_verify && !want_sha.empty() && to_lower(want_sha) != sha) {
     app.ui.error(4004, msg("download.sha_mismatch"));
     verified = false;
   }
-  if (!want_crc.empty() && to_lower(want_crc) != crc64_hex(crc)) {
+  if (!no_verify && !want_crc.empty() && to_lower(want_crc) != crc64_hex(crc)) {
     app.ui.error(4005, msg("download.crc_mismatch"));
     verified = false;
   }
-  app.ui.line(msgf2("download.done", human_size(static_cast<i64>(data.size())),
-                    human_duration(now_ms() - started)));
+  app.ui.line(msgf2("download.done", human_size(out_bytes), human_duration(now_ms() - started)));
   return verified ? 0 : 1;
 }
 
@@ -374,6 +387,31 @@ int cmd_clone(App& app, const std::vector<std::string>& args) {
   if (!unpack_directory(blob, target, why)) {
     app.ui.error(4013, std::string(msg("clone.bad_pack")) + ": " + why);
     return 1;
+  }
+  /* The archive type decides how later commits store data: full re-snapshots
+     everything, least keeps only the root snapshot plus increments. */
+  const std::string type_opt = opt_value(args, "-type", std::string());
+  const std::string want_type_text =
+      !type_opt.empty()        ? type_opt
+      : has_flag(args, "-full") ? "full"
+      : has_flag(args, "-least") ? "least"
+      : has_flag(args, "-nodeonly") ? "nodeonly"
+                                    : std::string();
+  const char* want_type = want_type_text.empty() ? nullptr : want_type_text.c_str();
+  if (want_type != nullptr) {
+    const std::string meta_path = fs::join(target, "meta.json");
+    Json meta = Json::object();
+    if (fs::is_file(meta_path)) {
+      try {
+        meta = Json::parse(fs::read_file(meta_path));
+      } catch (...) {
+        meta = Json::object();
+      }
+    }
+    meta.set("version", Json(1));
+    meta.set("name", Json(fs::filename(target)));
+    meta.set("type", Json(std::string(want_type)));
+    fs::write_file(meta_path, meta.dump(2) + std::string(1, '\n'));
   }
   Archive a = Archive::open(target);
   app.ui.line(msgf("clone.done", a.root()));
