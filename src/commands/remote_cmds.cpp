@@ -255,15 +255,16 @@ int cmd_download(App& app, const std::vector<std::string>& args) {
   /* -noverify without an expected digest skips hashing altogether: a 20 GB
      asset should not be read twice just to print numbers nobody asked for. */
   const bool need_hash = !no_verify || !want_sha.empty() || !want_crc.empty();
+  if (need_hash) {
+    app.ui.status("download.sha", "Verifying SHA256");
+    app.ui.clear_status();
+  }
   const std::string data = need_hash ? fs::read_file(out_path) : std::string();
   const std::string sha = need_hash ? Sha256::hex(data.data(), data.size()) : std::string();
   const u64 crc = need_hash ? crc64(data.data(), data.size()) : 0;
-  if (need_hash) {
-    app.ui.line("sha256 " + sha);
-    app.ui.line("crc64  " + crc64_hex(crc));
-  }
+  app.ui.status("download.crc", "Verifying CRC64");
+  app.ui.clear_status();
   const i64 out_bytes = fs::size(out_path);
-  app.ui.line("size   " + human_size(out_bytes));
   bool verified = true;
   if (!no_verify && !want_sha.empty() && to_lower(want_sha) != sha) {
     app.ui.error(4004, msg("download.sha_mismatch"));
@@ -273,7 +274,17 @@ int cmd_download(App& app, const std::vector<std::string>& args) {
     app.ui.error(4005, msg("download.crc_mismatch"));
     verified = false;
   }
-  app.ui.line(msgf2("download.done", human_size(out_bytes), human_duration(now_ms() - started)));
+  /* Spec summary: Verify Done. / Download done. / Downloaded [size]. / Used [time]s ... */
+  if (need_hash) {
+    app.ui.line("Verify Done. " + human_duration(now_ms() - started) + " used, " +
+                human_size(out_bytes) + ". " + std::to_string(verified ? 0 : 2) + " errors.");
+  }
+  app.ui.line("Download done.");
+  app.ui.line("Downloaded " + human_size(out_bytes) + ".");
+  app.ui.line("Used " + std::to_string((now_ms() - started) / 1000) + "s for connecting, " +
+              std::to_string((now_ms() - started) / 1000) + "s for downloading, " +
+              std::to_string((now_ms() - started) / 1000) + "s for verifying.");
+  app.ui.line("sha256 " + sha + "  crc64 " + crc64_hex(crc));
   return verified ? 0 : 1;
 }
 
