@@ -36,6 +36,9 @@ class Settings {
   /* Validates and applies; throws Failure with a localized reason. */
   void set(const std::string& key, const std::string& value);
 
+  /* Drops an explicit value so the default applies again. */
+  void unset(const std::string& key);
+
   std::vector<std::string> keys() const;
   const std::map<std::string, std::string>& raw() const { return values_; }
 

@@ -124,6 +124,8 @@ void Settings::save(const std::string& path) const {
   fs::write_file_atomic(path, doc.dump(2) + "\n");
 }
 
+void Settings::unset(const std::string& key) { values_.erase(key); }
+
 std::string Settings::get(const std::string& key) const {
   auto it = values_.find(key);
   if (it != values_.end()) return it->second;

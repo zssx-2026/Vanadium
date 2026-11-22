@@ -26,6 +26,9 @@ int dispatch(App& app, const std::vector<std::string>& args);
 
 /* helpers shared by commands */
 std::string need_arg(const std::vector<std::string>& args, std::size_t i, const char* name);
+/* Positional tokens of a command line with options (and their values) removed;
+   the command name stays at index 0. */
+std::vector<std::string> positionals(const std::vector<std::string>& args);
 std::string opt_value(const std::vector<std::string>& args, const std::string& key,
                       const std::string& def = {});
 bool has_flag(const std::vector<std::string>& args, const std::string& flag);

@@ -5,6 +5,12 @@
 #include "core.h"
 #include "ui.h"
 
+/* Human-readable transport backend name for the doctor output. Defined in the
+   remote transport layer (transport.cpp, namespace vd). */
+namespace vd {
+const char* transport_backend_name();
+}  // namespace vd
+
 namespace vd::remote {
 
 struct HttpResponse {

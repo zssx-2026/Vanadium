@@ -13,13 +13,15 @@
 #include "vanadium/core.h"
 #include "vanadium/crypto.h"
 #include "vanadium/gen.h"
+#include "vanadium/registry.h"
+#include "vanadium/remote.h"
 #include "vanadium/store.h"
 #include "vanadium/vd.h"
 
 namespace vd {
 namespace {
 
-const char* kVersion = "0.3.0";
+const char* kVersion = "0.4.0";
 
 /* Walk up from start looking for an archive root (meta.json). */
 std::string find_archive_root(const std::string& start) {
@@ -170,18 +172,44 @@ void print_branch_tree(App& app, const Archive& a, bool tree, bool releases, int
   }
 }
 
+/* Options that consume the following token as their value. need_arg uses this
+   list to skip options when locating positional arguments, so "inv search -regex
+   foo" and "inv search foo -regex" resolve to the same pattern. */
+bool flag_takes_value(const std::string& flag) {
+  static const std::set<std::string> kValueFlags = {
+      "-alias", "-at",   "-branch", "-content", "-crc64", "-depth",  "-encoding", "-filter",
+      "-format", "-keep", "-lang",   "-limit",   "-message", "-n",    "-notes",
+      "-out",    "-path", "-seconds", "-set",    "-sha256", "-size",  "-thread",   "-threads",
+      "-title",  "-token", "-type",  "-url"};
+  return kValueFlags.find(flag) != kValueFlags.end();
+}
+
 }  // namespace
 
 /* ---------------------------------------------------------------- helpers */
 
+std::vector<std::string> positionals(const std::vector<std::string>& args) {
+  std::vector<std::string> out;
+  for (std::size_t i = 0; i < args.size(); ++i) {
+    const std::string& a = args[i];
+    if (i > 0 && !a.empty() && a[0] == '-') {
+      if (a.find('=') == std::string::npos && flag_takes_value(a)) ++i;
+      continue;
+    }
+    out.push_back(a);
+  }
+  return out;
+}
+
 std::string need_arg(const std::vector<std::string>& args, std::size_t i, const char* name) {
-  if (i >= args.size() || args[i].empty()) {
+  const std::vector<std::string> pos = positionals(args);
+  if (i >= pos.size() || pos[i].empty()) {
     Failure f;
     f.code = 1001;
     f.message = std::string(msg("cli.missing_arg")) + ": " + name;
     throw f;
   }
-  return args[i];
+  return pos[i];
 }
 
 std::string opt_value(const std::vector<std::string>& args, const std::string& key,
@@ -281,7 +309,15 @@ int cmd_help(App& app, const std::vector<std::string>& args) {
 
 int cmd_set(App& app, const std::vector<std::string>& args) {
   load_settings(app);
-  if (args.size() < 2) {
+  if (has_flag(args, "-unset")) {
+    const std::vector<std::string> pos = positionals(args);
+    if (pos.size() < 2) fail(1001, std::string(msg("cli.missing_arg")) + ": <key>");
+    app.settings.unset(pos[1]);
+    save_settings(app);
+    app.ui.line("unset " + pos[1] + ", default restored");
+    return 0;
+  }
+  if (has_flag(args, "-list") || args.size() < 2) {
     app.ui.line(msg("set.list"));
     for (const auto& d : Settings::defs()) {
       if (d.dynamic) {
@@ -296,14 +332,15 @@ int cmd_set(App& app, const std::vector<std::string>& args) {
     }
     return 0;
   }
-  const std::string key = args[1];
-  if (args.size() < 3) {
+  const std::vector<std::string> pos = positionals(args);
+  const std::string key = pos[1];
+  if (pos.size() < 3) {
     app.ui.line("  " + key + " = " + app.settings.get(key));
     return 0;
   }
-  app.settings.set(key, args[2]);
+  app.settings.set(key, pos[2]);
   save_settings(app);
-  app.ui.line(msgf2("set.saved", key, args[2]));
+  app.ui.line(msgf2("set.saved", key, pos[2]));
   return 0;
 }
 
@@ -317,13 +354,47 @@ int cmd_init(App& app, const std::vector<std::string>& args) {
   }
   fs::mkdirs(target);
   Archive a = Archive::create(target, fs::filename(target), ArchiveType::NodeOnly);
+  /* The workspace registry lives in <workspace>/.inv and is created here and
+     nowhere else; every registered branch gets a <id>.inv record in it. */
+  ensure_registry_dir(target);
+  RegistryEntry root_record;
+  root_record.archive = a.id();
+  root_record.name = a.name();
+  root_record.type = archive_type_name(a.type());
+  root_record.path = "/";
+  root_record.dir = target;
+  root_record.created_ms = a.created_ms();
+  root_record.registered_ms = now_ms();
+  const auto root_branch = a.find("/");
+  root_record.id = root_branch ? root_branch->id : std::string();
+  root_record.head_seq = 0;
+  if (!root_record.id.empty()) {
+    std::string reg_err;
+    if (!write_registry(target, root_record, &reg_err)) {
+      app.ui.warn("registry write failed: " + reg_err);
+    }
+  }
   app.ui.line(msgf("init.created", a.root()));
   done_line(app, "init", a.branches().size(), started);
   return 0;
 }
 
 int cmd_status(App& app, const std::vector<std::string>& args) {
-  Archive a = open_here(app, args.size() > 1 ? args[1] : std::string());
+  const std::vector<std::string> pos = positionals(args);
+  Archive a = open_here(app, pos.size() > 1 ? pos[1] : std::string());
+  if (has_flag(args, "-short")) {
+    /* Compact form for scripting: one line per path, then a one-line summary. */
+    std::vector<std::string> deleted;
+    std::set<std::string> added;
+    auto changed = a.scan_working_tree(a.root(), &deleted, &added);
+    for (const auto& e : changed) {
+      app.ui.line(std::string(added.count(e.path) ? "A  " : "M  ") + e.path);
+    }
+    for (const auto& d : deleted) app.ui.line("D  " + d);
+    app.ui.line(std::to_string(changed.size()) + " " + msg("ui.changed") + ", " +
+                std::to_string(deleted.size()) + " " + msg("ui.deleted"));
+    return 0;
+  }
   app.ui.line(std::string(msg("status.archive")) + ": " + a.name() + "  (" + a.root() + ")");
   app.ui.line(std::string(msg("status.type")) + ": " + archive_type_name(a.type()));
   const std::size_t nb = a.branches().size();
@@ -351,43 +422,92 @@ int cmd_log(App& app, const std::vector<std::string>& args) {
   Archive a = open_here(app);
   const std::string branch = opt_value(args, "-branch", "/");
   std::size_t limit = 20;
-  if (has_flag(args, "-n")) {
-    const std::string v = opt_value(args, "-n", "20");
-    limit = static_cast<std::size_t>(std::atoll(v.c_str()));
-  }
+  const std::string limit_text = opt_value(args, "-limit", opt_value(args, "-n", std::string()));
+  if (!limit_text.empty()) limit = static_cast<std::size_t>(std::atoll(limit_text.c_str()));
+  const bool stat = has_flag(args, "-stat");
   auto hist = a.history(branch, limit);
   if (hist.empty()) {
     app.ui.line(msg("log.empty"));
     return 0;
   }
+  const bool oneline = has_flag(args, "-oneline");
   for (auto it = hist.rbegin(); it != hist.rend(); ++it) {
-    app.ui.line("@" + std::to_string(it->seq) + "  " + short_sha(it->id) + "  " +
-                iso_time(it->time_ms) + "  " + it->message);
+    if (stat) {
+      u64 bytes = 0;
+      for (const auto& e : it->entries) bytes += e.size;
+      app.ui.line("@" + std::to_string(it->seq) + "  " + short_sha(it->id) + "  " +
+                  std::to_string(it->entries.size()) + " " + msg("ui.items") + ", " +
+                  human_size(static_cast<i64>(bytes)) + "  " + it->message);
+    } else if (oneline) {
+      app.ui.line("@" + std::to_string(it->seq) + " " + short_sha(it->id, 8) + " " + it->message);
+    } else {
+      app.ui.line("@" + std::to_string(it->seq) + "  " + short_sha(it->id) + "  " +
+                  iso_time(it->time_ms) + "  " + it->message);
+    }
   }
   return 0;
 }
 
-int cmd_diff(App& app, const std::vector<std::string>&) {
+int cmd_diff(App& app, const std::vector<std::string>& args) {
   Archive a = open_here(app);
+  const bool name_only = has_flag(args, "-name-only");
+  const bool stat_only = has_flag(args, "-stat");
+  const std::string path_glob = opt_value(args, "-path", std::string());
   std::vector<std::string> deleted;
-  auto changed = a.scan_working_tree(a.root(), &deleted);
-  if (changed.empty() && deleted.empty()) {
+  std::set<std::string> added;
+  auto changed = a.scan_working_tree(a.root(), &deleted, &added);
+  const auto wanted = [&](const std::string& path) {
+    return path_glob.empty() || gen::glob_match(path_glob, path);
+  };
+  std::size_t shown_changed = 0;
+  std::size_t shown_deleted = 0;
+  u64 bytes = 0;
+  for (const auto& e : changed) {
+    if (!wanted(e.path)) continue;
+    ++shown_changed;
+    bytes += e.size;
+    if (name_only) {
+      app.ui.line(e.path);
+    } else if (!stat_only) {
+      app.ui.line(std::string(added.count(e.path) ? "A  " : "M  ") + e.path + "  " +
+                  human_size(static_cast<i64>(e.size)));
+    }
+  }
+  for (const auto& d : deleted) {
+    if (!wanted(d)) continue;
+    ++shown_deleted;
+    if (!stat_only) app.ui.line(name_only ? d : "D  " + d);
+  }
+  if (shown_changed == 0 && shown_deleted == 0) {
     app.ui.line(msg("ui.clean"));
     return 0;
   }
-  for (const auto& e : changed) {
-    app.ui.line(std::string(e.dir ? "A  " : "M  ") + e.path + "  " + human_size(static_cast<i64>(e.size)));
+  if (stat_only) {
+    app.ui.line(std::to_string(shown_changed) + " " + msg("ui.changed") + ", " +
+                std::to_string(shown_deleted) + " " + msg("ui.deleted") + ", " +
+                human_size(static_cast<i64>(bytes)));
   }
-  for (const auto& d : deleted) app.ui.line("D  " + d);
   return 0;
 }
 
 int cmd_reg(App& app, const std::vector<std::string>& args) {
   const i64 started = now_ms();
+  /* Registering requires an initialised workspace: the registry directory
+     <cwd>/.inv must already exist. It is never created implicitly. */
+  if (!workspace_initialized(app.cwd)) {
+    fail(3014, "the current working directory is not an initialised inv workspace (run \"inv init\" first)", app.cwd);
+  }
   Archive a = open_here(app);
   const std::string raw = need_arg(args, 1, "<path>");
   const std::string abs = fs::absolute(raw);
   if (!fs::is_dir(abs)) fail(3101, msg("store.no_dir"), abs);
+
+  /* Spec phrasing: the two-phase registration banner. The shell animates the
+     trailing dots on the status line; the kernel emits the base text and then
+     the settled line for each phase. */
+  app.ui.status("reg.search", "Searching folder");
+  app.ui.clear_status();
+  app.ui.line("The folder has been searched.");
 
   std::string branch_path = opt_value(args, "-branch", std::string());
   if (branch_path.empty()) {
@@ -399,7 +519,8 @@ int cmd_reg(App& app, const std::vector<std::string>& args) {
   } else {
     branch_path = gen::normalize_path(branch_path);
   }
-  const ArchiveType type = archive_type_parse(opt_value(args, "-type", archive_type_name(a.type())));
+  const std::string type_text = opt_value(args, "-type", archive_type_name(a.type()));
+  const ArchiveType type = archive_type_parse(type_text);
   if (!a.branch_exists(branch_path)) a.create_branch(branch_path, "");
 
   std::vector<std::string> deleted;
@@ -410,13 +531,39 @@ int cmd_reg(App& app, const std::vector<std::string>& args) {
     a.objects().put(data);
   }
   const std::string id = a.commit(branch_path, entries, opt_value(args, "-message", "register"));
-  app.ui.line(msgf2("reg.committed", branch_path, short_sha(id)));
+
+  app.ui.status("reg.register", "Registering folder");
+  app.ui.clear_status();
+  app.ui.line("The folder has been registered.");
+
+  /* Persist the registry record <cwd>/.inv/<branch id>.inv. */
+  const auto info = a.find(branch_path);
+  if (info) {
+    RegistryEntry record;
+    record.id = info->id;
+    record.archive = a.id();
+    record.name = a.name();
+    record.type = archive_type_name(type);
+    record.path = branch_path;
+    record.dir = abs;
+    record.created_ms = info->created_ms;
+    record.registered_ms = now_ms();
+    record.head_seq = info->head_seq;
+    std::string reg_err;
+    if (!write_registry(app.cwd, record, &reg_err)) {
+      app.ui.warn("registry write failed: " + reg_err);
+    }
+  }
+  app.ui.line("Registered \"" + branch_path + "\" (" + std::to_string(entries.size()) +
+              " items, id " + short_sha(info ? info->id : id) + ")");
   done_line(app, "reg", entries.size(), started);
-  (void)type;
   return 0;
 }
 
 int cmd_unreg(App& app, const std::vector<std::string>& args) {
+  if (!workspace_initialized(app.cwd)) {
+    fail(3014, "the current working directory is not an initialised inv workspace (run \"inv init\" first)", app.cwd);
+  }
   Archive a = open_here(app);
   const std::string raw = need_arg(args, 1, "<path>");
   std::string branch_path = gen::normalize_path(raw);
@@ -424,8 +571,20 @@ int cmd_unreg(App& app, const std::vector<std::string>& args) {
     branch_path = gen::normalize_path(fs::absolute(raw).substr(a.root().size()));
     if (branch_path.empty() || branch_path == ".") branch_path = "/";
   }
+  app.ui.status("unreg.search", "Searching folder");
+  app.ui.clear_status();
+  app.ui.line("The folder has been searched.");
+
+  const auto info = a.find(branch_path);
   a.remove_branch(branch_path, has_flag(args, "-recursive"));
-  app.ui.line(msgf("unreg.done", branch_path));
+
+  app.ui.status("unreg.unregister", "Unregistering folder");
+  app.ui.clear_status();
+  app.ui.line("The folder has been unregistered.");
+
+  /* Drop the registry record when one exists for this branch. */
+  if (info) remove_registry(app.cwd, info->id);
+  app.ui.line("Unregistered \"" + branch_path + "\"");
   return 0;
 }
 
@@ -441,6 +600,24 @@ int cmd_list(App& app, const std::vector<std::string>& args) {
   Archive a = open_here(app, fs_start);
   const bool tree = has_flag(args, "-tree");
   const bool releases = has_flag(args, "-releases");
+  if (has_flag(args, "-sys")) {
+    /* System namespaces only: the branch store and the release channels. */
+    app.ui.line("branches/");
+    for (const auto& b : a.branches()) {
+      if (b.path == "/") continue;
+      app.ui.line("  " + b.path + (b.head_seq > 0 ? "  @" + std::to_string(b.head_seq) : ""));
+    }
+    app.ui.line("releases/tag/v1.0");
+    app.ui.line("releases/rawdata/v1.0");
+    const auto records = list_registry(a.root());
+    if (!records.empty()) {
+      app.ui.line("registry/");
+      for (const auto& r : records) {
+        app.ui.line("  " + short_sha(r.id) + kRegistrySuffix + "  " + r.path);
+      }
+    }
+    return 0;
+  }
   int max_depth = -1;
   if (has_flag(args, "-depth")) {
     const std::string v = opt_value(args, "-depth", "-1");
@@ -479,7 +656,13 @@ int cmd_search(App& app, const std::vector<std::string>& args) {
   Archive a = open_here(app);
   const std::string pattern = need_arg(args, 1, "<pattern>");
   const std::string path_glob = opt_value(args, "-path", std::string());
-  const std::string branch_filter = opt_value(args, "-branch", std::string());
+  std::string branch_filter = opt_value(args, "-branch", std::string());
+  if (branch_filter.empty()) {
+    /* Legacy shape "inv search <pattern> <branch>" keeps working next to
+       "-branch"; the second positional is the branch when it names one. */
+    const std::vector<std::string> pos = positionals(args);
+    if (pos.size() > 2 && a.find(pos[2])) branch_filter = pos[2];
+  }
   const bool case_sensitive = has_flag(args, "-case");
   const bool use_regex = has_flag(args, "-regex");
   std::size_t limit = 200;
@@ -515,6 +698,36 @@ int cmd_search(App& app, const std::vector<std::string>& args) {
     if (case_sensitive) return line.find(needle) != std::string::npos;
     return to_lower(line).find(needle) != std::string::npos;
   };
+
+  if (has_flag(args, "-name")) {
+    /* Name mode: match the tracked path instead of the file body. */
+    std::size_t name_hits = 0;
+    bool name_truncated = false;
+    for (const auto& b : scope) {
+      auto snap = a.head(b.path);
+      if (!snap) continue;
+      for (const auto& e : snap->entries) {
+        if (e.dir) continue;
+        if (!path_glob.empty() && !gen::glob_match(path_glob, e.path)) continue;
+        if (!line_hit(e.path)) continue;
+        if (name_hits >= limit) {
+          name_truncated = true;
+          break;
+        }
+        ++name_hits;
+        app.ui.line(b.path + "  " + e.path + "  " + human_size(static_cast<i64>(e.size)));
+      }
+      if (name_truncated) break;
+    }
+    if (name_hits == 0) {
+      app.ui.line(msg("search.none"));
+    } else {
+      app.ui.line(std::string(msg("search.hits")) + ": " + std::to_string(name_hits) + "  (" +
+                  human_duration(now_ms() - started) + ")");
+    }
+    if (name_truncated) app.ui.warn(msg("search.limit"));
+    return 0;
+  }
 
   std::size_t hits = 0;
   std::size_t binary_skipped = 0;
@@ -605,28 +818,29 @@ int cmd_rm(App& app, const std::vector<std::string>& args) {
   return 0;
 }
 
-int cmd_verify(App& app, const std::vector<std::string>&) {
+int cmd_verify(App& app, const std::vector<std::string>& args) {
   Archive a = open_here(app);
+  const bool summary_only = has_flag(args, "-summary");
   const auto objs = a.objects().all_objects();
   int bad = 0;
   for (const auto& sha : objs) {
     std::string data;
     if (!a.objects().get(sha, data)) {
       ++bad;
-      app.ui.warn(std::string(msg("verify.corrupt")) + ": " + sha);
+      if (!summary_only) app.ui.warn(std::string(msg("verify.corrupt")) + ": " + sha);
       continue;
     }
     const std::string got = Sha256::hex(data.data(), data.size());
     if (got != sha) {
       ++bad;
-      app.ui.warn(std::string(msg("verify.mismatch")) + ": " + sha);
+      if (!summary_only) app.ui.warn(std::string(msg("verify.mismatch")) + ": " + sha);
     }
   }
   app.ui.line(msgf2("verify.summary", std::to_string(objs.size()), std::to_string(bad)));
   return bad == 0 ? 0 : 1;
 }
 
-int cmd_gc(App& app, const std::vector<std::string>&) {
+int cmd_gc(App& app, const std::vector<std::string>& args) {
   Archive a = open_here(app);
   std::set<std::string> live;
   for (const auto& b : a.branches()) {
@@ -638,6 +852,21 @@ int cmd_gc(App& app, const std::vector<std::string>&) {
   }
   const u64 before = a.objects().total_bytes();
   const std::size_t count_before = a.objects().all_objects().size();
+  if (has_flag(args, "-dry-run")) {
+    /* Report what gc would drop without touching the store. */
+    std::size_t dead = 0;
+    u64 dead_bytes = 0;
+    for (const auto& sha : a.objects().all_objects()) {
+      if (live.count(sha) != 0) continue;
+      std::string data;
+      if (a.objects().get(sha, data)) dead_bytes += data.size();
+      ++dead;
+    }
+    app.ui.line("gc dry run: " + std::to_string(dead) + " " + msg("ui.items") + ", " +
+                human_size(static_cast<i64>(dead_bytes)) + " reclaimable");
+    app.ui.line("objects " + std::to_string(count_before) + ", live " + std::to_string(live.size()));
+    return 0;
+  }
   a.objects().gc(live);
   const u64 after = a.objects().total_bytes();
   app.ui.line(msgf2("gc.summary", std::to_string(count_before - live.size()), human_size(static_cast<i64>(before - after))));
@@ -668,6 +897,7 @@ int cmd_doctor(App& app, const std::vector<std::string>&) {
               (proto_types > 0 && gen::proto_type_name(0) != nullptr
                    ? std::string(", first=") + gen::proto_type_name(0)
                    : std::string()));
+  app.ui.line(std::string("  transport  ") + transport_backend_name());
   app.ui.line(std::string("  elapsed    ") + human_duration(now_ms() - started));
   return 0;
 }

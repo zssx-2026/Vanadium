@@ -71,6 +71,8 @@ class Archive {
 
   const std::string& root() const { return root_; }
   const std::string& name() const { return name_; }
+  const std::string& id() const { return archive_id_; }
+  i64 created_ms() const { return created_ms_; }
   ArchiveType type() const { return type_; }
   ObjectStore& objects() { return objects_; }
   const ObjectStore& objects() const { return objects_; }
@@ -92,9 +94,12 @@ class Archive {
   void materialize(const std::string& path, i64 seq, const std::string& target,
                    class Emitter* ui);
 
-  /* Diff working directory against head; returns entries to add/update/delete. */
+  /* Diff working directory against head; returns entries to add/update/delete.
+     When non-null, *added receives the paths that are new since head (the rest
+     of the returned entries are modifications of known files). */
   std::vector<Entry> scan_working_tree(const std::string& root,
-                                       std::vector<std::string>* deleted) const;
+                                       std::vector<std::string>* deleted,
+                                       std::set<std::string>* added = nullptr) const;
 
   void save_meta();
   void reload();

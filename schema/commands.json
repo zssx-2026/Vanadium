@@ -14,7 +14,7 @@
    "summary": {
     "en": "Assume yes for prompts",
     "zh-cn": "对提示默认回答是",
-    "tr-cn": "對提示認認回答是",
+    "tr-cn": "對提示默認回答是",
     "am-en": "Assume yes for prompts"
    }
   },
@@ -79,64 +79,22 @@
     "tr-cn": "顯示命令幫助或列出全部命令",
     "am-en": "Show help for a command or list every command"
    },
-   "options": [
-    {
-     "flag": "-all",
-     "arg": "",
-     "summary": {
-      "en": "List every command with a one line summary",
-      "zh-cn": "列出全部命令及一行摘要",
-      "tr-cn": "列出全部命令及一行摘要",
-      "am-en": "List every command with a one line summary"
-     }
-    },
-    {
-     "flag": "-keys",
-     "arg": "",
-     "summary": {
-      "en": "List message keys used by the catalog",
-      "zh-cn": "列出目录中的消息键",
-      "tr-cn": "列出目錄中的消息鍵",
-      "am-en": "List message keys used by the catalog"
-     }
-    }
-   ]
+   "options": []
   },
   {
    "name": "version",
    "args": "",
    "summary": {
-    "en": "Print kernel, shell and archive format versions",
-    "zh-cn": "打印内核、外壳与存档格式版本",
-    "tr-cn": "打印內核、外殼與存档格式版本",
-    "am-en": "Print kernel, shell and archive format versions"
+    "en": "Print shell, kernel and archive format versions",
+    "zh-cn": "打印外壳、内核与存档格式版本",
+    "tr-cn": "打印外殼、內核與存檔格式版本",
+    "am-en": "Print shell, kernel and archive format versions"
    },
-   "options": [
-    {
-     "flag": "-full",
-     "arg": "",
-     "summary": {
-      "en": "Include build commit and compiler details",
-      "zh-cn": "包含构建提交与编译器详情",
-      "tr-cn": "包含構建提交與編譯器詳情",
-      "am-en": "Include build commit and compiler details"
-     }
-    },
-    {
-     "flag": "-format",
-     "arg": "<fmt>",
-     "summary": {
-      "en": "Print a single field such as abi",
-      "zh-cn": "只打印单个字段，例如 abi",
-      "tr-cn": "只打印單個字段，例如 abi",
-      "am-en": "Print a single field such as abi"
-     }
-    }
-   ]
+   "options": []
   },
   {
    "name": "set",
-   "args": "<key>[=<value>] [value]",
+   "args": "[key] [value]",
    "summary": {
     "en": "Read or write a persistent setting",
     "zh-cn": "读取或写入持久化设置",
@@ -144,16 +102,6 @@
     "am-en": "Read or write a persistent setting"
    },
    "options": [
-    {
-     "flag": "-unset",
-     "arg": "",
-     "summary": {
-      "en": "Remove the setting and fall back to default",
-      "zh-cn": "删除设置并恢复默认",
-      "tr-cn": "刪除設置並恢復認認",
-      "am-en": "Remove the setting and fall back to default"
-     }
-    },
     {
      "flag": "-list",
      "arg": "",
@@ -165,23 +113,13 @@
      }
     },
     {
-     "flag": "-type",
-     "arg": "<type>",
+     "flag": "-unset",
+     "arg": "<key>",
      "summary": {
-      "en": "Force the value type: int float bool string",
-      "zh-cn": "强制值类型：int float bool string",
-      "tr-cn": "強制值類型：int float bool string",
-      "am-en": "Force the value type: int float bool string"
-     }
-    },
-    {
-     "flag": "-url",
-     "arg": "<name>",
-     "summary": {
-      "en": "Set a dynamic remote url_<name> key",
-      "zh-cn": "设置动态远程键 url_<name>",
-      "tr-cn": "設置動態遠程鍵 url_<name>",
-      "am-en": "Set a dynamic remote url_<name> key"
+      "en": "Remove the setting and fall back to the default",
+      "zh-cn": "删除设置并恢复默认值",
+      "tr-cn": "刪除設置並恢復默認值",
+      "am-en": "Remove the setting and fall back to the default"
      }
     }
    ]
@@ -192,59 +130,18 @@
    "summary": {
     "en": "Initialize a new archive in the given directory",
     "zh-cn": "在指定目录初始化新存档",
-    "tr-cn": "在指定目錄初始化新存档",
+    "tr-cn": "在指定目錄初始化新存檔",
     "am-en": "Initialize a new archive in the given directory"
    },
-   "options": [
-    {
-     "flag": "-type",
-     "arg": "<type>",
-     "summary": {
-      "en": "Archive type: full nodeonly least",
-      "zh-cn": "存档类型：full nodeonly least",
-      "tr-cn": "存档類型：full nodeonly least",
-      "am-en": "Archive type: full nodeonly least"
-     }
-    },
-    {
-     "flag": "-name",
-     "arg": "<name>",
-     "summary": {
-      "en": "Archive display name",
-      "zh-cn": "存档显示名称",
-      "tr-cn": "存档顯示名稱",
-      "am-en": "Archive display name"
-     }
-    },
-    {
-     "flag": "-remote",
-     "arg": "<url>",
-     "summary": {
-      "en": "Attach a remote GitHub repository",
-      "zh-cn": "绑定远程 GitHub 仓库",
-      "tr-cn": "綁定遠程 GitHub 倉庫",
-      "am-en": "Attach a remote GitHub repository"
-     }
-    },
-    {
-     "flag": "-force",
-     "arg": "",
-     "summary": {
-      "en": "Initialize even if files already exist",
-      "zh-cn": "即使已有文件也初始化",
-      "tr-cn": "即使已有文件也初始化",
-      "am-en": "Initialize even if files already exist"
-     }
-    }
-   ]
+   "options": []
   },
   {
    "name": "status",
    "args": "[path]",
    "summary": {
     "en": "Show working tree changes against the current snapshot",
-    "zh-cn": "显示工作区相对当前快照的改动",
-    "tr-cn": "顯示工作區相對當前快照的改動",
+    "zh-cn": "显示工作树相对当前快照的变更",
+    "tr-cn": "顯示工作樹相對當前快照的變更",
     "am-en": "Show working tree changes against the current snapshot"
    },
    "options": [
@@ -252,44 +149,181 @@
      "flag": "-short",
      "arg": "",
      "summary": {
-      "en": "One line per changed path",
-      "zh-cn": "每个改动路径一行",
-      "tr-cn": "每個改動路徑一行",
-      "am-en": "One line per changed path"
-     }
-    },
-    {
-     "flag": "-branch",
-     "arg": "<name>",
-     "summary": {
-      "en": "Compare against another branch",
-      "zh-cn": "与另一分支比较",
-      "tr-cn": "與另一分支比較",
-      "am-en": "Compare against another branch"
-     }
-    },
-    {
-     "flag": "-untracked",
-     "arg": "",
-     "summary": {
-      "en": "Include untracked files",
-      "zh-cn": "包含未跟踪文件",
-      "tr-cn": "包含未跟蹤文件",
-      "am-en": "Include untracked files"
+      "en": "Print one changed path per line",
+      "zh-cn": "每行只打印一个变更路径",
+      "tr-cn": "每行只打印一個變更路徑",
+      "am-en": "Print one changed path per line"
      }
     }
    ]
   },
   {
    "name": "push",
-   "args": "[message]",
+   "args": "<url>",
    "summary": {
-    "en": "Record a snapshot of the working tree",
-    "zh-cn": "记录工作区快照",
-    "tr-cn": "記錄工作區快照",
-    "am-en": "Record a snapshot of the working tree"
+    "en": "Upload the archive pack to a GitHub release",
+    "zh-cn": "把存档包上传到 GitHub release",
+    "tr-cn": "把存檔包上傳到 GitHub release",
+    "am-en": "Upload the archive pack to a GitHub release"
+   },
+   "options": []
+  },
+  {
+   "name": "pull",
+   "args": "<url>",
+   "summary": {
+    "en": "Download the archive pack from a GitHub release",
+    "zh-cn": "从 GitHub release 下载存档包",
+    "tr-cn": "從 GitHub release 下載存檔包",
+    "am-en": "Download the archive pack from a GitHub release"
    },
    "options": [
+    {
+     "flag": "-tag",
+     "arg": "<tag>",
+     "summary": {
+      "en": "Release tag to fetch",
+      "zh-cn": "要下载的 release 标签",
+      "tr-cn": "要下載的 release 標簽",
+      "am-en": "Release tag to fetch"
+     }
+    },
+    {
+     "flag": "-threads",
+     "arg": "<n>",
+     "summary": {
+      "en": "Parallel connections, 1 to 16 (alias -thread)",
+      "zh-cn": "并行连接数，1 到 16（别名 -thread）",
+      "tr-cn": "並行連接數，1 到 16（別名 -thread）",
+      "am-en": "Parallel connections, 1 to 16 (alias -thread)"
+     }
+    }
+   ]
+  },
+  {
+   "name": "log",
+   "args": "",
+   "summary": {
+    "en": "List snapshots from newest to oldest",
+    "zh-cn": "从新到旧列出快照",
+    "tr-cn": "從新到舊列出快照",
+    "am-en": "List snapshots from newest to oldest"
+   },
+   "options": [
+    {
+     "flag": "-branch",
+     "arg": "<name>",
+     "summary": {
+      "en": "Branch to read, defaults to the current one",
+      "zh-cn": "读取的分支，默认为当前分支",
+      "tr-cn": "讀取的分支，默認為當前分支",
+      "am-en": "Branch to read, defaults to the current one"
+     }
+    },
+    {
+     "flag": "-n",
+     "arg": "<N>",
+     "summary": {
+      "en": "Maximum snapshots to print (alias -limit)",
+      "zh-cn": "最多打印的快照数（别名 -limit）",
+      "tr-cn": "最多打印的快照數（別名 -limit）",
+      "am-en": "Maximum snapshots to print (alias -limit)"
+     }
+    },
+    {
+     "flag": "-oneline",
+     "arg": "",
+     "summary": {
+      "en": "One line per snapshot",
+      "zh-cn": "每个快照一行",
+      "tr-cn": "每個快照一行",
+      "am-en": "One line per snapshot"
+     }
+    },
+    {
+     "flag": "-stat",
+     "arg": "",
+     "summary": {
+      "en": "Include changed file counts",
+      "zh-cn": "包含变更文件统计",
+      "tr-cn": "包含變更文件統計",
+      "am-en": "Include changed file counts"
+     }
+    }
+   ]
+  },
+  {
+   "name": "diff",
+   "args": "",
+   "summary": {
+    "en": "Compare the working tree with the current snapshot",
+    "zh-cn": "比较工作树与当前快照",
+    "tr-cn": "比較工作樹與當前快照",
+    "am-en": "Compare the working tree with the current snapshot"
+   },
+   "options": [
+    {
+     "flag": "-name-only",
+     "arg": "",
+     "summary": {
+      "en": "Print changed paths only",
+      "zh-cn": "只打印变更路径",
+      "tr-cn": "只打印變更路徑",
+      "am-en": "Print changed paths only"
+     }
+    },
+    {
+     "flag": "-stat",
+     "arg": "",
+     "summary": {
+      "en": "Print per file change counts",
+      "zh-cn": "打印每个文件的变更统计",
+      "tr-cn": "打印每個文件的變更統計",
+      "am-en": "Print per file change counts"
+     }
+    },
+    {
+     "flag": "-path",
+     "arg": "<glob>",
+     "summary": {
+      "en": "Limit the comparison to matching paths",
+      "zh-cn": "只比较匹配的路径",
+      "tr-cn": "只比較匹配的路徑",
+      "am-en": "Limit the comparison to matching paths"
+     }
+    }
+   ]
+  },
+  {
+   "name": "reg",
+   "args": "<path>",
+   "summary": {
+    "en": "Register a directory as a branch (requires an initialised workspace; writes .inv/<id>.inv)",
+    "zh-cn": "把目录注册为分支（要求工作区已初始化；写入 .inv/<id>.inv）",
+    "tr-cn": "把目錄注冊為分支（要求工作區已初始化；寫入 .inv/<id>.inv）",
+    "am-en": "Register a directory as a branch (requires an initialized workspace; writes .inv/<id>.inv)"
+   },
+   "options": [
+    {
+     "flag": "-branch",
+     "arg": "<name>",
+     "summary": {
+      "en": "Branch name, defaults to the directory name",
+      "zh-cn": "分支名，默认为目录名",
+      "tr-cn": "分支名，默認為目錄名",
+      "am-en": "Branch name, defaults to the directory name"
+     }
+    },
+    {
+     "flag": "-type",
+     "arg": "<type>",
+     "summary": {
+      "en": "Archive type: full nodeonly least",
+      "zh-cn": "存档类型：full nodeonly least",
+      "tr-cn": "存檔類型：full nodeonly least",
+      "am-en": "Archive type: full nodeonly least"
+     }
+    },
     {
      "flag": "-message",
      "arg": "<text>",
@@ -299,265 +333,27 @@
       "tr-cn": "快照說明",
       "am-en": "Snapshot message"
      }
-    },
-    {
-     "flag": "-branch",
-     "arg": "<name>",
-     "summary": {
-      "en": "Target branch path",
-      "zh-cn": "目标分支路径",
-      "tr-cn": "目標分支路徑",
-      "am-en": "Target branch path"
-     }
-    },
-    {
-     "flag": "-type",
-     "arg": "<type>",
-     "summary": {
-      "en": "Override archive type for this snapshot",
-      "zh-cn": "覆盖本次快照的存档类型",
-      "tr-cn": "覆蓋本次快照的存档類型",
-      "am-en": "Override archive type for this snapshot"
-     }
-    },
-    {
-     "flag": "-node",
-     "arg": "",
-     "summary": {
-      "en": "Mark this snapshot as a node start",
-      "zh-cn": "将本快照标记为节点起点",
-      "tr-cn": "將本快照標記為節點起點",
-      "am-en": "Mark this snapshot as a node start"
-     }
-    },
-    {
-     "flag": "-dry-run",
-     "arg": "",
-     "summary": {
-      "en": "Compute the snapshot without writing",
-      "zh-cn": "只计算不写入",
-      "tr-cn": "只計算不寫入",
-      "am-en": "Compute the snapshot without writing"
-     }
-    }
-   ]
-  },
-  {
-   "name": "pull",
-   "args": "[branch]",
-   "summary": {
-    "en": "Apply remote snapshots to the working tree",
-    "zh-cn": "将远程快照应用到工作区",
-    "tr-cn": "將遠程快照應用到工作區",
-    "am-en": "Apply remote snapshots to the working tree"
-   },
-   "options": [
-    {
-     "flag": "-branch",
-     "arg": "<name>",
-     "summary": {
-      "en": "Branch to pull",
-      "zh-cn": "要拉取的分支",
-      "tr-cn": "要拉取的分支",
-      "am-en": "Branch to pull"
-     }
-    },
-    {
-     "flag": "-force",
-     "arg": "",
-     "summary": {
-      "en": "Overwrite local changes",
-      "zh-cn": "覆盖本地改动",
-      "tr-cn": "覆蓋本地改動",
-      "am-en": "Overwrite local changes"
-     }
-    },
-    {
-     "flag": "-noverify",
-     "arg": "",
-     "summary": {
-      "en": "Skip SHA256 and CRC64 checks",
-      "zh-cn": "跳过 SHA256 与 CRC64 校验",
-      "tr-cn": "跳过 SHA256 與 CRC64 校驗",
-      "am-en": "Skip SHA256 and CRC64 checks"
-     }
-    }
-   ]
-  },
-  {
-   "name": "log",
-   "args": "[branch]",
-   "summary": {
-    "en": "List snapshots newest first",
-    "zh-cn": "按从新到旧列出快照",
-    "tr-cn": "按從新到舊列出快照",
-    "am-en": "List snapshots newest first"
-   },
-   "options": [
-    {
-     "flag": "-limit",
-     "arg": "<n>",
-     "summary": {
-      "en": "Maximum number of snapshots",
-      "zh-cn": "最大快照数量",
-      "tr-cn": "最大快照数量",
-      "am-en": "Maximum number of snapshots"
-     }
-    },
-    {
-     "flag": "-oneline",
-     "arg": "",
-     "summary": {
-      "en": "Compact one line format",
-      "zh-cn": "紧凑单行格式",
-      "tr-cn": "緊湊單行格式",
-      "am-en": "Compact one line format"
-     }
-    },
-    {
-     "flag": "-branch",
-     "arg": "<name>",
-     "summary": {
-      "en": "Branch to inspect",
-      "zh-cn": "要查看的分支",
-      "tr-cn": "要查看的分支",
-      "am-en": "Branch to inspect"
-     }
-    },
-    {
-     "flag": "-stat",
-     "arg": "",
-     "summary": {
-      "en": "Include per snapshot change statistics",
-      "zh-cn": "包含每个快照的变更统计",
-      "tr-cn": "包含每個快照的變更統計",
-      "am-en": "Include per snapshot change statistics"
-     }
-    }
-   ]
-  },
-  {
-   "name": "diff",
-   "args": "[from] [to]",
-   "summary": {
-    "en": "Compare two snapshots, branches or the working tree",
-    "zh-cn": "比较两个快照、分支或工作区",
-    "tr-cn": "比較兩個快照、分支或工作區",
-    "am-en": "Compare two snapshots, branches or the working tree"
-   },
-   "options": [
-    {
-     "flag": "-name-only",
-     "arg": "",
-     "summary": {
-      "en": "List changed paths only",
-      "zh-cn": "只列出改动路径",
-      "tr-cn": "只列出改動路徑",
-      "am-en": "List changed paths only"
-     }
-    },
-    {
-     "flag": "-stat",
-     "arg": "",
-     "summary": {
-      "en": "Show change counts per path",
-      "zh-cn": "显示每个路径的改动计数",
-      "tr-cn": "顯示每個路徑的改動計数",
-      "am-en": "Show change counts per path"
-     }
-    },
-    {
-     "flag": "-binary",
-     "arg": "",
-     "summary": {
-      "en": "Include binary file markers",
-      "zh-cn": "包含二进制文件标记",
-      "tr-cn": "包含二進制文件標記",
-      "am-en": "Include binary file markers"
-     }
-    },
-    {
-     "flag": "-path",
-     "arg": "<glob>",
-     "summary": {
-      "en": "Restrict to paths matching a glob",
-      "zh-cn": "仅限匹配 glob 的路径",
-      "tr-cn": "僅限匹配 glob 的路徑",
-      "am-en": "Restrict to paths matching a glob"
-     }
-    }
-   ]
-  },
-  {
-   "name": "reg",
-   "args": "<path> [alias]",
-   "summary": {
-    "en": "Register an archive so it can be used by alias",
-    "zh-cn": "注册存档以便通过别名使用",
-    "tr-cn": "注冊存档以便通过別名使用",
-    "am-en": "Register an archive so it can be used by alias"
-   },
-   "options": [
-    {
-     "flag": "-alias",
-     "arg": "<name>",
-     "summary": {
-      "en": "Alias used by other commands",
-      "zh-cn": "其他命令使用的别名",
-      "tr-cn": "其他命令使用的別名",
-      "am-en": "Alias used by other commands"
-     }
-    },
-    {
-     "flag": "-url",
-     "arg": "<url>",
-     "summary": {
-      "en": "Associate a remote url",
-      "zh-cn": "关联远程地址",
-      "tr-cn": "關聯遠程地址",
-      "am-en": "Associate a remote url"
-     }
-    },
-    {
-     "flag": "-force",
-     "arg": "",
-     "summary": {
-      "en": "Replace an existing registration",
-      "zh-cn": "替换已有注册",
-      "tr-cn": "替換已有注冊",
-      "am-en": "Replace an existing registration"
-     }
     }
    ]
   },
   {
    "name": "unreg",
-   "args": "<alias>",
+   "args": "<path>",
    "summary": {
-    "en": "Remove an archive registration",
-    "zh-cn": "移除存档注册",
-    "tr-cn": "移除存档注冊",
-    "am-en": "Remove an archive registration"
+    "en": "Remove a branch registration and its .inv record",
+    "zh-cn": "移除分支注册及其 .inv 记录",
+    "tr-cn": "移除分支注冊及其 .inv 記錄",
+    "am-en": "Remove a branch registration and its .inv record"
    },
    "options": [
     {
-     "flag": "-keep-files",
+     "flag": "-recursive",
      "arg": "",
      "summary": {
-      "en": "Leave the archive directory untouched",
-      "zh-cn": "不触碰存档目录",
-      "tr-cn": "不触碰存档目錄",
-      "am-en": "Leave the archive directory untouched"
-     }
-    },
-    {
-     "flag": "-all",
-     "arg": "",
-     "summary": {
-      "en": "Remove every registration",
-      "zh-cn": "移除全部注册",
-      "tr-cn": "移除全部注冊",
-      "am-en": "Remove every registration"
+      "en": "Also remove registered children",
+      "zh-cn": "同时移除已注册的子分支",
+      "tr-cn": "同時移除已注冊的子分支",
+      "am-en": "Also remove registered children"
      }
     }
    ]
@@ -566,10 +362,10 @@
    "name": "list",
    "args": "[path]",
    "summary": {
-    "en": "List branches, nodes and registered archives",
-    "zh-cn": "列出分支、节点与已注册存档",
-    "tr-cn": "列出分支、節點與已注冊存档",
-    "am-en": "List branches, nodes and registered archives"
+    "en": "List branches, nodes or the files of one branch",
+    "zh-cn": "列出分支、节点或某个分支的文件",
+    "tr-cn": "列出分支、節點或某個分支的文件",
+    "am-en": "List branches, nodes or the files of one branch"
    },
    "options": [
     {
@@ -577,8 +373,8 @@
      "arg": "",
      "summary": {
       "en": "Render the branch tree",
-      "zh-cn": "渲染分支树",
-      "tr-cn": "渲染分支樹",
+      "zh-cn": "以树形显示分支",
+      "tr-cn": "以樹形顯示分支",
       "am-en": "Render the branch tree"
      }
     },
@@ -586,10 +382,10 @@
      "flag": "-releases",
      "arg": "",
      "summary": {
-      "en": "Include release system branches",
-      "zh-cn": "包含发布系统分支",
-      "tr-cn": "包含发布系統分支",
-      "am-en": "Include release system branches"
+      "en": "Also list the release system branches",
+      "zh-cn": "同时列出 release 系统分支",
+      "tr-cn": "同時列出 release 系統分支",
+      "am-en": "Also list the release system branches"
      }
     },
     {
@@ -601,47 +397,67 @@
       "tr-cn": "限制樹深度",
       "am-en": "Limit tree depth"
      }
+    },
+    {
+     "flag": "-line",
+     "arg": "",
+     "summary": {
+      "en": "One node per line",
+      "zh-cn": "每个节点一行",
+      "tr-cn": "每個節點一行",
+      "am-en": "One node per line"
+     }
+    },
+    {
+     "flag": "-sys",
+     "arg": "",
+     "summary": {
+      "en": "Include system nodes",
+      "zh-cn": "包含系统节点",
+      "tr-cn": "包含系統節點",
+      "am-en": "Include system nodes"
+     }
     }
    ]
   },
   {
    "name": "search",
-   "args": "<pattern>",
+   "args": "<pattern> [branch]",
    "summary": {
-    "en": "Search tracked content for a pattern",
-    "zh-cn": "在已跟踪内容中搜索模式",
-    "tr-cn": "在已跟蹤內容中搜索模式",
-    "am-en": "Search tracked content for a pattern"
+    "en": "Search tracked snapshot content for a pattern",
+    "zh-cn": "在已跟踪快照内容中搜索模式",
+    "tr-cn": "在已跟蹤快照內容中搜索模式",
+    "am-en": "Search tracked snapshot content for a pattern"
    },
    "options": [
     {
      "flag": "-path",
      "arg": "<glob>",
      "summary": {
-      "en": "Restrict to paths matching a glob",
-      "zh-cn": "仅限匹配 glob 的路径",
-      "tr-cn": "僅限匹配 glob 的路徑",
-      "am-en": "Restrict to paths matching a glob"
+      "en": "Limit the search to matching paths",
+      "zh-cn": "只搜索匹配的路径",
+      "tr-cn": "只搜索匹配的路徑",
+      "am-en": "Limit the search to matching paths"
      }
     },
     {
      "flag": "-branch",
      "arg": "<name>",
      "summary": {
-      "en": "Search a specific branch",
-      "zh-cn": "搜索指定分支",
-      "tr-cn": "搜索指定分支",
-      "am-en": "Search a specific branch"
+      "en": "Branch to search",
+      "zh-cn": "要搜索的分支",
+      "tr-cn": "要搜索的分支",
+      "am-en": "Branch to search"
      }
     },
     {
      "flag": "-case",
      "arg": "",
      "summary": {
-      "en": "Case sensitive matching",
+      "en": "Case sensitive match",
       "zh-cn": "区分大小写",
       "tr-cn": "區分大小寫",
-      "am-en": "Case sensitive matching"
+      "am-en": "Case sensitive match"
      }
     },
     {
@@ -649,8 +465,8 @@
      "arg": "",
      "summary": {
       "en": "Treat the pattern as a regular expression",
-      "zh-cn": "将模式视为正则表达式",
-      "tr-cn": "將模式視為正則表達式",
+      "zh-cn": "把模式当作正则表达式",
+      "tr-cn": "把模式當作正則表達式",
       "am-en": "Treat the pattern as a regular expression"
      }
     },
@@ -658,458 +474,398 @@
      "flag": "-limit",
      "arg": "<n>",
      "summary": {
-      "en": "Stop after n matches",
-      "zh-cn": "达到 n 个匹配后停止",
-      "tr-cn": "達到 n 個匹配後停止",
-      "am-en": "Stop after n matches"
+      "en": "Maximum matches to print",
+      "zh-cn": "最多打印的匹配数",
+      "tr-cn": "最多打印的匹配數",
+      "am-en": "Maximum matches to print"
+     }
+    },
+    {
+     "flag": "-name",
+     "arg": "",
+     "summary": {
+      "en": "Match path names only, without reading content",
+      "zh-cn": "只匹配路径名，不读取文件内容",
+      "tr-cn": "只匹配路徑名，不讀取文件內容",
+      "am-en": "Match path names only, without reading content"
      }
     }
    ]
   },
   {
    "name": "rb",
-   "args": "<snapshot>",
+   "args": "<path> <seq>",
    "summary": {
     "en": "Roll the working tree back to an earlier snapshot",
-    "zh-cn": "将工作区回滚到更早的快照",
-    "tr-cn": "將工作區回滾到更早的快照",
+    "zh-cn": "把工作树回滚到更早的快照",
+    "tr-cn": "把工作樹回滾到更早的快照",
     "am-en": "Roll the working tree back to an earlier snapshot"
    },
    "options": [
     {
-     "flag": "-branch",
-     "arg": "<name>",
+     "flag": "-path",
+     "arg": "<dir>",
      "summary": {
-      "en": "Branch to roll back",
-      "zh-cn": "要回滚的分支",
-      "tr-cn": "要回滾的分支",
-      "am-en": "Branch to roll back"
+      "en": "Materialize into this directory",
+      "zh-cn": "物化到该目录",
+      "tr-cn": "物化到該目錄",
+      "am-en": "Materialize into this directory"
      }
     },
     {
-     "flag": "-keep-local",
+     "flag": "-yes",
      "arg": "",
      "summary": {
-      "en": "Preserve local modifications where possible",
-      "zh-cn": "尽量保留本地修改",
-      "tr-cn": "盡量保留本地修改",
-      "am-en": "Preserve local modifications where possible"
-     }
-    },
-    {
-     "flag": "-type",
-     "arg": "<type>",
-     "summary": {
-      "en": "Rollback strategy override",
-      "zh-cn": "回滚策略覆盖",
-      "tr-cn": "回滾策略覆蓋",
-      "am-en": "Rollback strategy override"
-     }
-    },
-    {
-     "flag": "-dry-run",
-     "arg": "",
-     "summary": {
-      "en": "Report the plan without writing",
-      "zh-cn": "只报告计划不写入",
-      "tr-cn": "只報告計劃不寫入",
-      "am-en": "Report the plan without writing"
+      "en": "Skip the confirmation prompt",
+      "zh-cn": "跳过确认提示",
+      "tr-cn": "跳過確認提示",
+      "am-en": "Skip the confirmation prompt"
      }
     }
    ]
   },
   {
    "name": "rm",
-   "args": "<path>",
+   "args": "<branch>",
    "summary": {
-    "en": "Remove tracked paths from the current snapshot",
-    "zh-cn": "从当前快照移除已跟踪路径",
-    "tr-cn": "從當前快照移除已跟蹤路徑",
-    "am-en": "Remove tracked paths from the current snapshot"
+    "en": "Delete a branch from the archive",
+    "zh-cn": "从存档删除分支",
+    "tr-cn": "從存檔刪除分支",
+    "am-en": "Delete a branch from the archive"
    },
    "options": [
-    {
-     "flag": "-cached",
-     "arg": "",
-     "summary": {
-      "en": "Remove from the snapshot but keep files",
-      "zh-cn": "从快照移除但保留文件",
-      "tr-cn": "從快照移除但保留文件",
-      "am-en": "Remove from the snapshot but keep files"
-     }
-    },
     {
      "flag": "-recursive",
      "arg": "",
      "summary": {
-      "en": "Remove directories recursively",
-      "zh-cn": "递归移除目录",
-      "tr-cn": "遞歸移除目錄",
-      "am-en": "Remove directories recursively"
+      "en": "Also delete child branches",
+      "zh-cn": "同时删除子分支",
+      "tr-cn": "同時刪除子分支",
+      "am-en": "Also delete child branches"
      }
     },
     {
-     "flag": "-force",
+     "flag": "-yes",
      "arg": "",
      "summary": {
-      "en": "Ignore local modifications",
-      "zh-cn": "忽略本地修改",
-      "tr-cn": "忽略本地修改",
-      "am-en": "Ignore local modifications"
+      "en": "Skip the confirmation prompt",
+      "zh-cn": "跳过确认提示",
+      "tr-cn": "跳過確認提示",
+      "am-en": "Skip the confirmation prompt"
      }
     }
    ]
   },
   {
    "name": "clone",
-   "args": "<url> [path]",
+   "args": "<url>",
    "summary": {
     "en": "Clone a remote archive into a new directory",
-    "zh-cn": "将远程存档克隆到新目录",
-    "tr-cn": "將遠程存档克隆到新目錄",
+    "zh-cn": "把远程存档克隆到新目录",
+    "tr-cn": "把遠程存檔克隆到新目錄",
     "am-en": "Clone a remote archive into a new directory"
    },
    "options": [
     {
-     "flag": "-branch",
-     "arg": "<name>",
+     "flag": "-path",
+     "arg": "<dir>",
      "summary": {
-      "en": "Branch to check out",
-      "zh-cn": "要检出的分支",
-      "tr-cn": "要检出的分支",
-      "am-en": "Branch to check out"
+      "en": "Target directory, defaults to the repository name",
+      "zh-cn": "目标目录，默认为仓库名",
+      "tr-cn": "目標目錄，默認為倉庫名",
+      "am-en": "Target directory, defaults to the repository name"
      }
     },
     {
-     "flag": "-tag",
-     "arg": "<tag>",
-     "summary": {
-      "en": "Release tag to fetch",
-      "zh-cn": "要获取的发布标签",
-      "tr-cn": "要獲取的发布標签",
-      "am-en": "Release tag to fetch"
-     }
-    },
-    {
-     "flag": "-depth",
+     "flag": "-threads",
      "arg": "<n>",
      "summary": {
-      "en": "Shallow clone depth",
-      "zh-cn": "浅克隆深度",
-      "tr-cn": "淺克隆深度",
-      "am-en": "Shallow clone depth"
-     }
-    },
-    {
-     "flag": "-noverify",
-     "arg": "",
-     "summary": {
-      "en": "Skip SHA256 and CRC64 checks",
-      "zh-cn": "跳过 SHA256 与 CRC64 校验",
-      "tr-cn": "跳过 SHA256 與 CRC64 校驗",
-      "am-en": "Skip SHA256 and CRC64 checks"
+      "en": "Parallel connections, 1 to 16 (alias -thread)",
+      "zh-cn": "并行连接数，1 到 16（别名 -thread）",
+      "tr-cn": "並行連接數，1 到 16（別名 -thread）",
+      "am-en": "Parallel connections, 1 to 16 (alias -thread)"
      }
     },
     {
      "flag": "-type",
      "arg": "<type>",
      "summary": {
-      "en": "Archive type to materialize",
-      "zh-cn": "要落地的存档类型",
-      "tr-cn": "要落地的存档類型",
-      "am-en": "Archive type to materialize"
+      "en": "Archive type: full nodeonly least",
+      "zh-cn": "存档类型：full nodeonly least",
+      "tr-cn": "存檔類型：full nodeonly least",
+      "am-en": "Archive type: full nodeonly least"
+     }
+    },
+    {
+     "flag": "-full",
+     "arg": "",
+     "summary": {
+      "en": "Shortcut for -type full",
+      "zh-cn": "-type full 的简写",
+      "tr-cn": "-type full 的簡寫",
+      "am-en": "Shortcut for -type full"
+     }
+    },
+    {
+     "flag": "-least",
+     "arg": "",
+     "summary": {
+      "en": "Shortcut for -type least",
+      "zh-cn": "-type least 的简写",
+      "tr-cn": "-type least 的簡寫",
+      "am-en": "Shortcut for -type least"
+     }
+    },
+    {
+     "flag": "-nodeonly",
+     "arg": "",
+     "summary": {
+      "en": "Shortcut for -type nodeonly",
+      "zh-cn": "-type nodeonly 的简写",
+      "tr-cn": "-type nodeonly 的簡寫",
+      "am-en": "Shortcut for -type nodeonly"
      }
     }
    ]
   },
   {
    "name": "fork",
-   "args": "<branch> <new-branch>",
+   "args": "<url>",
    "summary": {
-    "en": "Create a child branch from an existing branch",
-    "zh-cn": "从现有分支创建子分支",
-    "tr-cn": "從現有分支創建子分支",
-    "am-en": "Create a child branch from an existing branch"
+    "en": "Clone a remote archive under a new name",
+    "zh-cn": "以新名称克隆远程存档",
+    "tr-cn": "以新名稱克隆遠程存檔",
+    "am-en": "Clone a remote archive under a new name"
    },
    "options": [
     {
-     "flag": "-at",
-     "arg": "<snapshot>",
+     "flag": "-name",
+     "arg": "<name>",
      "summary": {
-      "en": "Fork at a specific snapshot",
-      "zh-cn": "在指定快照处分叉",
-      "tr-cn": "在指定快照處分叉",
-      "am-en": "Fork at a specific snapshot"
+      "en": "New archive name, defaults to the repository name",
+      "zh-cn": "新存档名，默认为仓库名",
+      "tr-cn": "新存檔名，默認為倉庫名",
+      "am-en": "New archive name, defaults to the repository name"
      }
     },
     {
-     "flag": "-node",
-     "arg": "",
+     "flag": "-path",
+     "arg": "<dir>",
      "summary": {
-      "en": "Make the fork point a node start",
-      "zh-cn": "将分叉点设为节点起点",
-      "tr-cn": "將分叉點設為節點起點",
-      "am-en": "Make the fork point a node start"
-     }
-    },
-    {
-     "flag": "-description",
-     "arg": "<text>",
-     "summary": {
-      "en": "Branch description",
-      "zh-cn": "分支说明",
-      "tr-cn": "分支說明",
-      "am-en": "Branch description"
+      "en": "Target directory, defaults to the new name",
+      "zh-cn": "目标目录，默认为新名称",
+      "tr-cn": "目標目錄，默認為新名稱",
+      "am-en": "Target directory, defaults to the new name"
      }
     }
    ]
   },
   {
    "name": "login",
-   "args": "",
+   "args": "[url]",
    "summary": {
-    "en": "Authorize this machine against the remote provider",
-    "zh-cn": "对远程服务进行本机授权",
-    "tr-cn": "對遠程服务進行本機授權",
-    "am-en": "Authorize this machine against the remote provider"
+    "en": "Store a GitHub token for this machine",
+    "zh-cn": "在本机保存 GitHub 令牌",
+    "tr-cn": "在本機保存 GitHub 令牌",
+    "am-en": "Store a GitHub token for this machine"
    },
    "options": [
     {
      "flag": "-token",
-     "arg": "",
+     "arg": "<token>",
      "summary": {
-      "en": "Read a token from stdin instead of device flow",
-      "zh-cn": "从标准输入读取令牌而非设备流程",
-      "tr-cn": "從標准輸入讀取令牌而非設備流程",
-      "am-en": "Read a token from stdin instead of device flow"
+      "en": "Token to store",
+      "zh-cn": "要保存的令牌",
+      "tr-cn": "要保存的令牌",
+      "am-en": "Token to store"
      }
     },
     {
-     "flag": "-status",
-     "arg": "",
+     "flag": "-name",
+     "arg": "<user>",
      "summary": {
-      "en": "Show the current authorization state",
-      "zh-cn": "显示当前授权状态",
-      "tr-cn": "顯示當前授權狀態",
-      "am-en": "Show the current authorization state"
-     }
-    },
-    {
-     "flag": "-logout",
-     "arg": "",
-     "summary": {
-      "en": "Forget stored credentials",
-      "zh-cn": "忘记已保存凭据",
-      "tr-cn": "忘記已保存憑據",
-      "am-en": "Forget stored credentials"
+      "en": "Account name to store the token under",
+      "zh-cn": "保存令牌所用的账号名",
+      "tr-cn": "保存令牌所用的帳號名",
+      "am-en": "Account name to store the token under"
      }
     }
    ]
   },
   {
    "name": "release",
-   "args": "[tag]",
+   "args": "<url>",
    "summary": {
-    "en": "Package the archive and publish a GitHub release",
-    "zh-cn": "打包存档并发布 GitHub 发布",
-    "tr-cn": "打包存档並发布 GitHub 发布",
-    "am-en": "Package the archive and publish a GitHub release"
+    "en": "Create or list GitHub releases for the archive",
+    "zh-cn": "为存档创建或列出 GitHub release",
+    "tr-cn": "為存檔創建或列出 GitHub release",
+    "am-en": "Create or list GitHub releases for the archive"
    },
    "options": [
     {
      "flag": "-tag",
      "arg": "<tag>",
      "summary": {
-      "en": "Release tag to create",
-      "zh-cn": "要创建的发布标签",
-      "tr-cn": "要創建的发布標签",
-      "am-en": "Release tag to create"
+      "en": "Release tag, defaults to v1.0",
+      "zh-cn": "release 标记，默认为 v1.0",
+      "tr-cn": "release 標記，默認為 v1.0",
+      "am-en": "Release tag, defaults to v1.0"
      }
     },
     {
-     "flag": "-notes",
-     "arg": "<text>",
+     "flag": "-title",
+     "arg": "<title>",
      "summary": {
-      "en": "Release notes",
-      "zh-cn": "发布说明",
-      "tr-cn": "发布說明",
-      "am-en": "Release notes"
-     }
-    },
-    {
-     "flag": "-draft",
-     "arg": "",
-     "summary": {
-      "en": "Create the release as a draft",
-      "zh-cn": "以草稿形式创建发布",
-      "tr-cn": "以草稿形式創建发布",
-      "am-en": "Create the release as a draft"
-     }
-    },
-    {
-     "flag": "-prerelease",
-     "arg": "",
-     "summary": {
-      "en": "Mark the release as a pre-release",
-      "zh-cn": "标记为预发布",
-      "tr-cn": "標記為預发布",
-      "am-en": "Mark the release as a pre-release"
-     }
-    },
-    {
-     "flag": "-asset",
-     "arg": "<path>",
-     "summary": {
-      "en": "Upload an extra asset",
-      "zh-cn": "上传额外资源",
-      "tr-cn": "上传額外資源",
-      "am-en": "Upload an extra asset"
-     }
-    }
-   ]
-  },
-  {
-   "name": "edit",
-   "args": "<path>",
-   "summary": {
-    "en": "Open or replace a tracked file through the archive",
-    "zh-cn": "通过存档打开或替换已跟踪文件",
-    "tr-cn": "通过存档打開或替換已跟蹤文件",
-    "am-en": "Open or replace a tracked file through the archive"
-   },
-   "options": [
-    {
-     "flag": "-content",
-     "arg": "<text>",
-     "summary": {
-      "en": "Write the given content instead of editing",
-      "zh-cn": "写入给定内容而非编辑",
-      "tr-cn": "寫入給定內容而非編輯",
-      "am-en": "Write the given content instead of editing"
-     }
-    },
-    {
-     "flag": "-append",
-     "arg": "",
-     "summary": {
-      "en": "Append instead of replacing",
-      "zh-cn": "追加而非替换",
-      "tr-cn": "追加而非替換",
-      "am-en": "Append instead of replacing"
-     }
-    },
-    {
-     "flag": "-encoding",
-     "arg": "<enc>",
-     "summary": {
-      "en": "Text encoding, default utf-8",
-      "zh-cn": "文本编码，默认 utf-8",
-      "tr-cn": "文本編碼，認認 utf-8",
-      "am-en": "Text encoding, default utf-8"
-     }
-    }
-   ]
-  },
-  {
-   "name": "download",
-   "args": "<asset> [path]",
-   "summary": {
-    "en": "Download a release asset with parallel ranges",
-    "zh-cn": "使用并行范围下载发布资源",
-    "tr-cn": "使用並行範圍下載发布資源",
-    "am-en": "Download a release asset with parallel ranges"
-   },
-   "options": [
-    {
-     "flag": "-threads",
-     "arg": "<n>",
-     "summary": {
-      "en": "Number of parallel connections",
-      "zh-cn": "并行连接数",
-      "tr-cn": "並行連接数",
-      "am-en": "Number of parallel connections"
-     }
-    },
-    {
-     "flag": "-out",
-     "arg": "<path>",
-     "summary": {
-      "en": "Output file path",
-      "zh-cn": "输出文件路径",
-      "tr-cn": "輸出文件路徑",
-      "am-en": "Output file path"
-     }
-    },
-    {
-     "flag": "-resume",
-     "arg": "",
-     "summary": {
-      "en": "Resume a partial download",
-      "zh-cn": "续传部分下载",
-      "tr-cn": "續传部分下載",
-      "am-en": "Resume a partial download"
-     }
-    },
-    {
-     "flag": "-noverify",
-     "arg": "",
-     "summary": {
-      "en": "Skip SHA256 and CRC64 checks",
-      "zh-cn": "跳过 SHA256 与 CRC64 校验",
-      "tr-cn": "跳过 SHA256 與 CRC64 校驗",
-      "am-en": "Skip SHA256 and CRC64 checks"
-     }
-    }
-   ]
-  },
-  {
-   "name": "verify",
-   "args": "[path]",
-   "summary": {
-    "en": "Verify objects, manifests and deltas of an archive",
-    "zh-cn": "校验存档的对象、清单与增量",
-    "tr-cn": "校驗存档的對象、清單與增量",
-    "am-en": "Verify objects, manifests and deltas of an archive"
-   },
-   "options": [
-    {
-     "flag": "-deep",
-     "arg": "",
-     "summary": {
-      "en": "Recompute every hash from disk",
-      "zh-cn": "从磁盘重新计算全部哈希",
-      "tr-cn": "從磁盤重新計算全部哈希",
-      "am-en": "Recompute every hash from disk"
-     }
-    },
-    {
-     "flag": "-repair",
-     "arg": "",
-     "summary": {
-      "en": "Re-fetch corrupt objects from the remote",
-      "zh-cn": "从远程重新获取损坏对象",
-      "tr-cn": "從遠程重新獲取損壞對象",
-      "am-en": "Re-fetch corrupt objects from the remote"
+      "en": "Release title, defaults to the tag",
+      "zh-cn": "release 标题，默认为标记",
+      "tr-cn": "release 標題，默認為標記",
+      "am-en": "Release title, defaults to the tag"
      }
     },
     {
      "flag": "-branch",
      "arg": "<name>",
      "summary": {
-      "en": "Verify a single branch",
-      "zh-cn": "只校验单个分支",
-      "tr-cn": "只校驗單個分支",
-      "am-en": "Verify a single branch"
+      "en": "Branch whose head is described",
+      "zh-cn": "用于描述的分支头",
+      "tr-cn": "用於描述的分支頭",
+      "am-en": "Branch whose head is described"
      }
     },
+    {
+     "flag": "-relist",
+     "arg": "",
+     "summary": {
+      "en": "List existing releases instead of creating one",
+      "zh-cn": "改为列出已有 release",
+      "tr-cn": "改為列出已有 release",
+      "am-en": "List existing releases instead of creating one"
+     }
+    },
+    {
+     "flag": "-reintro",
+     "arg": "",
+     "summary": {
+      "en": "Update the latest release instead of creating one",
+      "zh-cn": "改为更新最新 release",
+      "tr-cn": "改為更新最新 release",
+      "am-en": "Update the latest release instead of creating one"
+     }
+    }
+   ]
+  },
+  {
+   "name": "edit",
+   "args": "<type> <url>",
+   "summary": {
+    "en": "Edit a url_<name> setting or a stored token",
+    "zh-cn": "编辑 url_<name> 设置或已保存的令牌",
+    "tr-cn": "編輯 url_<name> 設置或已保存的令牌",
+    "am-en": "Edit a url_<name> setting or a stored token"
+   },
+   "options": [
+    {
+     "flag": "-name",
+     "arg": "<name>",
+     "summary": {
+      "en": "Setting name, required for type url",
+      "zh-cn": "设置名，type=url 时必填",
+      "tr-cn": "設置名，type=url 時必填",
+      "am-en": "Setting name, required for type url"
+     }
+    },
+    {
+     "flag": "-token",
+     "arg": "<token>",
+     "summary": {
+      "en": "Token value, used for type token",
+      "zh-cn": "令牌值，type=token 时使用",
+      "tr-cn": "令牌值，type=token 時使用",
+      "am-en": "Token value, used for type token"
+     }
+    }
+   ]
+  },
+  {
+   "name": "download",
+   "args": "<url>",
+   "summary": {
+    "en": "Download a URL with parallel ranged requests",
+    "zh-cn": "用并行分段请求下载 URL",
+    "tr-cn": "用並行分段請求下載 URL",
+    "am-en": "Download a URL with parallel ranged requests"
+   },
+   "options": [
+    {
+     "flag": "-out",
+     "arg": "<path>",
+     "summary": {
+      "en": "Output file path (alias -path)",
+      "zh-cn": "输出文件路径（别名 -path）",
+      "tr-cn": "輸出文件路徑（別名 -path）",
+      "am-en": "Output file path (alias -path)"
+     }
+    },
+    {
+     "flag": "-threads",
+     "arg": "<n>",
+     "summary": {
+      "en": "Parallel connections, 1 to 16 (alias -thread)",
+      "zh-cn": "并行连接数，1 到 16（别名 -thread）",
+      "tr-cn": "並行連接數，1 到 16（別名 -thread）",
+      "am-en": "Parallel connections, 1 to 16 (alias -thread)"
+     }
+    },
+    {
+     "flag": "-sha256",
+     "arg": "<hex>",
+     "summary": {
+      "en": "Expected SHA-256 digest",
+      "zh-cn": "期望的 SHA-256 摘要",
+      "tr-cn": "期望的 SHA-256 摘要",
+      "am-en": "Expected SHA-256 digest"
+     }
+    },
+    {
+     "flag": "-crc64",
+     "arg": "<hex>",
+     "summary": {
+      "en": "Expected CRC-64 digest",
+      "zh-cn": "期望的 CRC-64 摘要",
+      "tr-cn": "期望的 CRC-64 摘要",
+      "am-en": "Expected CRC-64 digest"
+     }
+    },
+    {
+     "flag": "-noverify",
+     "arg": "",
+     "summary": {
+      "en": "Skip digest verification",
+      "zh-cn": "跳过摘要校验",
+      "tr-cn": "跳過摘要校驗",
+      "am-en": "Skip digest verification"
+     }
+    }
+   ]
+  },
+  {
+   "name": "verify",
+   "args": "",
+   "summary": {
+    "en": "Verify every object hash in the archive",
+    "zh-cn": "校验存档中每个对象的哈希",
+    "tr-cn": "校驗存檔中每個對象的哈希",
+    "am-en": "Verify every object hash in the archive"
+   },
+   "options": [
     {
      "flag": "-summary",
      "arg": "",
      "summary": {
-      "en": "Print a compact summary only",
-      "zh-cn": "仅打印紧凑摘要",
-      "tr-cn": "僅打印緊湊摘要",
-      "am-en": "Print a compact summary only"
+      "en": "Print a single summary line",
+      "zh-cn": "只打印一行汇总",
+      "tr-cn": "只打印一行匯總",
+      "am-en": "Print a single summary line"
      }
     }
    ]
@@ -1118,10 +874,10 @@
    "name": "gc",
    "args": "",
    "summary": {
-    "en": "Delete unreferenced objects and stale temporaries",
-    "zh-cn": "删除未引用对象与过期临时文件",
-    "tr-cn": "刪除未引用對象與过期臨時文件",
-    "am-en": "Delete unreferenced objects and stale temporaries"
+    "en": "Delete objects that no snapshot references",
+    "zh-cn": "删除没有快照引用的对象",
+    "tr-cn": "刪除沒有快照引用的對象",
+    "am-en": "Delete objects that no snapshot references"
    },
    "options": [
     {
@@ -1129,29 +885,9 @@
      "arg": "",
      "summary": {
       "en": "Report reclaimable space without deleting",
-      "zh-cn": "只报告可回收空间不删除",
-      "tr-cn": "只報告可回收空間不刪除",
+      "zh-cn": "只报告可回收空间，不删除",
+      "tr-cn": "只報告可回收空間，不刪除",
       "am-en": "Report reclaimable space without deleting"
-     }
-    },
-    {
-     "flag": "-aggressive",
-     "arg": "",
-     "summary": {
-      "en": "Also repack and recompress objects",
-      "zh-cn": "同时重新打包与压缩对象",
-      "tr-cn": "同時重新打包與壓縮對象",
-      "am-en": "Also repack and recompress objects"
-     }
-    },
-    {
-     "flag": "-keep",
-     "arg": "<n>",
-     "summary": {
-      "en": "Keep n recent snapshots untouched",
-      "zh-cn": "保留最近 n 个快照不动",
-      "tr-cn": "保留最近 n 個快照不動",
-      "am-en": "Keep n recent snapshots untouched"
      }
     }
    ]
@@ -1160,179 +896,56 @@
    "name": "doctor",
    "args": "",
    "summary": {
-    "en": "Diagnose environment, permissions and archive health",
-    "zh-cn": "诊断环境、权限与存档健康状况",
-    "tr-cn": "診斷環境、權限與存档健康狀況",
-    "am-en": "Diagnose environment, permissions and archive health"
+    "en": "Diagnose environment, settings and archive health",
+    "zh-cn": "诊断环境、设置与存档健康状态",
+    "tr-cn": "診斷環境、設置與存檔健康狀態",
+    "am-en": "Diagnose environment, settings and archive health"
    },
-   "options": [
-    {
-     "flag": "-fix",
-     "arg": "",
-     "summary": {
-      "en": "Apply safe automatic repairs",
-      "zh-cn": "执行安全的自动修复",
-      "tr-cn": "执行安全的自動修復",
-      "am-en": "Apply safe automatic repairs"
-     }
-    },
-    {
-     "flag": "-network",
-     "arg": "",
-     "summary": {
-      "en": "Include remote connectivity checks",
-      "zh-cn": "包含远程连通性检查",
-      "tr-cn": "包含遠程連通性检查",
-      "am-en": "Include remote connectivity checks"
-     }
-    },
-    {
-     "flag": "-report",
-     "arg": "",
-     "summary": {
-      "en": "Write the diagnosis to a report file",
-      "zh-cn": "将诊断写入报告文件",
-      "tr-cn": "將診斷寫入報告文件",
-      "am-en": "Write the diagnosis to a report file"
-     }
-    }
-   ]
+   "options": []
   },
   {
    "name": "report",
-   "args": "[branch]",
+   "args": "",
    "summary": {
-    "en": "Generate an archive report using the Java sidecar",
-    "zh-cn": "使用 Java 边车生成存档报告",
-    "tr-cn": "使用 Java 邊車生成存档報告",
-    "am-en": "Generate an archive report using the Java sidecar"
+    "en": "Write an archive report as JSON",
+    "zh-cn": "以 JSON 写出存档报告",
+    "tr-cn": "以 JSON 寫出存檔報告",
+    "am-en": "Write an archive report as JSON"
    },
    "options": [
-    {
-     "flag": "-format",
-     "arg": "<fmt>",
-     "summary": {
-      "en": "Report format: text json html",
-      "zh-cn": "报告格式：text json html",
-      "tr-cn": "報告格式：text json html",
-      "am-en": "Report format: text json html"
-     }
-    },
     {
      "flag": "-out",
      "arg": "<path>",
      "summary": {
-      "en": "Output file path",
-      "zh-cn": "输出文件路径",
-      "tr-cn": "輸出文件路徑",
-      "am-en": "Output file path"
-     }
-    },
-    {
-     "flag": "-audit",
-     "arg": "",
-     "summary": {
-      "en": "Include integrity audit sections",
-      "zh-cn": "包含完整性审计章节",
-      "tr-cn": "包含完整性審計章節",
-      "am-en": "Include integrity audit sections"
-     }
-    },
-    {
-     "flag": "-branch",
-     "arg": "<name>",
-     "summary": {
-      "en": "Branch to report on",
-      "zh-cn": "要报告的分支",
-      "tr-cn": "要報告的分支",
-      "am-en": "Branch to report on"
+      "en": "Report path, defaults to inv-report.json in the current directory",
+      "zh-cn": "报告路径，默认为当前目录的 inv-report.json",
+      "tr-cn": "報告路徑，默認為當前目錄的 inv-report.json",
+      "am-en": "Report path, defaults to inv-report.json in the current directory"
      }
     }
    ]
   },
   {
    "name": "remote",
-   "args": "[action]",
+   "args": "",
    "summary": {
-    "en": "Show or change the remote repository binding",
-    "zh-cn": "显示或修改远程仓库绑定",
-    "tr-cn": "顯示或修改遠程倉庫綁定",
-    "am-en": "Show or change the remote repository binding"
+    "en": "List the url_* remote bindings in settings",
+    "zh-cn": "列出设置中的 url_* 远程绑定",
+    "tr-cn": "列出設置中的 url_* 遠程綁定",
+    "am-en": "List the url_* remote bindings in settings"
    },
-   "options": [
-    {
-     "flag": "-set",
-     "arg": "<url>",
-     "summary": {
-      "en": "Set the remote url",
-      "zh-cn": "设置远程地址",
-      "tr-cn": "設置遠程地址",
-      "am-en": "Set the remote url"
-     }
-    },
-    {
-     "flag": "-remove",
-     "arg": "",
-     "summary": {
-      "en": "Remove the remote binding",
-      "zh-cn": "移除远程绑定",
-      "tr-cn": "移除遠程綁定",
-      "am-en": "Remove the remote binding"
-     }
-    },
-    {
-     "flag": "-test",
-     "arg": "",
-     "summary": {
-      "en": "Test connectivity and permissions",
-      "zh-cn": "测试连通性与权限",
-      "tr-cn": "測試連通性與權限",
-      "am-en": "Test connectivity and permissions"
-     }
-    }
-   ]
+   "options": []
   },
   {
    "name": "self-test",
    "args": "[filter]",
    "summary": {
     "en": "Run the generated kernel self-test vectors",
-    "zh-cn": "运行生成的内核自测向量",
-    "tr-cn": "運行生成的內核自測向量",
+    "zh-cn": "运行生成的内核自检向量",
+    "tr-cn": "運行生成的內核自檢向量",
     "am-en": "Run the generated kernel self-test vectors"
    },
-   "options": [
-    {
-     "flag": "-filter",
-     "arg": "<text>",
-     "summary": {
-      "en": "Only run cases whose name matches",
-      "zh-cn": "只运行名称匹配的用例",
-      "tr-cn": "只運行名稱匹配的用例",
-      "am-en": "Only run cases whose name matches"
-     }
-    },
-    {
-     "flag": "-list",
-     "arg": "",
-     "summary": {
-      "en": "List case names without running",
-      "zh-cn": "只列出用例名不执行",
-      "tr-cn": "只列出用例名不执行",
-      "am-en": "List case names without running"
-     }
-    },
-    {
-     "flag": "-fail-fast",
-     "arg": "",
-     "summary": {
-      "en": "Stop at the first failing case",
-      "zh-cn": "首个失败用例即停止",
-      "tr-cn": "首個失敗用例即停止",
-      "am-en": "Stop at the first failing case"
-     }
-    }
-   ]
+   "options": []
   },
   {
    "name": "bench",
@@ -1343,32 +956,11 @@
     "tr-cn": "測量哈希、壓縮與 IO 吞吐",
     "am-en": "Measure hashing, compression and IO throughput"
    },
-   "options": [
-    {
-     "flag": "-seconds",
-     "arg": "<n>",
-     "summary": {
-      "en": "Target duration per benchmark",
-      "zh-cn": "每个基准的目标时长",
-      "tr-cn": "每個基准的目標時長",
-      "am-en": "Target duration per benchmark"
-     }
-    },
-    {
-     "flag": "-size",
-     "arg": "<n>",
-     "summary": {
-      "en": "Working set size in MiB",
-      "zh-cn": "工作集大小（MiB）",
-      "tr-cn": "工作集大小（MiB）",
-      "am-en": "Working set size in MiB"
-     }
-    }
-   ]
+   "options": []
   },
   {
    "name": "completion",
-   "args": "<shell>",
+   "args": "",
    "summary": {
     "en": "Print a shell completion script",
     "zh-cn": "打印 shell 补全脚本",
@@ -1377,23 +969,13 @@
    },
    "options": [
     {
-     "flag": "-shell",
-     "arg": "<name>",
+     "flag": "-powershell",
+     "arg": "",
      "summary": {
-      "en": "Target shell: pwsh bash zsh fish",
-      "zh-cn": "目标 shell：pwsh bash zsh fish",
-      "tr-cn": "目標 shell：pwsh bash zsh fish",
-      "am-en": "Target shell: pwsh bash zsh fish"
-     }
-    },
-    {
-     "flag": "-out",
-     "arg": "<path>",
-     "summary": {
-      "en": "Write the script to a file",
-      "zh-cn": "将脚本写入文件",
-      "tr-cn": "將腳本寫入文件",
-      "am-en": "Write the script to a file"
+      "en": "Emit PowerShell completion",
+      "zh-cn": "输出 PowerShell 补全",
+      "tr-cn": "輸出 PowerShell 補全",
+      "am-en": "Emit PowerShell completion"
      }
     }
    ]

@@ -42,13 +42,13 @@
     "conn.refused": {
       "en": "Connection refused by remote",
       "zh-cn": "远程拒绝连接",
-      "tr-cn": "遠程拒绝連接",
+      "tr-cn": "遠程拒絕連接",
       "am-en": "Connection refused by remote"
     },
     "conn.dns_failed": {
       "en": "Cannot resolve host name",
       "zh-cn": "无法解析主机名",
-      "tr-cn": "无法解析主機名",
+      "tr-cn": "無法解析主機名",
       "am-en": "Cannot resolve host name"
     },
     "conn.tls_failed": {
@@ -66,19 +66,19 @@
     "conn.rate_limited": {
       "en": "Rate limited, waiting",
       "zh-cn": "已触发限流，正在等待",
-      "tr-cn": "已触发限流，正在等待",
+      "tr-cn": "已觸發限流，正在等待",
       "am-en": "Rate limited, waiting"
     },
     "conn.offline": {
       "en": "Network is offline",
       "zh-cn": "网络已离线",
-      "tr-cn": "網絡已离线",
+      "tr-cn": "網絡已離線",
       "am-en": "Network is offline"
     },
     "conn.resumed": {
       "en": "Transfer resumed",
       "zh-cn": "传输已续传",
-      "tr-cn": "传輸已續传",
+      "tr-cn": "傳輸已續傳",
       "am-en": "Transfer resumed"
     },
     "conn.closed": {
@@ -102,7 +102,7 @@
     "conn.cert_invalid": {
       "en": "Invalid server certificate",
       "zh-cn": "服务器证书无效",
-      "tr-cn": "服务器證書无效",
+      "tr-cn": "服务器證書無效",
       "am-en": "Invalid server certificate"
     },
     "conn.reset": {
@@ -114,25 +114,25 @@
     "conn.throttle": {
       "en": "Throttling request rate",
       "zh-cn": "正在限制请求速率",
-      "tr-cn": "正在限制请求速率",
+      "tr-cn": "正在限制請求速率",
       "am-en": "Throttling request rate"
     },
     "conn.handshake": {
       "en": "Negotiating protocol",
       "zh-cn": "正在协商协议",
-      "tr-cn": "正在协商协议",
+      "tr-cn": "正在协商协議",
       "am-en": "Negotiating protocol"
     },
     "conn.http_error": {
       "en": "HTTP request failed",
       "zh-cn": "HTTP 请求失败",
-      "tr-cn": "HTTP 请求失敗",
+      "tr-cn": "HTTP 請求失敗",
       "am-en": "HTTP request failed"
     },
     "clone.start": {
       "en": "Cloning archive",
       "zh-cn": "正在克隆存档",
-      "tr-cn": "正在克隆存档",
+      "tr-cn": "正在克隆存檔",
       "am-en": "Cloning archive"
     },
     "clone.progress": {
@@ -150,19 +150,19 @@
     "clone.verify": {
       "en": "Verifying cloned data",
       "zh-cn": "正在校验克隆数据",
-      "tr-cn": "正在校驗克隆数據",
+      "tr-cn": "正在校驗克隆數據",
       "am-en": "Verifying cloned data"
     },
     "clone.verified": {
       "en": "Cloned data verified",
       "zh-cn": "克隆数据校验通过",
-      "tr-cn": "克隆数據校驗通过",
+      "tr-cn": "克隆數據校驗通過",
       "am-en": "Cloned data verified"
     },
     "clone.verify_failed": {
       "en": "Cloned data failed verification",
       "zh-cn": "克隆数据校验失败",
-      "tr-cn": "克隆数據校驗失敗",
+      "tr-cn": "克隆數據校驗失敗",
       "am-en": "Cloned data failed verification"
     },
     "clone.target_exists": {
@@ -180,25 +180,25 @@
     "clone.tag": {
       "en": "Using release tag",
       "zh-cn": "使用发布标签",
-      "tr-cn": "使用发布標签",
+      "tr-cn": "使用發布標簽",
       "am-en": "Using release tag"
     },
     "clone.shallow": {
       "en": "Shallow clone requested",
       "zh-cn": "已请求浅克隆",
-      "tr-cn": "已请求淺克隆",
+      "tr-cn": "已請求淺克隆",
       "am-en": "Shallow clone requested"
     },
     "clone.partial": {
       "en": "Partial clone in progress",
       "zh-cn": "正在执行部分克隆",
-      "tr-cn": "正在执行部分克隆",
+      "tr-cn": "正在執行部分克隆",
       "am-en": "Partial clone in progress"
     },
     "clone.resume": {
       "en": "Resuming interrupted clone",
       "zh-cn": "正在续传中断的克隆",
-      "tr-cn": "正在續传中斷的克隆",
+      "tr-cn": "正在續傳中斷的克隆",
       "am-en": "Resuming interrupted clone"
     },
     "clone.manifest": {
@@ -216,7 +216,7 @@
     "clone.lz4": {
       "en": "Decompressing blocks",
       "zh-cn": "正在解压数据块",
-      "tr-cn": "正在解壓数據塊",
+      "tr-cn": "正在解壓數據塊",
       "am-en": "Decompressing blocks"
     },
     "clone.retry": {
@@ -264,7 +264,7 @@
     "search.path": {
       "en": "Path filter",
       "zh-cn": "路径过滤",
-      "tr-cn": "路徑过濾",
+      "tr-cn": "路徑過濾",
       "am-en": "Path filter"
     },
     "search.branch": {
@@ -288,7 +288,7 @@
     "search.invalid_regex": {
       "en": "Invalid regular expression",
       "zh-cn": "正则表达式无效",
-      "tr-cn": "正則表達式无效",
+      "tr-cn": "正則表達式無效",
       "am-en": "Invalid regular expression"
     },
     "search.limit": {
@@ -300,7 +300,7 @@
     "search.binary_skipped": {
       "en": "Binary files skipped",
       "zh-cn": "已跳过二进制文件",
-      "tr-cn": "已跳过二進制文件",
+      "tr-cn": "已跳過二進制文件",
       "am-en": "Binary files skipped"
     },
     "search.done": {
@@ -342,13 +342,13 @@
     "dl.range": {
       "en": "Range request",
       "zh-cn": "范围请求",
-      "tr-cn": "範圍请求",
+      "tr-cn": "範圍請求",
       "am-en": "Range request"
     },
     "dl.threads": {
       "en": "Parallel connections",
       "zh-cn": "并行连接数",
-      "tr-cn": "並行連接数",
+      "tr-cn": "並行連接數",
       "am-en": "Parallel connections"
     },
     "dl.retry": {
@@ -408,25 +408,25 @@
     "dl.speed": {
       "en": "Transfer speed",
       "zh-cn": "传输速度",
-      "tr-cn": "传輸速度",
+      "tr-cn": "傳輸速度",
       "am-en": "Transfer speed"
     },
     "dl.asset": {
       "en": "Release asset",
       "zh-cn": "发布资源",
-      "tr-cn": "发布資源",
+      "tr-cn": "發布資源",
       "am-en": "Release asset"
     },
     "verify.start": {
       "en": "Verifying archive",
       "zh-cn": "正在校验存档",
-      "tr-cn": "正在校驗存档",
+      "tr-cn": "正在校驗存檔",
       "am-en": "Verifying archive"
     },
     "verify.ok": {
       "en": "Verification passed",
       "zh-cn": "校验通过",
-      "tr-cn": "校驗通过",
+      "tr-cn": "校驗通過",
       "am-en": "Verification passed"
     },
     "verify.fail": {
@@ -438,25 +438,25 @@
     "verify.objects": {
       "en": "Checking objects",
       "zh-cn": "正在检查对象",
-      "tr-cn": "正在检查對象",
+      "tr-cn": "正在檢查對象",
       "am-en": "Checking objects"
     },
     "verify.entries": {
       "en": "Checking manifest entries",
       "zh-cn": "正在检查清单条目",
-      "tr-cn": "正在检查清單條目",
+      "tr-cn": "正在檢查清單條目",
       "am-en": "Checking manifest entries"
     },
     "verify.crc": {
       "en": "Checking CRC64",
       "zh-cn": "正在检查 CRC64",
-      "tr-cn": "正在检查 CRC64",
+      "tr-cn": "正在檢查 CRC64",
       "am-en": "Checking CRC64"
     },
     "verify.sha": {
       "en": "Checking SHA256",
       "zh-cn": "正在检查 SHA256",
-      "tr-cn": "正在检查 SHA256",
+      "tr-cn": "正在檢查 SHA256",
       "am-en": "Checking SHA256"
     },
     "verify.missing": {
@@ -564,31 +564,31 @@
     "reg.start": {
       "en": "Registering archive",
       "zh-cn": "正在注册存档",
-      "tr-cn": "正在注冊存档",
+      "tr-cn": "正在注冊存檔",
       "am-en": "Registering archive"
     },
     "reg.done": {
       "en": "Archive registered",
       "zh-cn": "存档已注册",
-      "tr-cn": "存档已注冊",
+      "tr-cn": "存檔已注冊",
       "am-en": "Archive registered"
     },
     "reg.exists": {
       "en": "Archive already registered",
       "zh-cn": "存档已注册",
-      "tr-cn": "存档已注冊",
+      "tr-cn": "存檔已注冊",
       "am-en": "Archive already registered"
     },
     "reg.missing": {
       "en": "Archive not registered",
       "zh-cn": "存档未注册",
-      "tr-cn": "存档未注冊",
+      "tr-cn": "存檔未注冊",
       "am-en": "Archive not registered"
     },
     "reg.invalid": {
       "en": "Not a valid archive directory",
       "zh-cn": "不是有效的存档目录",
-      "tr-cn": "不是有效的存档目錄",
+      "tr-cn": "不是有效的存檔目錄",
       "am-en": "Not a valid archive directory"
     },
     "reg.removed": {
@@ -600,13 +600,13 @@
     "reg.list": {
       "en": "Registered archives",
       "zh-cn": "已注册存档",
-      "tr-cn": "已注冊存档",
+      "tr-cn": "已注冊存檔",
       "am-en": "Registered archives"
     },
     "reg.alias": {
       "en": "Archive alias",
       "zh-cn": "存档别名",
-      "tr-cn": "存档別名",
+      "tr-cn": "存檔別名",
       "am-en": "Archive alias"
     },
     "reg.alias_taken": {
@@ -636,49 +636,49 @@
     "rel.start": {
       "en": "Creating release",
       "zh-cn": "正在创建发布",
-      "tr-cn": "正在創建发布",
+      "tr-cn": "正在創建發布",
       "am-en": "Creating release"
     },
     "rel.done": {
       "en": "Release published",
       "zh-cn": "发布已完成",
-      "tr-cn": "发布已完成",
+      "tr-cn": "發布已完成",
       "am-en": "Release published"
     },
     "rel.tag": {
       "en": "Release tag",
       "zh-cn": "发布标签",
-      "tr-cn": "发布標签",
+      "tr-cn": "發布標簽",
       "am-en": "Release tag"
     },
     "rel.asset": {
       "en": "Uploading asset",
       "zh-cn": "正在上传资源",
-      "tr-cn": "正在上传資源",
+      "tr-cn": "正在上傳資源",
       "am-en": "Uploading asset"
     },
     "rel.upload": {
       "en": "Upload progress",
       "zh-cn": "上传进度",
-      "tr-cn": "上传進度",
+      "tr-cn": "上傳進度",
       "am-en": "Upload progress"
     },
     "rel.chunk": {
       "en": "Uploading chunk",
       "zh-cn": "正在上传分块",
-      "tr-cn": "正在上传分塊",
+      "tr-cn": "正在上傳分塊",
       "am-en": "Uploading chunk"
     },
     "rel.finalize": {
       "en": "Finalizing release",
       "zh-cn": "正在完成发布",
-      "tr-cn": "正在完成发布",
+      "tr-cn": "正在完成發布",
       "am-en": "Finalizing release"
     },
     "rel.exists": {
       "en": "Release already exists",
       "zh-cn": "发布已存在",
-      "tr-cn": "发布已存在",
+      "tr-cn": "發布已存在",
       "am-en": "Release already exists"
     },
     "rel.auth": {
@@ -690,31 +690,31 @@
     "rel.notes": {
       "en": "Release notes",
       "zh-cn": "发布说明",
-      "tr-cn": "发布說明",
+      "tr-cn": "發布說明",
       "am-en": "Release notes"
     },
     "rel.draft": {
       "en": "Release saved as draft",
       "zh-cn": "发布已保存为草稿",
-      "tr-cn": "发布已保存為草稿",
+      "tr-cn": "發布已保存為草稿",
       "am-en": "Release saved as draft"
     },
     "rel.prerelease": {
       "en": "Marked as pre-release",
       "zh-cn": "已标记为预发布",
-      "tr-cn": "已標記為預发布",
+      "tr-cn": "已標記為預發布",
       "am-en": "Marked as pre-release"
     },
     "rel.verify": {
       "en": "Verifying uploaded asset",
       "zh-cn": "正在校验已上传资源",
-      "tr-cn": "正在校驗已上传資源",
+      "tr-cn": "正在校驗已上傳資源",
       "am-en": "Verifying uploaded asset"
     },
     "rel.summary": {
       "en": "Release summary",
       "zh-cn": "发布摘要",
-      "tr-cn": "发布摘要",
+      "tr-cn": "發布摘要",
       "am-en": "Release summary"
     },
     "login.start": {
@@ -732,7 +732,7 @@
     "login.code": {
       "en": "Enter this code",
       "zh-cn": "请输入此代码",
-      "tr-cn": "请輸入此代碼",
+      "tr-cn": "請輸入此代碼",
       "am-en": "Enter this code"
     },
     "login.wait": {
@@ -756,7 +756,7 @@
     "login.scope": {
       "en": "Requested scope",
       "zh-cn": "请求的权限范围",
-      "tr-cn": "请求的權限範圍",
+      "tr-cn": "請求的權限範圍",
       "am-en": "Requested scope"
     },
     "login.token_saved": {
@@ -774,7 +774,7 @@
     "login.expired": {
       "en": "Credentials expired",
       "zh-cn": "凭据已过期",
-      "tr-cn": "憑據已过期",
+      "tr-cn": "憑據已過期",
       "am-en": "Credentials expired"
     },
     "err.generic": {
@@ -822,13 +822,13 @@
     "err.invalid_arg": {
       "en": "Invalid argument",
       "zh-cn": "参数无效",
-      "tr-cn": "參数无效",
+      "tr-cn": "參數無效",
       "am-en": "Invalid argument"
     },
     "err.state": {
       "en": "Invalid state",
       "zh-cn": "状态无效",
-      "tr-cn": "狀態无效",
+      "tr-cn": "狀態無效",
       "am-en": "Invalid state"
     },
     "err.internal": {
@@ -846,7 +846,7 @@
     "set.invalid": {
       "en": "Invalid setting value",
       "zh-cn": "设置值无效",
-      "tr-cn": "設置值无效",
+      "tr-cn": "設置值無效",
       "am-en": "Invalid setting value"
     },
     "set.unknown_key": {
@@ -882,7 +882,7 @@
     "set.reset": {
       "en": "Setting reset to default",
       "zh-cn": "设置已恢复默认",
-      "tr-cn": "設置已恢復認認",
+      "tr-cn": "設置已恢復默認",
       "am-en": "Setting reset to default"
     },
     "set.list": {
@@ -900,7 +900,7 @@
     "set.default": {
       "en": "Default value",
       "zh-cn": "默认值",
-      "tr-cn": "認認值",
+      "tr-cn": "默認值",
       "am-en": "Default value"
     },
     "set.scope": {
@@ -996,7 +996,7 @@
     "ui.skipped": {
       "en": "Skipped",
       "zh-cn": "已跳过",
-      "tr-cn": "已跳过",
+      "tr-cn": "已跳過",
       "am-en": "Skipped"
     },
     "ui.warn": {
@@ -1014,7 +1014,7 @@
     "ui.clean": {
       "en": "Nothing to do",
       "zh-cn": "无需操作",
-      "tr-cn": "无需操作",
+      "tr-cn": "無需操作",
       "am-en": "Nothing to do"
     },
     "archive.not_found": {

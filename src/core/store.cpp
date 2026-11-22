@@ -547,7 +547,8 @@ void Archive::materialize(const std::string& path, i64 seq, const std::string& t
 }
 
 std::vector<Entry> Archive::scan_working_tree(const std::string& root,
-                                              std::vector<std::string>* deleted) const {
+                                              std::vector<std::string>* deleted,
+                                              std::set<std::string>* added) const {
   std::vector<Entry> out;
   std::vector<std::string> stack;
   const std::string base = fs::absolute(root);
@@ -590,6 +591,7 @@ std::vector<Entry> Archive::scan_working_tree(const std::string& root,
   std::sort(out.begin(), out.end(), [](const Entry& a, const Entry& b2) { return a.path < b2.path; });
 
   if (deleted) deleted->clear();
+  if (added) added->clear();
   auto b = find("/");
   if (b) {
     auto snap = head("/");
@@ -602,6 +604,7 @@ std::vector<Entry> Archive::scan_working_tree(const std::string& root,
         auto it = prev.find(e.path);
         if (it == prev.end()) {
           changed.push_back(e);
+          if (added) added->insert(e.path);
           continue;
         }
         const Entry& old = *it->second;
@@ -615,6 +618,9 @@ std::vector<Entry> Archive::scan_working_tree(const std::string& root,
         }
       }
       out.swap(changed);
+    } else if (added) {
+      /* No snapshot on the root branch yet: every scanned path is new. */
+      for (const auto& e : out) added->insert(e.path);
     }
   }
   return out;
