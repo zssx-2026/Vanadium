@@ -306,6 +306,9 @@ unsigned long transport_error_code(const Failure& f) {
 
 bool transport_retryable(const Failure& f) {
   const unsigned long code = transport_error_code(f);
+  /* 120079 (connection refused) is a hard failure: the target answered
+     authoritatively that nothing is listening. 12007 (DNS) already falls
+     outside this list. */
   return code == 12002 || code == 12029 || code == 12030;
 }
 

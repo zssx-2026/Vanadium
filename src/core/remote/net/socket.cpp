@@ -50,9 +50,24 @@ bool wait_fd(SOCKET s, bool for_write, int timeout_ms) {
   timeval tv;
   tv.tv_sec = timeout_ms / 1000;
   tv.tv_usec = (timeout_ms % 1000) * 1000;
-  int rc = ::select(0, for_write ? nullptr : &set, for_write ? &set : nullptr, nullptr, &tv);
+  /* Windows reports a failed non-blocking connect through exceptfds, not by
+     making the socket writable — a refusal must wake us, or every dead port
+     burns its whole connect budget before surfacing the error. */
+  fd_set* wset = for_write ? &set : nullptr;
+  fd_set eset;
+  FD_ZERO(&eset);
+  FD_SET(s, &eset);
+  int rc = ::select(0, for_write ? nullptr : &set, wset, &eset, &tv);
   if (rc == SOCKET_ERROR) throw_socket_error("select failed", WSAGetLastError());
-  return rc > 0;
+  if (rc == 0) return false;
+  if (!for_write) return true;
+  if (FD_ISSET(s, &eset)) {
+    /* Exceptional completion: the connect failed. Let the caller pick the
+       error up from SO_ERROR and treat this like a writable wakeup that
+       fails the SO_ERROR check. */
+    return true;
+  }
+  return FD_ISSET(s, &set);
 }
 
 }  // namespace
@@ -85,9 +100,12 @@ int transport_code_for_wsa(int wsa_code) {
       return 12002;
     case WSAENETUNREACH:
     case WSAEHOSTUNREACH:
-    case WSAECONNREFUSED:
     case WSAEADDRNOTAVAIL:
       return 12029;
+    case WSAECONNREFUSED:
+      /* Nothing is listening: retrying within seconds cannot help. Surfaced as a
+         distinct hard-fail code so neither the probe nor the stream retries it. */
+      return 120079;
     case WSAECONNRESET:
     case WSAECONNABORTED:
     case WSAENETRESET:
@@ -195,16 +213,19 @@ SOCKET tcp_connect(const std::string& host, int port, int connect_ms) {
   std::vector<Endpoint> addrs = resolve_host(host, port, std::max(1000, connect_ms));
   auto deadline = clock_type::now() + std::chrono::milliseconds(std::max(0, connect_ms));
   std::string last_error = "no address attempted";
+  int last_wsa = 0; /* real failure from the final attempt, not a synthesized timeout */
 
   for (const Endpoint& ep : addrs) {
     SOCKET s = ::socket(ep.family, SOCK_STREAM, IPPROTO_TCP);
     if (s == INVALID_SOCKET) {
-      last_error = socket_error_text(WSAGetLastError());
+      last_wsa = WSAGetLastError();
+      last_error = socket_error_text(last_wsa);
       continue;
     }
     u_long nonblocking = 1;
     if (ioctlsocket(s, FIONBIO, &nonblocking) != 0) {
-      last_error = socket_error_text(WSAGetLastError());
+      last_wsa = WSAGetLastError();
+      last_error = socket_error_text(last_wsa);
       close_socket(s);
       continue;
     }
@@ -212,6 +233,7 @@ SOCKET tcp_connect(const std::string& host, int port, int connect_ms) {
     if (rc == SOCKET_ERROR) {
       int err = WSAGetLastError();
       if (err != WSAEWOULDBLOCK && err != WSAEINPROGRESS) {
+        last_wsa = err;
         last_error = socket_error_text(err);
         close_socket(s);
         continue;
@@ -227,11 +249,13 @@ SOCKET tcp_connect(const std::string& host, int port, int connect_ms) {
       int so_error = 0;
       int len = sizeof(so_error);
       if (getsockopt(s, SOL_SOCKET, SO_ERROR, reinterpret_cast<char*>(&so_error), &len) != 0) {
-        last_error = socket_error_text(WSAGetLastError());
+        last_wsa = WSAGetLastError();
+        last_error = socket_error_text(last_wsa);
         close_socket(s);
         continue;
       }
       if (so_error != 0) {
+        last_wsa = so_error;
         last_error = socket_error_text(so_error);
         close_socket(s);
         continue;
@@ -242,8 +266,8 @@ SOCKET tcp_connect(const std::string& host, int port, int connect_ms) {
     set_nodelay(s);
     return s;
   }
-  int mapped = transport_code_for_wsa(WSAETIMEDOUT);
-  if (last_error.find("timed out") == std::string::npos) mapped = 12029;
+  int mapped = transport_code_for_wsa(last_wsa != 0 ? last_wsa : WSAETIMEDOUT);
+  if (last_wsa == 0 && last_error.find("timed out") == std::string::npos) mapped = 12029;
   throw Failure(1, "connect failed",
                 host + ":" + std::to_string(port) + " " + last_error + " (" +
                     std::to_string(mapped) + ")");
