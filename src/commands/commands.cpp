@@ -723,6 +723,35 @@ int cmd_search(App& app, const std::vector<std::string>& args) {
   };
 
   if (has_flag(args, "-name")) {
+    /* Spec shape "inv search <path> <branch> -name": find a branch by name in the archive.
+       Output copy is spec-mandated; the archive path positional may be "." or a real dir. */
+    const std::vector<std::string> pos = positionals(args);
+    std::string want = pos.size() > 2 ? pos[2] : (pos.size() > 1 ? pos[1] : std::string());
+    if (!want.empty()) {
+      app.ui.status("search.branch", "Searching in archive");
+      app.ui.clear_status();
+      app.ui.line("Searching in archive.");
+      const std::string needle_b = to_lower(want);
+      const BranchInfo* hit = nullptr;
+      for (const auto& b : a.branches()) {
+        std::string leaf = b.path;
+        const std::size_t slash = leaf.find_last_of('/');
+        if (slash != std::string::npos) leaf = leaf.substr(slash + 1);
+        if (leaf == want || b.path == want ||
+            to_lower(leaf) == needle_b || to_lower(b.path) == needle_b) {
+          hit = &b;
+          break;
+        }
+      }
+      if (!hit) fail(3013, msg("store.no_branch"), want);
+      app.ui.line("Found branch.");
+      app.ui.line("The branch is in " + hit->path + ".");
+      app.ui.line("Founded branch in " + human_duration(now_ms() - started) + ".");
+      return 0;
+    }
+  }
+
+  if (has_flag(args, "-name")) {
     /* Name mode: match the tracked path instead of the file body. */
     std::size_t name_hits = 0;
     bool name_truncated = false;
