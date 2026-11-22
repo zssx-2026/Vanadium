@@ -37,7 +37,7 @@ SetCompressor /SOLID zlib
   !endif
 !endif
 !ifndef APP_VERSION
-  !define APP_VERSION "0.4.0"
+  !define APP_VERSION "0.5.0"
 !endif
 
 ; APP_VERSION must be MAJOR.MINOR.PATCH. A trailing dot lets the compiler
