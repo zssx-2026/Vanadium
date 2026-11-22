@@ -40,6 +40,19 @@ SetCompressor /SOLID zlib
   !define APP_VERSION "0.5.0"
 !endif
 
+; A pre-release suffix ("0.5.0-snapshot.1") is split off first: the numeric
+; MAJOR.MINOR.PATCH fields drive the Windows version metadata, the suffix is
+; carried into DisplayVersion / OutFile / branding verbatim.
+!define VER_FULL "${APP_VERSION}"
+!searchparse /noerrors "${APP_VERSION}-" "" APP_VERSION "-" VER_PRE
+!ifdef VER_PRE
+  !if "${VER_PRE}" == ""
+    !undef VER_PRE
+  !endif
+!endif
+!ifndef APP_VERSION
+  !define APP_VERSION "${VER_FULL}"
+!endif
 ; APP_VERSION must be MAJOR.MINOR.PATCH. A trailing dot lets the compiler
 ; split all three fields (the last field would otherwise swallow the tail);
 ; /noerrors keeps a malformed version from aborting with a cryptic searchparse
@@ -88,11 +101,11 @@ SetCompressor /SOLID zlib
 !macroend
 
 ; ---- installer metadata ----------------------------------------------------
-Name "${APP_NAME} ${APP_VERSION}"
-OutFile "${OUT_DIR}\inv-setup-${APP_VERSION}.exe"
+Name "${APP_NAME} ${VER_FULL}"
+OutFile "${OUT_DIR}\inv-setup-${VER_FULL}.exe"
 InstallDir "$PROGRAMFILES64\Infinity\inv"
 InstallDirRegKey HKLM "${UNINST_KEY}" "InstallLocation"
-BrandingText "${APP_NAME} ${APP_VERSION}"
+BrandingText "${APP_NAME} ${VER_FULL}"
 ShowInstDetails show
 ShowUninstDetails show
 
@@ -100,10 +113,10 @@ VIProductVersion "${VER_MAJOR}.${VER_MINOR}.${VER_PATCH}.0"
 VIAddVersionKey "ProductName" "${APP_NAME}"
 VIAddVersionKey "CompanyName" "Infinity"
 VIAddVersionKey "FileDescription" "${APP_NAME} installer"
-VIAddVersionKey "FileVersion" "${APP_VERSION}"
-VIAddVersionKey "ProductVersion" "${APP_VERSION}"
+VIAddVersionKey "FileVersion" "${VER_MAJOR}.${VER_MINOR}.${VER_PATCH}.0"
+VIAddVersionKey "ProductVersion" "${VER_MAJOR}.${VER_MINOR}.${VER_PATCH}.0"
 VIAddVersionKey "LegalCopyright" "Copyright (c) Infinity"
-VIAddVersionKey "OriginalFilename" "inv-setup-${APP_VERSION}.exe"
+VIAddVersionKey "OriginalFilename" "inv-setup-${VER_FULL}.exe"
 
 ; ---- pages (MUI2) ----------------------------------------------------------
 !define MUI_WELCOMEPAGE_TITLE_3LINES
@@ -175,7 +188,7 @@ Section "$(INV_SEC_CORE)" SEC_CORE
 
   ; Add/Remove Programs entry
   WriteRegStr HKLM "${UNINST_KEY}" "DisplayName" "${APP_NAME}"
-  WriteRegStr HKLM "${UNINST_KEY}" "DisplayVersion" "${APP_VERSION}"
+  WriteRegStr HKLM "${UNINST_KEY}" "DisplayVersion" "${VER_FULL}"
   WriteRegStr HKLM "${UNINST_KEY}" "Publisher" "Infinity"
   WriteRegStr HKLM "${UNINST_KEY}" "InstallLocation" "$INSTDIR"
   WriteRegStr HKLM "${UNINST_KEY}" "DisplayIcon" "$INSTDIR\inv.exe"

@@ -26,7 +26,8 @@
               (step 4c asserts the "abi vanadium-abi-1" tag unconditionally)
 
 .PARAMETER Tag
-  Release tag. Defaults to inv.
+  Release tag. Defaults to inv. Snapshot/alpha builds pass e.g.
+  -Tag inv-0.5.0-snapshot.1 -Version 0.5.0-snapshot.1 -Prerelease.
 
 .PARAMETER Repo
   owner/name. Defaults to zssx-2026/Infinity-Vanade.
@@ -59,6 +60,9 @@ param(
   [string]$DistDir = '',
   [string]$Notes = '',
   [string]$Title = '',
+  # snapshot/alpha builds must NOT land on the stable 'inv' release; they get
+  # their own tag and are flagged as pre-release so GitHub sorts them apart.
+  [switch]$Prerelease,
   [switch]$DryRun,
   [switch]$KeepExisting
 )
@@ -191,7 +195,7 @@ function New-Release {
     name = $releaseName
     body = $Notes
     draft = $false
-    prerelease = $false
+    prerelease = [bool]$Prerelease
   }
   $json = $payload | ConvertTo-Json -Depth 5
   $content = New-Object System.Net.Http.StringContent($json, [System.Text.Encoding]::UTF8, 'application/json')
