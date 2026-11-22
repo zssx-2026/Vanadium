@@ -113,6 +113,12 @@ bool unpack_directory(const std::string& blob, const std::string& target, std::s
 }
 
 remote::Github github_for(App& app, const std::string& host) {
+  /* Read-only GitHub API works anonymously; only release/edit (writes) need a
+     token, and those go through github_for_write which still enforces login. */
+  return remote::Github(remote::load_token(host));
+}
+
+remote::Github github_for_write(App& app, const std::string& host) {
   std::string token = remote::load_token(host);
   if (token.empty()) {
     Failure f;
@@ -283,7 +289,7 @@ int cmd_push(App& app, const std::vector<std::string>& args) {
   std::string owner, repo;
   require_repo(app, args, owner, repo);
   Archive a = open_here(app);
-  remote::Github gh = github_for(app, "github.com");
+  remote::Github gh = github_for_write(app, "github.com");
 
   Json rel;
   try {
@@ -450,7 +456,7 @@ int cmd_fork(App& app, const std::vector<std::string>& args) {
 int cmd_release(App& app, const std::vector<std::string>& args) {
   std::string owner, repo;
   require_repo(app, args, owner, repo);
-  remote::Github gh = github_for(app, "github.com");
+  remote::Github gh = github_for_write(app, "github.com");
   const std::string tag = opt_value(args, "-tag", "v1.0");
   const std::string title = opt_value(args, "-title", tag);
   const std::string branch = opt_value(args, "-branch", "/");
