@@ -925,37 +925,63 @@ int cmd_search(App& app, const std::vector<std::string>& args) {
 }
 
 int cmd_rb(App& app, const std::vector<std::string>& args) {
+  const i64 started = now_ms();
   Archive a = open_here(app);
   const std::string branch_path = need_arg(args, 1, "<path>");
   const std::string seq_text = need_arg(args, 2, "<branch>");
   const i64 seq = std::atoll(seq_text.c_str());
   if (!a.branch_exists(branch_path)) fail(3013, msg("store.no_branch"), branch_path);
   if (!app.yes) {
-    app.ui.line(msg("rb.warning"));
-    if (!app.ui.prompt(msg("rb.confirm"), "Y/N")) {
-      app.ui.line(msg("ui.cancelled"));
+    app.ui.line("Do you want to roll back to this branch?");
+    app.ui.line("This operation is irreversible! Please ensure that your files have been backed up.");
+    if (!app.ui.prompt("(Y/N)", "Y/N")) {
+      app.ui.line("The user doesn't agree to perform this operation, exit.");
       return 1;
     }
   }
+  app.ui.status("rb.search", "Searching branch");
+  app.ui.clear_status();
+  app.ui.line("The branch has been searched.");
+  app.ui.line("Found archive's type is " + std::string(archive_type_name(a.type())) + ".");
   const std::string target = opt_value(args, "-path", a.root());
   a.materialize(branch_path, seq, target, &app.ui);
-  app.ui.line(msgf2("rb.done", branch_path, std::to_string(seq)));
+  app.ui.line("Roll done. " + human_duration(now_ms() - started) + " used.");
   return 0;
 }
 
 int cmd_rm(App& app, const std::vector<std::string>& args) {
+  const i64 started = now_ms();
   Archive a = open_here(app);
   const std::string branch_path = need_arg(args, 1, "<branch>");
   if (!a.branch_exists(branch_path)) fail(3013, msg("store.no_branch"), branch_path);
   if (!app.yes) {
-    app.ui.line(msg("rm.warning"));
-    if (!app.ui.prompt(msg("rm.confirm"), "Y/N")) {
-      app.ui.line(msg("ui.cancelled"));
+    app.ui.line("Do you want to remove this branch?");
+    app.ui.line("This operation is irreversible! Please ensure that your files have been backed up.");
+    if (!app.ui.prompt("(Y/N)", "Y/N")) {
+      app.ui.line("The user doesn't agree to perform this operation, exit.");
       return 1;
     }
   }
+  app.ui.status("rm.search", "Searching branch");
+  app.ui.clear_status();
+  app.ui.line("The branch has been searched.");
+  const auto info = a.find(branch_path);
+  app.ui.status("rm.remove", "Removing branch");
+  app.ui.clear_status();
   a.remove_branch(branch_path, has_flag(args, "-recursive"));
-  app.ui.line(msgf("rm.done", branch_path));
+  app.ui.line("The branch has beed removed.");
+  std::size_t files = 0, folders = 0, bytes = 0;
+  if (info) {
+    auto snap = a.head(branch_path);
+    if (snap) {
+      for (const auto& e : snap->entries) {
+        if (e.dir) ++folders; else { ++files; bytes += e.size; }
+      }
+    }
+  }
+  app.ui.line("Removed " + std::to_string(files) + " files, " + std::to_string(folders) +
+              " folders, " + human_size(static_cast<i64>(bytes)) + ".");
+  (void)started;
   return 0;
 }
 
