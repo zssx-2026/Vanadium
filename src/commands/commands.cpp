@@ -681,10 +681,11 @@ int cmd_reg(App& app, const std::vector<std::string>& args) {
     a.objects().put(data);
     ++n_files;
   }
+  (void)n_files;  /* spec: the Compress line carries no count */
   app.ui.clear_status();
-  app.ui.line("Compress done. " + std::to_string(n_files) + " files compressed.");
+  app.ui.line("Compress done.");
 
-  app.ui.status("reg.copy", "Copying files");
+  app.ui.status("reg.copy", "Copying");
   const std::string id = a.commit(branch_path, entries, opt_value(args, "-message", "register"));
   app.ui.clear_status();
   app.ui.line("The folder has been added.");
