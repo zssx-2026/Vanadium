@@ -1014,6 +1014,9 @@ int cmd_rm(App& app, const std::vector<std::string>& args) {
   }
   app.ui.line("Removed " + std::to_string(files) + " files, " + std::to_string(folders) +
               " folders, " + human_size(static_cast<i64>(bytes)) + ".");
+
+  /* Keep the .inv registry in sync with the removed branch. */
+  if (info) remove_registry(app.cwd, info->id);
   (void)started;
   return 0;
 }
