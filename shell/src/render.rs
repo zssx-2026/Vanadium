@@ -525,9 +525,11 @@ fn render_progress_line(p: &Phase, now: Instant, utf8: bool) -> String {
         "--".to_string()
     };
     /* Spec: [num]/[all] （done size） [size]/s — fullwidth parens per m02304. */
+    /* Spec: merge rows carry no phase name; only thread rows do (thread[num]). */
+    let prefix = if p.name.starts_with("thread") { format!("{} ", p.name) } else { String::new() };
     format!(
-        "{} [{}] {} {} （{}） {} ETA:{}",
-        p.name,
+        "{}[{}] {} {} （{}） {} ETA:{}",
+        prefix,
         bar,
         pct,
         count,
