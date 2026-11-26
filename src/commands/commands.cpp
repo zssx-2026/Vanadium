@@ -421,6 +421,8 @@ int cmd_info(App& app, const std::vector<std::string>&) {
   app.ui.line("Give a star of this project: https://github.com/zssx-2026/Vanadium");
   app.ui.line("Open the release page of this version: https://github.com/zssx-2026/Infinity-Vanade/releases");
   app.ui.line("Open the project page on Github: https://github.com/zssx-2026/Vanadium");
+  app.ui.line("LICENCE on Github: https://github.com/zssx-2026/Vanadium/blob/main/LICENSE");
+  app.ui.line("Docs on Github: https://github.com/zssx-2026/Vanadium/tree/main/docs");
   return 0;
 }
 

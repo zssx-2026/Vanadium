@@ -13,6 +13,7 @@
 
 #include <algorithm>
 #include <cstring>
+#include <ctime>
 #include <map>
 #include <sstream>
 #include <string>
@@ -95,9 +96,22 @@ std::vector<std::string> local_addresses() {
 int cmd_serve_impl(App& app, const std::vector<std::string>& args) {
   remote::net::ensure_winsock();
   int port = 8341;
+  /* Spec flags (m05011). -cli/-nocommand/-page/-whitelist/-whiteip land with the
+     interactive command loop; here we honor the flags that shape this server loop. */
+  bool detlog = has_flag(args, "-detlog");
+  bool simlog = has_flag(args, "-simlog");
+  bool nopage = has_flag(args, "-nopage");
+  bool lockdata = has_flag(args, "-lockdata");
+  bool automd = has_flag(args, "-automd");
+  bool autoagree = has_flag(args, "-autoagree");
+  long maxm = 0, minm = 0;
   for (std::size_t i = 0; i + 1 < args.size(); ++i) {
     if (args[i] == "-port") port = std::atoi(args[i + 1].c_str());
+    else if (args[i] == "-maxm") maxm = std::atol(args[i + 1].c_str());
+    else if (args[i] == "-minm") minm = std::atol(args[i + 1].c_str());
   }
+  if (maxm > 0 && maxm < minm) { fail(4103, "-maxm must be >= -minm"); }
+  (void)simlog; (void)lockdata; (void)automd; (void)autoagree;
   /* Walk up from the working directory to the archive root (meta.json or
      legacy invar.json), mirroring open_here() in commands.cpp. */
   std::string base = fs::absolute(app.cwd);
@@ -202,6 +216,14 @@ int cmd_serve_impl(App& app, const std::vector<std::string>& args) {
       closesocket(cs);
       continue;
     }
+    if (nopage && (target == "/" || target.empty())) {
+      /* -nopage: 无页面模式 — no directory listing pages. */
+      std::string resp404 = "HTTP/1.1 404 Not Found\r\nContent-Type: " + ctype +
+                            "\r\nContent-Length: 0\r\nConnection: close\r\n\r\n";
+      ::send(cs, resp404.data(), (int)resp404.size(), 0);
+      closesocket(cs);
+      continue;
+    }
     if (target == "/" || target.empty()) {
       body = "<html><head><title>inv</title></head><body><h1>/</h1><ul>";
       for (const ServeEntry& e : entries)
@@ -253,6 +275,16 @@ int cmd_serve_impl(App& app, const std::vector<std::string>& args) {
                        "\r\nConnection: close\r\n\r\n" + body;
     ::send(cs, resp.data(), (int)resp.size(), 0);
     closesocket(cs);
+    /* -detlog: timestamped access line per request (spec [<时间戳>][<type>]). */
+    if (detlog) {
+      char ts[32];
+      std::time_t now = std::time(nullptr);
+      std::tm tmv{};
+      localtime_s(&tmv, &now);
+      std::strftime(ts, sizeof(ts), "%Y-%m-%d %H:%M:%S", &tmv);
+      app.ui.line("[" + std::string(ts) + "][access] " + method + " " + target +
+                  " 200 " + std::to_string(body.size()) + "B");
+    }
   }
   return 0;
 }
