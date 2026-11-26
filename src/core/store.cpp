@@ -24,6 +24,7 @@ constexpr const char* kBranchesDir = "branches";
 constexpr const char* kHistoryFile = "history.jsonl";
 constexpr const char* kHeadFile = "head.json";
 constexpr u32 kObjectMagic = 0x315A5649u; /* "IVZ1" little endian */
+constexpr u32 kObjectMagicRaw = 0x305A5649u; /* "IVZ0" little endian: stored raw */
 
 std::string canonical_branch(const std::string& raw) {
   std::string s = trim(raw);
@@ -134,17 +135,21 @@ BranchInfo branch_from_json(const Json& j) {
   return b;
 }
 
-std::string encode_object(const std::string& raw) {
+std::string encode_object(const std::string& raw, int level) {
+  /* level 0 stores the bytes verbatim ("IVZ0" header) when that is not larger
+     than the LZ4 block; level >= 1 forces LZ4 ("IVZ1"). Both decode paths are
+     always available, so old and new objects interoperate. */
   const std::string comp = lz4_compress(raw.data(), raw.size());
+  const bool use_raw = level <= 0 && raw.size() + 12 <= comp.size() + 12;
   std::string out;
-  out.reserve(comp.size() + 12);
-  const u32 magic = kObjectMagic;
+  out.reserve((use_raw ? raw.size() : comp.size()) + 12);
+  const u32 magic = use_raw ? kObjectMagicRaw : kObjectMagic;
   const u32 raw_len = static_cast<u32>(raw.size());
-  const u32 comp_len = static_cast<u32>(comp.size());
+  const u32 comp_len = static_cast<u32>(use_raw ? raw.size() : comp.size());
   out.append(reinterpret_cast<const char*>(&magic), 4);
   out.append(reinterpret_cast<const char*>(&raw_len), 4);
   out.append(reinterpret_cast<const char*>(&comp_len), 4);
-  out += comp;
+  out += use_raw ? raw : comp;
   return out;
 }
 
@@ -154,6 +159,11 @@ bool decode_object(const std::string& blob, std::string& out) {
   std::memcpy(&magic, blob.data(), 4);
   std::memcpy(&raw_len, blob.data() + 4, 4);
   std::memcpy(&comp_len, blob.data() + 8, 4);
+  if (magic == kObjectMagicRaw) {
+    if (comp_len != raw_len || blob.size() < 12 + comp_len) return false;
+    out.assign(blob.data() + 12, comp_len);
+    return true;
+  }
   if (magic != kObjectMagic) return false;
   if (blob.size() < 12 + comp_len) return false;
   return lz4_decompress(blob.data() + 12, comp_len, out, raw_len);
@@ -193,7 +203,7 @@ std::string ObjectStore::put(const std::string& data) {
   const std::string path = object_path(sha);
   if (fs::exists(path)) return sha;
   fs::mkdirs(fs::parent(path));
-  fs::write_file_atomic(path, encode_object(data));
+  fs::write_file_atomic(path, encode_object(data, compress_level_));
   return sha;
 }
 

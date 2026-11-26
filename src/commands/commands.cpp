@@ -406,7 +406,11 @@ int cmd_info(App& app, const std::vector<std::string>&) {
   else if (v.find("-alpha") != std::string::npos || v.find("-beta") != std::string::npos) channel = "Beta version";
   app.ui.line(channel);
   app.ui.line("Release time stamp: 2026-11-22 19:50:00 (UTC+8)");
-  app.ui.line("Official support period: n/a (pre-release channel)");
+  /* Spec m05441: "Official support period:<ts1> ~ <ts2>（没有不写！）" — the
+     line is omitted entirely on the pre-release channel, which has no support
+     window yet. */
+  app.ui.line("Thank you for choose us!");
+  app.ui.line("We're working for your better experience!");
   app.ui.line("");
   app.ui.line("          ███████                     ███████");
   app.ui.line("       ███       ███               ███       ███");
@@ -1254,6 +1258,67 @@ struct CmdEntry {
   int (*fn)(App&, const std::vector<std::string>&);
 };
 
+
+/* inv compact <parameter> <path>: rewrite every object in the archive at the
+   requested compression level (spec m05441; -level 0 stores verbatim, 1..9
+   LZ4, mirroring add's -zl range). Reports before/after bytes. */
+int cmd_compact(App& app, const std::vector<std::string>& args) {
+  int level = 1;
+  std::vector<std::string> pos;
+  for (std::size_t i = 1; i < args.size(); ++i) {
+    if (args[i] == "-level") {
+      if (i + 1 >= args.size()) {
+        app.ui.error(1001, "Missing argument: <level>");
+        return 1;
+      }
+      level = std::atoi(args[++i].c_str());
+      if (level < 0 || level > 9) {
+        app.ui.error(3104, "Invalid compression level: " + args[i]);
+        return 1;
+      }
+    } else {
+      pos.push_back(args[i]);
+    }
+  }
+  std::string target = pos.empty() ? app.cwd : fs::absolute(pos.back());
+  if (!Archive::looks_like_archive(target)) {
+    fail(3001, msg("store.not_archive"), target);
+    return 1;
+  }
+  Archive a = Archive::open(target);
+  a.objects().set_compress_level(level);
+  const std::vector<std::string> objs = a.objects().all_objects();
+  std::size_t rewritten = 0, saved = 0;
+  app.ui.status("compact", "Compressing archive");
+  for (const std::string& sha : objs) {
+    std::string data;
+    if (!a.objects().get(sha, data)) continue;
+    const u64 old_size = a.objects().stored_size(sha);
+    if (old_size == 0) continue;
+    /* put() with the level knob writes the recompressed blob at the same
+       sha-addressed path (content is identical after decode). */
+    a.objects().set_compress_level(level);
+    const std::string new_sha = a.objects().put(data);
+    if (new_sha != sha) {
+      /* content-addressed path cannot change; defensive: keep old object. */
+      a.objects().set_compress_level(1);
+      continue;
+    }
+    const u64 new_size = a.objects().stored_size(sha);
+    if (new_size < old_size) {
+      saved += old_size - new_size;
+      ++rewritten;
+    } else {
+      /* rewrite wrote a bigger/equal blob; nothing to keep, count as visited */
+    }
+  }
+  app.ui.clear_status();
+  app.ui.line("Compressing archive done. " + std::to_string(rewritten) + " objects rewritten, " +
+              std::to_string(saved) + "B saved.");
+  app.ui.line("Compact done.");
+  return 0;
+}
+
 const CmdEntry kCommands[] = {
     {"help", cmd_help},
     {"version", cmd_version},
@@ -1278,6 +1343,7 @@ const CmdEntry kCommands[] = {
     {"serve", cmd_serve},
     {"login", cmd_login},
     {"release", cmd_release},
+    {"compact", cmd_compact},
     {"edit", cmd_edit},
     {"download", cmd_download},
     {"verify", cmd_verify},

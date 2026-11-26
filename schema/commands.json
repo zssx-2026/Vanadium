@@ -1073,6 +1073,28 @@
      }
     }
    ]
+  },
+  {
+   "name": "compact",
+   "args": "<path>",
+   "summary": {
+    "en": "Rewrite archive objects at a chosen compression level",
+    "zh-cn": "以指定压缩等级重写存档对象",
+    "tr-cn": "以指定壓縮等級重寫存檔物件",
+    "am-en": "Rewrite archive objects at a chosen compression level"
+   },
+   "options": [
+    {
+     "flag": "-level",
+     "arg": "<n>",
+     "summary": {
+      "en": "Compression level 0-9 (0 stores verbatim)",
+      "zh-cn": "压缩等级 0-9（0 原样存储）",
+      "tr-cn": "壓縮等級 0-9（0 原樣儲存）",
+      "am-en": "Compression level 0-9 (0 stores verbatim)"
+     }
+    }
+   ]
   }
  ]
 }

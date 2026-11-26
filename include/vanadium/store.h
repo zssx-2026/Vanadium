@@ -49,6 +49,10 @@ class ObjectStore {
   ObjectStore() = default;
   explicit ObjectStore(std::string root);
   std::string put(const std::string& data);
+  /* Compact knob (inv compact -level): 0 = store bytes verbatim when smaller,
+     1..9 = LZ4 recompress. Default 1 keeps historical behavior. */
+  void set_compress_level(int level) { compress_level_ = level; }
+  int compress_level() const { return compress_level_; }
   std::string put_file(const std::string& path, u64* size_out = nullptr);
   bool get(const std::string& sha, std::string& out) const;
   bool has(const std::string& sha) const;
@@ -61,6 +65,7 @@ class ObjectStore {
 
  private:
   std::string root_;
+  int compress_level_ = 1;
 };
 
 class Archive {

@@ -99,6 +99,7 @@ const OptRow kOptions[] = {
 {"-silent", "", {"Run the installer silently into the current directory", "\u9759\u9ED8\u5B89\u88C5\u5230\u5F53\u524D\u76EE\u5F55", "\u975C\u9ED8\u5B89\u88DD\u5230\u7576\u524D\u76EE\u9304", "Run the installer silently into the current directory"}},
 {"-path", "<dir>", {"Download cache directory", "\u4E0B\u8F7D\u7F13\u5B58\u76EE\u5F55", "\u4E0B\u8F09\u5FEB\u53D6\u76EE\u9304", "Download cache directory"}},
 {"-threads", "<n>", {"Download threads (alias -thread)", "\u4E0B\u8F7D\u7EBF\u7A0B\u6570\uFF08\u522B\u540D -thread\uFF09", "\u4E0B\u8F09\u57F7\u884C\u7DD2\u6578\uFF08\u5225\u540D -thread\uFF09", "Download threads (alias -thread)"}},
+{"-level", "<n>", {"Compression level 0-9 (0 stores verbatim)", "\u538B\u7F29\u7B49\u7EA7 0-9\uFF080 \u539F\u6837\u5B58\u50A8\uFF09", "\u58D3\u7E2E\u7B49\u7D1A 0-9\uFF080 \u539F\u6A23\u5132\u5B58\uFF09", "Compression level 0-9 (0 stores verbatim)"}},
 };
 
 const std::size_t kOptionCount = sizeof(kOptions) / sizeof(kOptions[0]);
@@ -135,6 +136,7 @@ const CmdRow kCommands[] = {
 {"completion", "", {"Print a shell completion script", "\u6253\u5370 shell \u8865\u5168\u811A\u672C", "\u6253\u5370 shell \u88DC\u5168\u8173\u672C", "Print a shell completion script"}, {"inv completion [options]", "inv completion [\u9009\u9879]", "inv completion [\u9078\u9805]", "inv completion [options]"}, 56, 1},
 {"serve", "[path]", {"Start an INV web server for the archive", "\u542F\u52A8\u5B58\u6863\u7684 INV \u7F51\u9875\u670D\u52A1\u5668", "\u555F\u52D5\u5B58\u6A94\u7684 INV \u7DB2\u9801\u670D\u52D9\u5668", "Start an INV web server for the archive"}, {"inv serve [path] [options]", "inv serve [path] [\u9009\u9879]", "inv serve [path] [\u9078\u9805]", "inv serve [path] [options]"}, 57, 2},
 {"update", "", {"Check for and install new versions from the release channel", "\u68C0\u67E5\u5E76\u5B89\u88C5\u53D1\u5E03\u901A\u9053\u4E2D\u7684\u65B0\u7248\u672C", "\u6AA2\u67E5\u4E26\u5B89\u88DD\u767C\u5E03\u901A\u9053\u4E2D\u7684\u65B0\u7248\u672C", "Check for and install new versions from the release channel"}, {"inv update [options]", "inv update [\u9009\u9879]", "inv update [\u9078\u9805]", "inv update [options]"}, 59, 5},
+{"compact", "<path>", {"Rewrite archive objects at a chosen compression level", "\u4EE5\u6307\u5B9A\u538B\u7F29\u7B49\u7EA7\u91CD\u5199\u5B58\u6863\u5BF9\u8C61", "\u4EE5\u6307\u5B9A\u58D3\u7E2E\u7B49\u7D1A\u91CD\u5BEB\u5B58\u6A94\u7269\u4EF6", "Rewrite archive objects at a chosen compression level"}, {"inv compact <path> [options]", "inv compact <path> [\u9009\u9879]", "inv compact <path> [\u9078\u9805]", "inv compact <path> [options]"}, 64, 1},
 };
 
 const std::size_t kCommandCount = sizeof(kCommands) / sizeof(kCommands[0]);
