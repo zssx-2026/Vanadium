@@ -516,6 +516,7 @@ bool download_segmented(const std::string& url, const std::string& out_path, int
     if (wanted > kMaxThreads) wanted = kMaxThreads;
 
     if (ui) ui->status("download", "probing " + url);
+    i64 t_probe_done = started;
 
     /* The probe is retried on its own: a single 12002 timeout here used to kill
        the whole download before any segment was ever requested. */
@@ -529,6 +530,7 @@ bool download_segmented(const std::string& url, const std::string& out_path, int
           err = static_cast<unsigned long>(info.status);
         } else {
           probed = true;
+          t_probe_done = now_ms();
           break;
         }
       } catch (const Failure& f) {
@@ -541,6 +543,7 @@ bool download_segmented(const std::string& url, const std::string& out_path, int
             ui->warn("probe failed (" + f.message + "), falling back to a single stream");
           }
           probed = false;
+          t_probe_done = now_ms();
           break;
         }
       }
@@ -600,10 +603,12 @@ bool download_segmented(const std::string& url, const std::string& out_path, int
       job.pending.push_back(i);
     }
 
+    const i64 t_transfer_start = now_ms();
     std::vector<std::thread> pool;
     pool.reserve(static_cast<size_t>(count));
     for (int i = 0; i < count; ++i) pool.emplace_back(worker, std::ref(job), i);
     for (auto& t : pool) t.join();
+    const i64 t_transfer_end = now_ms();
 
     if (job.abort.load()) {
       cleanup(job);
@@ -626,6 +631,8 @@ bool download_segmented(const std::string& url, const std::string& out_path, int
       report->elapsed_ms = now_ms() - started;
       report->threads = job.threads;
       report->retries = job.retries.load();
+      report->connect_ms = t_probe_done - started;
+      report->download_ms = t_transfer_end - t_transfer_start;
     }
     return true;
   } catch (const Failure& f) {

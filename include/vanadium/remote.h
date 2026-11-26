@@ -65,6 +65,11 @@ struct DownloadReport {
   i64 elapsed_ms = 0;
   int threads = 1;
   int retries = 0;
+  /* Phase timestamps (ms since epoch) for the spec's Used-line split:
+     connect = DNS+TCP+TLS+first byte of the probe, download = transfer
+     window, verify = hashing after the transfer. */
+  i64 connect_ms = 0;
+  i64 download_ms = 0;
 };
 bool download_segmented(const std::string& url, const std::string& out_path, int threads,
                         Emitter* ui, DownloadReport* report);

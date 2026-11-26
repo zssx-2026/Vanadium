@@ -286,9 +286,15 @@ int cmd_download(App& app, const std::vector<std::string>& args) {
   }
   app.ui.line("Download done.");
   app.ui.line("Downloaded " + human_size(out_bytes) + ".");
-  app.ui.line("Used " + std::to_string((now_ms() - started) / 1000) + "s for connecting, " +
-              std::to_string((now_ms() - started) / 1000) + "s for downloading, " +
-              std::to_string((now_ms() - started) / 1000) + "s for verifying.");
+  const i64 t_all_end = now_ms();
+  const i64 conn_s = rep.connect_ms > 0 ? rep.connect_ms / 1000 : 0;
+  const i64 dl_s = rep.download_ms > 0 ? rep.download_ms / 1000
+                   : (rep.elapsed_ms > 0 ? rep.elapsed_ms / 1000 : (t_all_end - started) / 1000);
+  i64 verify_s = (t_all_end - started) / 1000 - conn_s - dl_s;
+  if (verify_s < 0) verify_s = 0;
+  app.ui.line("Used " + std::to_string(conn_s) + "s for connecting, " +
+              std::to_string(dl_s) + "s for downloading, " +
+              std::to_string(verify_s) + "s for verifying.");
   app.ui.line("sha256 " + sha + "  crc64 " + crc64_hex(crc));
   return verified ? 0 : 1;
 }
