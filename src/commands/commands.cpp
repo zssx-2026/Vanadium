@@ -1290,9 +1290,11 @@ int cmd_compact(App& app, const std::vector<std::string>& args) {
   const std::vector<std::string> objs = a.objects().all_objects();
   std::size_t rewritten = 0, saved = 0;
   app.ui.status("compact", "Compressing archive");
+  std::size_t visited = 0;
   for (const std::string& sha : objs) {
+    app.ui.progress("compact", static_cast<long long>(visited), static_cast<long long>(objs.size()), -1, 0);
     std::string data;
-    if (!a.objects().get(sha, data)) continue;
+    if (!a.objects().get(sha, data)) { ++visited; continue; }
     const u64 old_size = a.objects().stored_size(sha);
     if (old_size == 0) continue;
     /* put() with the level knob writes the recompressed blob at the same
@@ -1308,9 +1310,8 @@ int cmd_compact(App& app, const std::vector<std::string>& args) {
     if (new_size < old_size) {
       saved += old_size - new_size;
       ++rewritten;
-    } else {
-      /* rewrite wrote a bigger/equal blob; nothing to keep, count as visited */
     }
+    ++visited;
   }
   app.ui.clear_status();
   app.ui.line("Compressing archive done. " + std::to_string(rewritten) + " objects rewritten, " +
