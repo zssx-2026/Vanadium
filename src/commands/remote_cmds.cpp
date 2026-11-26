@@ -530,7 +530,6 @@ int cmd_fork(App& app, const std::vector<std::string>& args) {
   meta.set("name", Json(name));
   meta.set("type", Json(std::string(archive_type_name(a.type()))));
   fs::write_file(fs::join(a.root(), "meta.json"), meta.dump(2) + "\n");
-  app.ui.line("Fork done.");
   return 0;
 }
 
