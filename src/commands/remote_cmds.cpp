@@ -84,7 +84,8 @@ std::string pack_directory(const std::string& root) {
 }
 
 bool unpack_directory(const std::string& blob, const std::string& target, std::string& why,
-                      std::size_t* out_files = nullptr, std::size_t* out_folders = nullptr) {
+                      std::size_t* out_files = nullptr, std::size_t* out_folders = nullptr,
+                      const Emitter* ui = nullptr, const char* phase = "unpack") {
   if (out_files) *out_files = 0;
   if (out_folders) *out_folders = 0;
   if (blob.size() < 9 || blob.compare(0, 5, kPackMagic) != 0) {
@@ -95,6 +96,7 @@ bool unpack_directory(const std::string& blob, const std::string& target, std::s
   const u32 count = read_u32(blob, pos);
   fs::mkdirs(target);
   for (u32 i = 0; i < count; ++i) {
+    if (ui) ui->progress(phase, i, count, -1, 0);
     if (pos >= blob.size()) {
       why = "truncated pack header";
       return false;
@@ -451,7 +453,7 @@ static int cmd_clone_impl(App& app, const std::vector<std::string>& args, const 
       want_type_text.empty() ? std::string("nodeonly") : want_type_text);
   Archive a = Archive::create(target, fs::filename(target), want_type);
   std::size_t n_files = 0, n_folders = 0;
-  if (!unpack_directory(blob, target, why, &n_files, &n_folders)) {
+  if (!unpack_directory(blob, target, why, &n_files, &n_folders, &app.ui, "uncompress")) {
     app.ui.error(4013, std::string(msg("clone.bad_pack")) + ": " + why);
     fs::remove_all(target);
     return 1;
@@ -475,9 +477,14 @@ static int cmd_clone_impl(App& app, const std::vector<std::string>& args, const 
 
   app.ui.status("clone.verify", "Verifying SHA256");
   std::size_t verified = 0;
+  std::size_t n_verify_total = 0;
+  for (const auto& e : entries) { if (!e.dir) ++n_verify_total; }
+  std::size_t verify_i = 0;
   std::string verify_err;
   for (const auto& e : entries) {
     if (e.dir) continue;
+    app.ui.progress("verify", static_cast<long long>(verify_i), static_cast<long long>(n_verify_total), -1, 0);
+    ++verify_i;
     std::string data = fs::read_file(fs::join(target, e.path));
     const std::string sha = vd::Sha256::hex(data);
     const u64 crc = vd::crc64(data.data(), data.size());
