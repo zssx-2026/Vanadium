@@ -12,6 +12,7 @@
 #include "vanadium/commands.h"
 
 #include <algorithm>
+#include <cstring>
 #include <map>
 #include <sstream>
 #include <string>
@@ -47,6 +48,25 @@ std::string html_escape(const std::string& s) {
     }
   }
   return out;
+}
+
+/* Minimal content types for common served extensions. */
+std::string content_type_for(const std::string& path) {
+  static const struct { const char* ext; const char* type; } kTypes[] = {
+    {".html", "text/html; charset=utf-8"}, {".htm", "text/html; charset=utf-8"},
+    {".css",  "text/css; charset=utf-8"},  {".js",   "text/javascript; charset=utf-8"},
+    {".json", "application/json; charset=utf-8"},
+    {".txt",  "text/plain; charset=utf-8"}, {".md",  "text/plain; charset=utf-8"},
+    {".xml",  "application/xml"}, {".csv",  "text/csv"},
+    {".png",  "image/png"}, {".jpg", "image/jpeg"}, {".jpeg", "image/jpeg"},
+    {".gif",  "image/gif"}, {".svg", "image/svg+xml"}, {".ico", "image/x-icon"},
+    {".pdf",  "application/pdf"}, {".zip", "application/zip"},
+  };
+  for (const auto& t : kTypes) {
+    const std::size_t n = std::strlen(t.ext);
+    if (path.size() >= n && path.compare(path.size() - n, n, t.ext) == 0) return t.type;
+  }
+  return "application/octet-stream";
 }
 
 /* Local IP addresses for the "Start website:" block. */
@@ -216,7 +236,7 @@ int cmd_serve_impl(App& app, const std::vector<std::string>& args) {
         std::string data;
         if (a.objects().get(it->second->sha, data)) {
           body = data;
-          ctype = "application/octet-stream";
+          ctype = content_type_for(it->second->path);
         } else {
           body = "<html><body><h1>500 Object read failed</h1></body></html>";
           std::string resp = "HTTP/1.1 500 Internal Server Error\r\nContent-Type: " + ctype +
