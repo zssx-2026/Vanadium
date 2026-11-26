@@ -134,11 +134,23 @@ void print_file_tree(App& app, const Archive& a, const std::string& branch_path,
 }
 
 void print_branch_tree(App& app, const Archive& a, bool tree, bool releases, int max_depth,
-                       bool line_form, bool sys_only) {
+                       bool line_form, bool sys_only,
+                       const std::string& sub_of = std::string()) {
   std::vector<BranchInfo> all = a.branches();
   std::sort(all.begin(), all.end(), [](const BranchInfo& x, const BranchInfo& y) {
     return x.path < y.path;
   });
+  /* Spec "-path <branch>": 只列出此路径下的子分支 — direct children only. */
+  if (!sub_of.empty()) {
+    const std::string prefix = sub_of.back() == '/' ? sub_of : sub_of + "/";
+    std::vector<BranchInfo> kids;
+    for (const auto& b : all) {
+      if (b.path.rfind(prefix, 0) != 0) continue;
+      if (b.path.find('/', prefix.size()) != std::string::npos) continue;
+      kids.push_back(b);
+    }
+    all.swap(kids);
+  }
   /* Virtual release system branches (spec tree always shows the releases namespaces). */
   struct SysRelease { const char* path; const char* name; };
   const SysRelease kReleases[] = {
@@ -781,6 +793,12 @@ int cmd_list(App& app, const std::vector<std::string>& args) {
   /* Root "/" keeps meaning "list the branches" (spec). A non-root branch path or a
      real subdirectory shows that branch's files. */
   if (!branch_path.empty() && branch_path != "/" && a.branch_exists(branch_path)) {
+    /* Spec "-path": 只列出此路径下的子分支 — sub-branches of this node only. */
+    if (has_flag(args, "-path")) {
+      print_branch_tree(app, a, false, false, -1, has_flag(args, "-line"), false,
+                        branch_path);
+      return 0;
+    }
     print_file_tree(app, a, branch_path, max_depth, has_flag(args, "-line"));
     return 0;
   }
