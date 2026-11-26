@@ -204,8 +204,6 @@ void print_branch_tree(App& app, const Archive& a, bool tree, bool releases, int
       w_name = std::max(w_name, name.size());
       w_kind = std::max(w_kind, std::strlen(kind));
     };
-    std::string root_kind = "主分支";
-    (void)root_kind;
     push_row("/", "主分支", "/");
     push_row("branches", "分支节点", "/branches/");
     for (const auto& b : all) {
@@ -231,7 +229,7 @@ void print_branch_tree(App& app, const Archive& a, bool tree, bool releases, int
     return;
   }
   /* Tree form: (系统分支) markers, releases namespaces unfolded. */
-  app.ui.line("/（主分支）");
+  app.ui.line("/（系统分支）");
   app.ui.line("  branches/（系统分支）");
   for (const auto& b : all) {
     if (b.path == "/") continue;
