@@ -453,6 +453,11 @@ int cmd_serve_impl(App& app, const std::vector<std::string>& args) {
     }
     if (!file_key.empty()) {
       while (file_key.size() > 1 && file_key.back() == '/') file_key.pop_back();
+      if (file_key == "/") file_key.clear();     /* /files/ lists the root */
+      if (file_key.empty()) {
+        respond(200, page_home(a, branch_path, entries), ctype);
+        continue;
+      }
       auto it = route.find(file_key);
       if (it != route.end()) {
         std::string data;
