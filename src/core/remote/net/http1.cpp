@@ -213,9 +213,12 @@ void Connection::send(const HttpRequest& request) {
   };
 
   std::string head;
+  if (request.target.empty()) {
+    throw Failure(1, "malformed http request", "request target is empty");
+  }
   head += method;
   head += ' ';
-  head += uri_.target();
+  head += request.target;
   head += " HTTP/1.1\r\n";
   if (!overridden("Host")) head += "Host: " + uri_.authority() + "\r\n";
   if (!overridden("User-Agent") && !request.user_agent.empty()) {

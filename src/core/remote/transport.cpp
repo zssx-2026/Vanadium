@@ -26,9 +26,10 @@ using net::ResponseHead;
 
 int pick(int value, int fallback) { return value > 0 ? value : fallback; }
 
-HttpRequest make_request(const HttpOptions& opt, int timeout_ms) {
+HttpRequest make_request(const HttpOptions& opt, int timeout_ms, const std::string& url) {
   HttpRequest req;
   req.method = opt.method.empty() ? "GET" : opt.method;
+  req.target = net::parse_uri(url).target();
   req.headers = opt.headers;
   req.body = opt.body;
   if (!opt.user_agent.empty()) req.user_agent = opt.user_agent;
@@ -130,7 +131,7 @@ std::string narrow(const std::wstring& s) {
 }
 
 RawResponse send_once(const std::string& url, const HttpOptions& opt, int timeout_ms) {
-  HttpRequest req = make_request(opt, timeout_ms);
+  HttpRequest req = make_request(opt, timeout_ms, url);
   net::Exchange ex = net::exchange_once(url, req);
   RawResponse out;
   out.status = ex.head.status;
@@ -146,13 +147,15 @@ std::string resolve_location(const std::string& base_url, const std::string& loc
 
 u64 stream_to_file(const std::string& url, const HttpOptions& opt, const std::string& path,
                    const std::function<void(u64, u64)>& on_chunk, bool append, StreamMeta* meta) {
-  HttpRequest base = make_request(opt, opt.timeout_ms);
+  HttpRequest base = make_request(opt, opt.timeout_ms, url);
   std::string current = url;
 
   for (int hop = 0; hop <= kMaxRedirects; ++hop) {
     net::Uri uri = net::parse_uri(current);
+    HttpRequest hop_req = base;
+    hop_req.target = uri.target();
     ResponseHead head;
-    std::shared_ptr<Connection> conn = open_exchange(uri, base, head);
+    std::shared_ptr<Connection> conn = open_exchange(uri, hop_req, head);
 
     const std::string location = head.header("Location");
     if (is_redirect(head.status) && !location.empty()) {

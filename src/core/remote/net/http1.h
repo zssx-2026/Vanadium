@@ -22,6 +22,7 @@ inline constexpr const char* kDefaultUserAgent = "inv/0.4.0";
 
 struct HttpRequest {
   std::string method = "GET";
+  std::string target = "/";    /* request-target sent on the wire (path?query) */
   std::vector<std::pair<std::string, std::string>> headers;
   std::string body;
   std::string user_agent = kDefaultUserAgent;
