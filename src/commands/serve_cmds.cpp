@@ -93,6 +93,178 @@ std::vector<std::string> local_addresses() {
   return out;
 }
 
+
+/* ---------- GitHub-like default pages ---------- */
+
+/* One shared shell around every page: top bar with nav links. */
+std::string page_shell(const std::string& title, const std::string& active,
+                       const std::string& inner) {
+  auto nav = [&](const char* href, const char* label) {
+    std::string cls = (active == label) ? " class=\"on\"" : "";
+    return "<a href=\"" + std::string(href) + "\"" + cls + ">" + label + "</a>";
+  };
+  std::string s = "<!doctype html><html><head><meta charset=\"utf-8\">";
+  s += "<title>" + html_escape(title) + " - inv</title>";
+  s += "<style>";
+  s += "body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:#0d1117;color:#e6edf3}";
+  s += "header{background:#010409;border-bottom:1px solid #30363d;padding:0 24px;display:flex;align-items:center;gap:20px;height:56px}";
+  s += "header .logo{color:#e6edf3;font-weight:700;text-decoration:none;font-size:18px}";
+  s += "header a{color:#c9d1d9;text-decoration:none;padding:14px 8px;display:inline-block}";
+  s += "header a.on{border-bottom:2px solid #a794ff}";
+  s += "header a:hover{color:#ffffff}";
+  s += "main{max-width:980px;margin:24px auto;padding:0 16px}";
+  s += "h1{font-size:24px} h2{font-size:18px;border-bottom:1px solid #30363d;padding-bottom:8px}";
+  s += "table{border-collapse:collapse;width:100%}";
+  s += "td,th{border:1px solid #30363d;padding:6px 10px;text-align:left;font-size:14px}";
+  s += "th{background:#161b22}";
+  s += "a{color:#a794ff;text-decoration:none} a:hover{text-decoration:underline}";
+  s += ".muted{color:#8b949e}";
+  s += "</style></head><body>";
+  s += "<header><a class=\"logo\" href=\"/\">inv</a>";
+  s += nav("/", "Home") + nav("/releases", "Releases") + nav("/pull-req", "Pull requests");
+  s += nav("/history", "History") + nav("/api", "API");
+  s += "</header><main>";
+  s += inner;
+  s += "</main></body></html>";
+  return s;
+}
+
+/* Repository header + file listing, GitHub style. */
+std::string page_home(const Archive& a, const std::string& branch_path,
+                      const std::vector<ServeEntry>& entries) {
+  std::string inner = "<h1>" + html_escape(a.name()) + " <span class=\"muted\">/ " +
+                      html_escape(branch_path == "/" ? "main" : branch_path.substr(1)) + "</span></h1>";
+  inner += "<p class=\"muted\">" + std::to_string(entries.size()) + " files &middot; served by inv</p>";
+  inner += "<h2>Files</h2><table><tr><th>Name</th><th>Type</th><th>Size</th></tr>";
+  for (const ServeEntry& e : entries) {
+    const std::string href = e.dir ? ("/files/" + e.path + "/") : ("/files/" + e.path);
+    inner += "<tr><td><a href=\"" + href + "\">" + html_escape(e.path) + (e.dir ? "/" : "") + "</a></td>";
+    inner += "<td>" + std::string(e.dir ? "directory" : "file") + "</td>";
+    inner += "<td>" + (e.dir ? "-" : human_size((u64)e.size)) + "</td></tr>";
+  }
+  inner += "</table>";
+  return page_shell(a.name(), "Home", inner);
+}
+
+std::string page_history(const Archive& a, const std::string& branch_path) {
+  std::string inner = "<h1>History <span class=\"muted\">" + html_escape(branch_path) + "</span></h1>";
+  const auto hist = a.history(branch_path, 100);
+  inner += "<table><tr><th>Seq</th><th>Message</th><th>Time</th><th>Id</th></tr>";
+  for (const auto& s : hist) {
+    inner += "<tr><td>#" + std::to_string(s.seq) + "</td>";
+    inner += "<td>" + html_escape(s.message.empty() ? "(no message)" : s.message) + "</td>";
+    inner += "<td>" + html_escape(iso_time(s.time_ms)) + "</td>";
+    inner += "<td class=\"muted\">" + html_escape(s.id.substr(0, 12)) + "</td></tr>";
+  }
+  inner += "</table>";
+  return page_shell("History", "History", inner);
+}
+
+std::string page_releases(const Archive& a) {
+  std::string inner = "<h1>Releases</h1>";
+  inner += "<p class=\"muted\">Releases are published with <code>inv release</code>.</p>";
+  return page_shell("Releases", "Releases", inner);
+}
+
+std::string page_pullreq() {
+  std::string inner = "<h1>Pull requests</h1>";
+  inner += "<p class=\"muted\">No open pull requests. Fork with <code>inv fork</code> and push back with <code>inv push</code>.</p>";
+  return page_shell("Pull requests", "Pull requests", inner);
+}
+
+std::string page_api() {
+  std::string inner = "<h1>API</h1>";
+  inner += "<p>JSON endpoints:</p><table>";
+  inner += "<tr><th>Endpoint</th><th>Description</th></tr>";
+  inner += "<tr><td><a href=\"/api/heads\">/api/heads</a></td><td>branch heads</td></tr>";
+  inner += "<tr><td><a href=\"/api/history\">/api/history</a></td><td>snapshot history</td></tr>";
+  inner += "<tr><td><a href=\"/api/branches\">/api/branches</a></td><td>branch list</td></tr>";
+  inner += "<tr><td><a href=\"/api/entries\">/api/entries</a></td><td>head snapshot entries</td></tr>";
+  inner += "</table>";
+  return page_shell("API", "API", inner);
+}
+
+std::string page_404(const std::string& target) {
+  std::string inner = "<h1>404 - \xe9\xa1\xb5\xe9\x9d\xa2\xe4\xb8\x8d\xe5\xad\x98\xe5\x9c\xa8</h1>";
+  inner += "<p class=\"muted\">" + html_escape(target) + "</p>";
+  return page_shell("Not found", "", inner);
+}
+
+std::string page_login(bool signup) {
+  std::string inner = signup ? "<h1>Sign up</h1>" : "<h1>Sign in</h1>";
+  inner += "<form><table>";
+  inner += "<tr><td>Username</td><td><input name=\"user\"></td></tr>";
+  inner += "<tr><td>Password</td><td><input name=\"pass\" type=\"password\"></td></tr>";
+  inner += "<tr><td></td><td><button type=\"submit\">" + std::string(signup ? "Sign up" : "Sign in") + "</button></td></tr>";
+  inner += "</table></form>";
+  return page_shell(signup ? "Sign up" : "Sign in", "", inner);
+}
+
+std::string page_token() {
+  std::string inner = "<h1>Token management</h1>";
+  inner += "<p class=\"muted\">Tokens are managed with <code>inv login</code>; credentials never leave this machine.</p>";
+  return page_shell("Tokens", "", inner);
+}
+
+std::string page_my(const Archive& a) {
+  std::string inner = "<h1>My archive</h1>";
+  inner += "<p>Name: " + html_escape(a.name()) + "</p>";
+  inner += "<p>Id: <code>" + html_escape(a.id()) + "</code></p>";
+  return page_shell("My", "", inner);
+}
+
+/* JSON responses for the /api endpoints. */
+std::string api_json(const Archive& a, const std::string& branch_path,
+                     const std::string& sub, const std::vector<ServeEntry>& entries) {
+  Json j = Json::object();
+  if (sub == "heads") {
+    j.set("branch", branch_path);
+    auto h = a.head(branch_path);
+    if (h) {
+      j.set("seq", h->seq);
+      j.set("id", h->id);
+      j.set("time_ms", h->time_ms);
+      j.set("message", h->message);
+    }
+  } else if (sub == "history") {
+    Json arr = Json::array();
+    for (const auto& s : a.history(branch_path, 100)) {
+      Json e = Json::object();
+      e.set("seq", s.seq);
+      e.set("id", s.id);
+      e.set("time_ms", s.time_ms);
+      e.set("message", s.message);
+      arr.push(std::move(e));
+    }
+    j.set("history", std::move(arr));
+  } else if (sub == "branches") {
+    Json arr = Json::array();
+    for (const auto& b : a.branches()) {
+      Json e = Json::object();
+      e.set("path", b.path);
+      e.set("name", b.name);
+      e.set("head_seq", b.head_seq);
+      arr.push(std::move(e));
+    }
+    j.set("branches", std::move(arr));
+  } else if (sub == "entries") {
+    Json arr = Json::array();
+    for (const ServeEntry& e : entries) {
+      Json o = Json::object();
+      o.set("path", e.path);
+      o.set("dir", e.dir);
+      o.set("size", e.size);
+      o.set("sha", e.sha);
+      arr.push(std::move(o));
+    }
+    j.set("entries", std::move(arr));
+  } else {
+    j = Json::object();
+    j.set("error", "unknown endpoint");
+  }
+  return j.dump();
+}
+
 int cmd_serve_impl(App& app, const std::vector<std::string>& args) {
   remote::net::ensure_winsock();
   int port = 8341;
@@ -101,6 +273,7 @@ int cmd_serve_impl(App& app, const std::vector<std::string>& args) {
   bool detlog = has_flag(args, "-detlog");
   bool simlog = has_flag(args, "-simlog");
   bool nopage = has_flag(args, "-nopage");
+  bool allwks = has_flag(args, "-allwks");
   bool lockdata = has_flag(args, "-lockdata");
   bool automd = has_flag(args, "-automd");
   bool autoagree = has_flag(args, "-autoagree");
@@ -207,83 +380,146 @@ int cmd_serve_impl(App& app, const std::vector<std::string>& args) {
 
     std::string body;
     std::string ctype = "text/html; charset=utf-8";
-    if (method != "GET" && method != "HEAD") {
-      body = "<h1>405 Method Not Allowed</h1>";
-      std::string resp = "HTTP/1.1 405 Method Not Allowed\r\nContent-Type: " + ctype +
-                         "\r\nContent-Length: " + std::to_string(body.size()) +
-                         "\r\nConnection: close\r\n\r\n" + body;
+
+    /* Helper lambdas keep the routing linear. */
+    auto respond = [&](int code, const std::string& b, const std::string& ct) {
+      const char* reason = code == 200 ? "OK" : (code == 404 ? "Not Found" :
+                            (code == 405 ? "Method Not Allowed" : "Internal Server Error"));
+      std::string resp = "HTTP/1.1 " + std::to_string(code) + " " + reason +
+                         "\r\nContent-Type: " + ct +
+                         "\r\nContent-Length: " + std::to_string(b.size()) +
+                         "\r\nConnection: close\r\n\r\n" + b;
       ::send(cs, resp.data(), (int)resp.size(), 0);
       closesocket(cs);
-      continue;
-    }
-    if (nopage && (target == "/" || target.empty())) {
-      /* -nopage: 无页面模式 — no directory listing pages. */
-      std::string resp404 = "HTTP/1.1 404 Not Found\r\nContent-Type: " + ctype +
-                            "\r\nContent-Length: 0\r\nConnection: close\r\n\r\n";
-      ::send(cs, resp404.data(), (int)resp404.size(), 0);
-      closesocket(cs);
-      continue;
-    }
-    if (target == "/" || target.empty()) {
-      body = "<html><head><title>inv</title></head><body><h1>/</h1><ul>";
-      for (const ServeEntry& e : entries)
-        body += "<li><a href=\"/" + html_escape(e.path) + (e.dir ? "/" : "") + "\">" +
-                html_escape(e.path) + (e.dir ? "/" : "") + "</a></li>";
-      body += "</ul></body></html>";
-    } else {
-      std::string key = target;
-      while (key.size() > 1 && key.back() == '/') key.pop_back();
-      auto it = route.find(key);
-      if (it == route.end()) {
-        body = "<html><body><h1>404 Not Found</h1></body></html>";
-        std::string resp = "HTTP/1.1 404 Not Found\r\nContent-Type: " + ctype +
-                           "\r\nContent-Length: " + std::to_string(body.size()) +
-                           "\r\nConnection: close\r\n\r\n" + body;
-        ::send(cs, resp.data(), (int)resp.size(), 0);
-        closesocket(cs);
-        continue;
+      if (detlog) {
+        char ts[32];
+        std::time_t now = std::time(nullptr);
+        std::tm tmv{};
+        localtime_s(&tmv, &now);
+        std::strftime(ts, sizeof(ts), "%Y-%m-%d %H:%M:%S", &tmv);
+        app.ui.line("[" + std::string(ts) + "][access] " + method + " " + target + " " +
+                    std::to_string(code) + " " + std::to_string(b.size()) + "B");
       }
-      if (it->second->dir) {
-        body = "<html><head><title>inv</title></head><body><h1>" + html_escape(key) +
-               "</h1><ul>";
-        for (const ServeEntry& e : entries) {
-          if (e.path.rfind(it->second->path + "/", 0) == 0 &&
-              e.path.find('/', it->second->path.size() + 1) == std::string::npos)
-            body += "<li><a href=\"/" + html_escape(e.path) + (e.dir ? "/" : "") + "\">" +
-                    html_escape(e.path.substr(it->second->path.size() + 1)) + (e.dir ? "/" : "") + "</a></li>";
-        }
-        body += "</ul></body></html>";
+    };
+
+    if (method != "GET" && method != "HEAD") {
+      respond(405, "<h1>405 Method Not Allowed</h1>", ctype);
+      continue;
+    }
+    if (target.empty()) target = "/";
+
+    /* 1) /assets/<sha> raw object link (works in every mode but -nopage). */
+    if (starts_with(target, "/assets/")) {
+      const std::string sha = target.substr(8);
+      std::string data;
+      if (sha.size() >= 8 && a.objects().get(sha, data)) {
+        ctype = "application/octet-stream";
+        respond(200, data, ctype);
       } else {
-        /* Read file bytes from the objects store. */
+        respond(404, page_404(target), ctype);
+      }
+      continue;
+    }
+
+    /* 2) /api/<name> JSON endpoints. */
+    if (starts_with(target, "/api/")) {
+      const std::string sub = target.substr(5);
+      ctype = "application/json";
+      if (sub == "branches" || sub == "history" || sub == "heads" || sub == "entries") {
+        respond(200, api_json(a, branch_path, sub, entries), ctype);
+      } else if (sub == "info") {
+        Json j = Json::object();
+        j.set("name", a.name());
+        j.set("id", a.id());
+        j.set("type", archive_type_name(a.type()));
+        j.set("branch", branch_path);
+        respond(200, j.dump(), ctype);
+      } else {
+        Json j = Json::object();
+        j.set("error", "unknown endpoint");
+        respond(404, j.dump(), ctype);
+      }
+      continue;
+    }
+
+    /* 3) file routes: /files/<path> direct, //path legacy, bare /<path> fallback. */
+    std::string file_key;
+    if (starts_with(target, "/files/")) {
+      file_key = target.substr(6);              /* keep leading slash */
+    } else if (target.size() >= 2 && target[0] == '/' && target[1] == '/') {
+      file_key = target.substr(1);
+    } else if (target != "/" && route.count(target)) {
+      file_key = target;
+    }
+    if (!file_key.empty()) {
+      while (file_key.size() > 1 && file_key.back() == '/') file_key.pop_back();
+      auto it = route.find(file_key);
+      if (it != route.end()) {
         std::string data;
         if (a.objects().get(it->second->sha, data)) {
-          body = data;
           ctype = content_type_for(it->second->path);
+          respond(200, data, ctype);
         } else {
-          body = "<html><body><h1>500 Object read failed</h1></body></html>";
-          std::string resp = "HTTP/1.1 500 Internal Server Error\r\nContent-Type: " + ctype +
-                             "\r\nContent-Length: " + std::to_string(body.size()) +
-                             "\r\nConnection: close\r\n\r\n" + body;
-          ::send(cs, resp.data(), (int)resp.size(), 0);
-          closesocket(cs);
-          continue;
+          respond(500, "<h1>500 Object read failed</h1>", ctype);
         }
+      } else {
+        /* directory listing? collect direct children */
+        const std::string prefix = file_key.substr(1) + "/";
+        std::string listing = "<h1>/" + html_escape(file_key.substr(1)) + "</h1><table>";
+        bool any = false;
+        for (const ServeEntry& e : entries) {
+          if (e.path.rfind(prefix, 0) == 0 &&
+              e.path.find('/', prefix.size()) == std::string::npos) {
+            any = true;
+            listing += "<tr><td><a href=\"/files/" + html_escape(e.path) + (e.dir ? "/" : "") + "\">" +
+                       html_escape(e.path.substr(prefix.size())) + (e.dir ? "/" : "") + "</a></td></tr>";
+          }
+        }
+        listing += "</table>";
+        if (any) respond(200, page_shell(file_key, "", listing), ctype);
+        else respond(404, page_404(target), ctype);
       }
+      continue;
     }
-    std::string resp = "HTTP/1.1 200 OK\r\nContent-Type: " + ctype +
-                       "\r\nContent-Length: " + std::to_string(body.size()) +
-                       "\r\nConnection: close\r\n\r\n" + body;
-    ::send(cs, resp.data(), (int)resp.size(), 0);
-    closesocket(cs);
-    /* -detlog: timestamped access line per request (spec [<时间戳>][<type>]). */
-    if (detlog) {
-      char ts[32];
-      std::time_t now = std::time(nullptr);
-      std::tm tmv{};
-      localtime_s(&tmv, &now);
-      std::strftime(ts, sizeof(ts), "%Y-%m-%d %H:%M:%S", &tmv);
-      app.ui.line("[" + std::string(ts) + "][access] " + method + " " + target +
-                  " 200 " + std::to_string(body.size()) + "B");
+
+    /* 4) pages (skipped in -nopage mode). */
+    if (nopage) {
+      respond(404, "", ctype);                   /* -nopage: no pages at all */
+      continue;
+    }
+    if (target == "/") {
+      respond(200, page_home(a, branch_path, entries), ctype);
+    } else if (target == "/releases") {
+      respond(200, page_releases(a), ctype);
+    } else if (target == "/pull-req") {
+      respond(200, page_pullreq(), ctype);
+    } else if (target == "/history") {
+      respond(200, page_history(a, branch_path), ctype);
+    } else if (target == "/api") {
+      respond(200, page_api(), ctype);
+    } else if (target == "/login") {
+      respond(200, page_login(false), ctype);
+    } else if (target == "/signup") {
+      respond(200, page_login(true), ctype);
+    } else if (target == "/token" || target == "/token/new") {
+      respond(200, page_token(), ctype);
+    } else if (target == "/my") {
+      respond(200, page_my(a), ctype);
+    } else if (starts_with(target, "/workspace")) {
+      if (!allwks) {
+        respond(404, page_404(target), ctype);
+      } else {
+        std::string inner = "<h1>Infinity CodeLab</h1>";
+        if (target == "/workspace") {
+          inner += "<p class=\"muted\">Workspaces are enabled (-allwks).</p>";
+          inner += "<p><a href=\"/workspace/new\">New workspace</a> &middot; <a href=\"/workspace/s\">Existing workspaces</a></p>";
+        } else {
+          inner += "<p class=\"muted\">" + html_escape(target) + "</p>";
+        }
+        respond(200, page_shell("Infinity CodeLab", "", inner), ctype);
+      }
+    } else {
+      respond(404, page_404(target), ctype);
     }
   }
   return 0;

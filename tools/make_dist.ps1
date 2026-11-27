@@ -38,11 +38,14 @@ if (Test-Path (Join-Path $Root "docs")) {
 } else { Write-Output "MISSING docs"; $fail++ }
 Set-Content -Path (Join-Path $Dist "VERSION") -Value $Version -NoNewline
 
+# Product icon (referenced by installer Icon/UniconIcon).
+Copy-Item -Force (Join-Path $Root "shell\assets\inv.ico") (Join-Path $Dist "inv.ico")
+
 Write-Output ("DIST_VERSION=" + $Version)
 
 # Completeness gate: the payload must contain the jar AND the runtime, or the
 # portable build silently loses the Java sidecar.
-$required = @("inv.exe", "vanadium.dll", "VERSION", "java\vanadium-report.jar", "java\runtime\bin\java.exe")
+$required = @("inv.exe", "vanadium.dll", "VERSION", "inv.ico", "java\vanadium-report.jar", "java\runtime\bin\java.exe")
 foreach ($rel in $required) {
   if (-not (Test-Path (Join-Path $Dist $rel))) { Write-Output ("MISSING dist\" + $rel); $fail++ }
 }

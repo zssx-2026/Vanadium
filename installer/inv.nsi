@@ -101,6 +101,8 @@ SetCompressor /SOLID zlib
 !macroend
 
 ; ---- installer metadata ----------------------------------------------------
+Icon "${SRC_DIR}\inv.ico"
+
 Name "${APP_NAME} ${VER_FULL}"
 OutFile "${OUT_DIR}\inv-setup-${VER_FULL}.exe"
 InstallDir "$PROGRAMFILES64\Infinity\inv"

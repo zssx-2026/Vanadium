@@ -54,8 +54,8 @@ if (-not $Version) {
   }
 }
 if (-not $Version) { $Version = '0.1.0' }
-if ($Version -notmatch '^\d+\.\d+\.\d+$') {
-  Write-Log FAIL ('version must be MAJOR.MINOR.PATCH, got "' + $Version + '"')
+if ($Version -notmatch '^\d+\.\d+\.\d+(-[A-Za-z0-9.]+)?$') {
+    Write-Log FAIL ('version must be MAJOR.MINOR.PATCH[-suffix], got "' + $Version + '"')
   Write-Host 'BUILD_RESULT=FAIL'
   exit 2
 }
