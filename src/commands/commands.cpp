@@ -1372,12 +1372,11 @@ int cmd_compact(App& app, const std::vector<std::string>& args) {
     }
   }
   if (convert) {
-    const i64 t_conv0 = now_ms();
     app.ui.status("compact.convert", "Converting type");
     a.set_type(dest);
+    app.ui.progress("compact.convert", 1, 1, 0, 0);
     app.ui.clear_status();
     app.ui.line("Convert done.");
-    (void)t_conv0;
   }
 
   /* Phase: Compacting archive (recompress every object at -level). */
@@ -1406,6 +1405,7 @@ int cmd_compact(App& app, const std::vector<std::string>& args) {
     }
     ++visited;
   }
+  app.ui.progress("compact.repack", (long long)objs.size(), (long long)objs.size(), 0, 0);
   app.ui.clear_status();
   app.ui.line("Compact done.");
   (void)rewritten;
