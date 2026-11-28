@@ -320,4 +320,17 @@ CMD = [
         "zh": "删除远程发布/仓库（rm 的别名）",
         "opts": [],
     },
+    {
+        "name": "profile", "args": "",
+        "en": "Manage application profiles (add/remove/reset)",
+        "zh": "管理应用配置档案（添加/删除/重置）",
+        "opts": [
+            ("-add", "", "Add a new profile", "添加新配置档案"),
+            ("-rm", "", "Remove a profile", "删除配置档案"),
+            ("-reset", "", "Reset a profile", "重置配置档案"),
+            ("-path", "<path>", "Store the profile beside this folder", "将配置档案存到该文件夹旁"),
+            ("-name", "<name>", "Profile name", "配置档案名称"),
+        ],
+    },
+
 ];

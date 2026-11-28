@@ -430,6 +430,123 @@ int cmd_info(App& app, const std::vector<std::string>&) {
   return 0;
 }
 
+
+/* ---------- profile (spec 输入.md:928-983) ---------- */
+
+static const char* kProfilesDir = "profiles";
+
+static std::string profile_root(App& app) {
+  std::string root = fs::join(app.home, kProfilesDir);
+  fs::mkdirs(root);
+  return root;
+}
+
+static std::string profile_dir(App& app, const std::string& name) {
+  return fs::join(profile_root(app), name);
+}
+
+static bool profile_exists(App& app, const std::string& name) {
+  return fs::is_dir(profile_dir(app, name));
+}
+
+/* Spec animation text: the shell animates the trailing dots on the status
+   line; the kernel emits the base text and settles the line afterwards. */
+static void profile_phase(App& app, const char* key, const char* text) {
+  app.ui.status(key, text);
+  app.ui.clear_status();
+}
+
+int cmd_profile(App& app, const std::vector<std::string>& args) {
+  if (has_flag(args, "-help")) {
+    app.ui.line("inv profile <parameter>  Profile management");
+    app.ui.line("  <parameter>:");
+    app.ui.line("    -help help");
+    app.ui.line("    -add add");
+    app.ui.line("    -rm remove");
+    app.ui.line("    -reset reset");
+    app.ui.line("    -path location (folder, auto-creates /.invprofile)");
+    app.ui.line("    -name Profile name");
+    return 0;
+  }
+
+  const bool add = has_flag(args, "-add");
+  const bool rm = has_flag(args, "-rm");
+  const bool reset = has_flag(args, "-reset");
+  const std::string name = opt_value(args, "-name", std::string());
+  const std::string path = opt_value(args, "-path", std::string());
+  if (!add && !rm && !reset) {
+    fail(1001, "choose one of -add / -rm / -reset (see: inv profile -help)", "");
+  }
+  if (name.empty()) fail(1001, std::string(msg("cli.missing_arg")) + ": -name", "");
+
+  /* -path stores the profile next to the given folder as /.invprofile. */
+  std::string root;
+  if (!path.empty()) {
+    const std::string abs = fs::absolute(path);
+    if (!fs::is_dir(abs)) fail(3101, msg("store.no_dir"), abs);
+    root = fs::join(abs, ".invprofile");
+    fs::mkdirs(root);
+  }
+
+  if (add) {
+    if (!app.yes && !app.ui.prompt("Do you want to create a new profile for this application?", "y/n")) {
+      app.ui.line("The user doesn't agree to perform this operation, exit.");
+      return 1;
+    }
+    bool use_after = app.yes;
+    if (!app.yes) {
+      use_after = app.ui.prompt("Do you want use this profile after create done?", "y/n");
+      if (!use_after) {
+        /* still create, just do not activate */
+      }
+    }
+    if (profile_exists(app, name)) fail(3010, "profile already exists", name);
+    profile_phase(app, "profile.create", "Creating profile");
+    fs::mkdirs(profile_dir(app, name));
+    profile_phase(app, "profile.write", "Writing defult settings");
+    fs::write_file_atomic(fs::join(profile_dir(app, name), "settings"),
+        "lang=en\n");
+    profile_phase(app, "profile.meta", "Creating metadata");
+    fs::write_file_atomic(fs::join(profile_dir(app, name), "metadata.json"),
+        std::string("{\"name\":\"") + name + "\",\"created\":" +
+        std::to_string(now_ms()) + "}");
+    profile_phase(app, "profile.reg", "Adding to register table");
+    fs::write_file_atomic(fs::join(root.empty() ? profile_root(app) : root,
+        "profiles.json"), std::string());
+    app.ui.line("Create done.");
+    if (use_after) {
+      fs::write_file_atomic(fs::join(app.home, "active_profile"), name);
+      app.ui.line("Profile '" + name + "' is now active.");
+    }
+    return 0;
+  }
+
+  const std::string dir = profile_dir(app, name);
+  if (!profile_exists(app, name)) fail(3013, "no such profile", name);
+
+  if (rm) {
+    if (!app.yes && !app.ui.prompt(
+        "This operation is irreversible! Please ensure that you have been backed up.", "y/n")) {
+      app.ui.line("The user doesn't agree to perform this operation, exit.");
+      return 1;
+    }
+    profile_phase(app, "profile.remove", "Removing profile");
+    fs::remove_all(dir);
+    app.ui.line("Remove done.");
+    return 0;
+  }
+
+  if (!app.yes && !app.ui.prompt(
+      "This operation is irreversible! Please ensure that you have been backed up.", "y/n")) {
+    app.ui.line("The user doesn't agree to perform this operation, exit.");
+    return 1;
+  }
+  profile_phase(app, "profile.reset", "Resetting profile");
+  fs::write_file_atomic(fs::join(dir, "settings"), "lang=en\n");
+  app.ui.line("Reset done.");
+  return 0;
+}
+
 int cmd_help(App& app, const std::vector<std::string>& args) {
   print_help(app, args.size() > 1 ? args[1] : std::string());
   return 0;
@@ -1422,6 +1539,7 @@ const CmdEntry kCommands[] = {
     {"help", cmd_help},
     {"version", cmd_version},
     {"info", cmd_info},
+  {"profile", cmd_profile},
     {"set", cmd_set},
     {"init", cmd_init},
     {"status", cmd_status},

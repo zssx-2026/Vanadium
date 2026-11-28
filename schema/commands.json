@@ -1119,6 +1119,68 @@
     "am-en": "Remove a remote release or repository (alias of rm)"
    },
    "options": []
+  },
+  {
+   "name": "profile",
+   "args": "",
+   "summary": {
+    "en": "Manage application profiles (add/remove/reset)",
+    "zh-cn": "管理应用配置档案（添加/删除/重置）",
+    "tr-cn": "管理應用配置檔案（添加/刪除/重置）",
+    "am-en": "Manage application profiles (add/remove/reset)"
+   },
+   "options": [
+    {
+     "flag": "-add",
+     "arg": "",
+     "summary": {
+      "en": "Add a new profile",
+      "zh-cn": "添加新配置档案",
+      "tr-cn": "添加新配置檔案",
+      "am-en": "Add a new profile"
+     }
+    },
+    {
+     "flag": "-rm",
+     "arg": "",
+     "summary": {
+      "en": "Remove a profile",
+      "zh-cn": "删除配置档案",
+      "tr-cn": "刪除配置檔案",
+      "am-en": "Remove a profile"
+     }
+    },
+    {
+     "flag": "-reset",
+     "arg": "",
+     "summary": {
+      "en": "Reset a profile",
+      "zh-cn": "重置配置档案",
+      "tr-cn": "重置配置檔案",
+      "am-en": "Reset a profile"
+     }
+    },
+    {
+     "flag": "-path",
+     "arg": "<path>",
+     "summary": {
+      "en": "Store the profile beside this folder",
+      "zh-cn": "将配置档案存到该文件夹旁",
+      "tr-cn": "將配置檔案存到該文件夾旁",
+      "am-en": "Store the profile beside this folder"
+     }
+    },
+    {
+     "flag": "-name",
+     "arg": "<name>",
+     "summary": {
+      "en": "Profile name",
+      "zh-cn": "配置档案名称",
+      "tr-cn": "配置檔案名稱",
+      "am-en": "Profile name"
+     }
+    }
+   ]
   }
  ]
 }

@@ -99,6 +99,11 @@ const OptRow kOptions[] = {
 {"-silent", "", {"Run the installer silently into the current directory", "\u9759\u9ED8\u5B89\u88C5\u5230\u5F53\u524D\u76EE\u5F55", "\u975C\u9ED8\u5B89\u88DD\u5230\u7576\u524D\u76EE\u9304", "Run the installer silently into the current directory"}},
 {"-level", "<n>", {"Compression level 0-9 (0 stores verbatim)", "\u538B\u7F29\u7B49\u7EA7 0-9\uFF080 \u539F\u6837\u5B58\u50A8\uFF09", "\u58D3\u7E2E\u7B49\u7D1A 0-9\uFF080 \u539F\u6A23\u5B58\u5132\uFF09", "Compression level 0-9 (0 stores verbatim)"}},
 {"-type", "<kind>", {"Archive type full/nodeonly/least", "\u5B58\u6863\u7C7B\u578B full/nodeonly/least", "\u5B58\u6A94\u985E\u578B full/nodeonly/least", "Archive type full/nodeonly/least"}},
+{"-add", "", {"Add a new profile", "\u6DFB\u52A0\u65B0\u914D\u7F6E\u6863\u6848", "\u6DFB\u52A0\u65B0\u914D\u7F6E\u6A94\u6848", "Add a new profile"}},
+{"-rm", "", {"Remove a profile", "\u5220\u9664\u914D\u7F6E\u6863\u6848", "\u522A\u9664\u914D\u7F6E\u6A94\u6848", "Remove a profile"}},
+{"-reset", "", {"Reset a profile", "\u91CD\u7F6E\u914D\u7F6E\u6863\u6848", "\u91CD\u7F6E\u914D\u7F6E\u6A94\u6848", "Reset a profile"}},
+{"-path", "<path>", {"Store the profile beside this folder", "\u5C06\u914D\u7F6E\u6863\u6848\u5B58\u5230\u8BE5\u6587\u4EF6\u5939\u65C1", "\u5C07\u914D\u7F6E\u6A94\u6848\u5B58\u5230\u8A72\u6587\u4EF6\u593E\u65C1", "Store the profile beside this folder"}},
+{"-name", "<name>", {"Profile name", "\u914D\u7F6E\u6863\u6848\u540D\u79F0", "\u914D\u7F6E\u6A94\u6848\u540D\u7A31", "Profile name"}},
 };
 
 const std::size_t kOptionCount = sizeof(kOptions) / sizeof(kOptions[0]);
@@ -139,6 +144,7 @@ const CmdRow kCommands[] = {
 {"info", "", {"Show current version information", "\u5C55\u793A\u5F53\u524D\u7248\u672C\u7684\u4FE1\u606F", "\u5C55\u793A\u7576\u524D\u7248\u672C\u7684\u4FE1\u606F", "Show current version information"}, {"inv info [options]", "inv info [\u9009\u9879]", "inv info [\u9078\u9805]", "inv info [options]"}, 63, 0},
 {"add", "<path>", {"Register a folder into the archive (alias of reg)", "\u5C06\u6587\u4EF6\u5939\u6CE8\u518C\u8FDB\u5B58\u6863\uFF08reg \u7684\u522B\u540D\uFF09", "\u5C07\u6587\u4EF6\u593E\u6CE8\u518A\u9032\u5B58\u6A94\uFF08reg \u7684\u5225\u540D\uFF09", "Register a folder into the archive (alias of reg)"}, {"inv add <path> [options]", "inv add <path> [\u9009\u9879]", "inv add <path> [\u9078\u9805]", "inv add <path> [options]"}, 63, 1},
 {"min", "<type> <url>", {"Remove a remote release or repository (alias of rm)", "\u5220\u9664\u8FDC\u7A0B\u53D1\u5E03/\u4ED3\u5E93\uFF08rm \u7684\u522B\u540D\uFF09", "\u522A\u9664\u9060\u7A0B\u767C\u5E03/\u5009\u5EAB\uFF08rm \u7684\u5225\u540D\uFF09", "Remove a remote release or repository (alias of rm)"}, {"inv min <type> <url> [options]", "inv min <type> <url> [\u9009\u9879]", "inv min <type> <url> [\u9078\u9805]", "inv min <type> <url> [options]"}, 64, 0},
+{"profile", "", {"Manage application profiles (add/remove/reset)", "\u7BA1\u7406\u5E94\u7528\u914D\u7F6E\u6863\u6848\uFF08\u6DFB\u52A0/\u5220\u9664/\u91CD\u7F6E\uFF09", "\u7BA1\u7406\u61C9\u7528\u914D\u7F6E\u6A94\u6848\uFF08\u6DFB\u52A0/\u522A\u9664/\u91CD\u7F6E\uFF09", "Manage application profiles (add/remove/reset)"}, {"inv profile [options]", "inv profile [\u9009\u9879]", "inv profile [\u9078\u9805]", "inv profile [options]"}, 64, 5},
 };
 
 const std::size_t kCommandCount = sizeof(kCommands) / sizeof(kCommands[0]);
