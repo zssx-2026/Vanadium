@@ -12,6 +12,7 @@
 #include "vanadium/commands.h"
 
 #include <algorithm>
+#include <cstdio>
 #include <cstring>
 #include <ctime>
 #include <map>
@@ -119,6 +120,26 @@ std::string page_shell(const std::string& title, const std::string& active,
   s += "th{background:#161b22}";
   s += "a{color:#a794ff;text-decoration:none} a:hover{text-decoration:underline}";
   s += ".muted{color:#8b949e}";
+  s += ".repohead{padding:16px 0;border-bottom:1px solid #30363d}";
+  s += ".repotitle{font-size:20px;font-weight:600}";
+  s += ".badge{display:inline-block;border:1px solid #30363d;border-radius:999px;padding:1px 10px;font-size:12px;color:#8b949e;margin-left:8px}";
+  s += ".pills{display:flex;gap:8px;margin-top:12px}";
+  s += ".pill{display:inline-flex;align-items:center;gap:6px;border:1px solid #30363d;border-radius:6px;background:#21262d;padding:4px 12px;font-size:12px;color:#e6edf3;cursor:default}";
+  s += ".pill b{color:#8b949e;font-weight:500;background:#30363d;border-radius:999px;padding:0 6px}";
+  s += ".tabs{display:flex;gap:4px;margin:16px 0 0;border-bottom:1px solid #30363d}";
+  s += ".tab{padding:8px 14px;font-size:14px;color:#e6edf3;text-decoration:none;border-bottom:2px solid transparent}";
+  s += ".tab.on{font-weight:600;border-bottom-color:#f78166}";
+  s += ".tab:hover{color:#fff}";
+  s += ".filelist{border:1px solid #30363d;border-radius:6px;margin-top:12px;overflow:hidden}";
+  s += ".filelist table{border:none;width:100%}";
+  s += ".filelist td{border:none;border-top:1px solid #21262d;padding:8px 16px;font-size:14px}";
+  s += ".filelist tr:first-child td{border-top:none;background:#161b22;color:#8b949e;font-size:12px}";
+  s += ".langbar{display:flex;height:8px;border-radius:999px;overflow:hidden;margin:8px 0}";
+  s += ".langbar span{display:block;height:100%}";
+  s += ".row{display:flex;gap:24px;align-items:flex-start}";
+  s += ".col-main{flex:1;min-width:0}.col-side{width:260px;flex-shrink:0}";
+  s += ".about h2{border:none;font-size:14px;margin-bottom:4px}";
+  s += ".topic{display:inline-block;background:#1f6feb33;color:#79c0ff;border-radius:999px;padding:2px 10px;font-size:12px;margin:2px 4px 2px 0}";
   s += "</style></head><body>";
   s += "<header><a class=\"logo\" href=\"/\">inv</a>";
   s += nav("/", "Home") + nav("/releases", "Releases") + nav("/pull-req", "Pull requests");
@@ -129,22 +150,113 @@ std::string page_shell(const std::string& title, const std::string& active,
   return s;
 }
 
-/* Repository header + file listing, GitHub style. */
+/* Repository page: GitHub-style header, tabs, file browser, About sidebar. */
 std::string page_home(const Archive& a, const std::string& branch_path,
                       const std::vector<ServeEntry>& entries) {
-  std::string inner = "<h1>" + html_escape(a.name()) + " <span class=\"muted\">/ " +
-                      html_escape(branch_path == "/" ? "main" : branch_path.substr(1)) + "</span></h1>";
-  inner += "<p class=\"muted\">" + std::to_string(entries.size()) + " files &middot; served by inv</p>";
-  inner += "<h2>Files</h2><table><tr><th>Name</th><th>Type</th><th>Size</th></tr>";
+  const auto branches = a.branches();
+  const auto hist = a.history(branch_path, 100);
+  u64 total_bytes = 0;
+  for (const ServeEntry& e : entries) if (!e.dir) total_bytes += (u64)e.size;
+
+  /* Language share by bytes per extension, top 5 (About sidebar). */
+  std::map<std::string, u64> lang_bytes;
   for (const ServeEntry& e : entries) {
-    const std::string href = e.dir ? ("/files/" + e.path + "/") : ("/files/" + e.path);
-    inner += "<tr><td><a href=\"" + href + "\">" + html_escape(e.path) + (e.dir ? "/" : "") + "</a></td>";
-    inner += "<td>" + std::string(e.dir ? "directory" : "file") + "</td>";
-    inner += "<td>" + (e.dir ? "-" : human_size((u64)e.size)) + "</td></tr>";
+    if (e.dir) continue;
+    const std::size_t dot = e.path.rfind('.');
+    const std::string ext = dot == std::string::npos ? "(no ext)" : e.path.substr(dot + 1);
+    lang_bytes[ext] += (u64)e.size;
   }
-  inner += "</table>";
+  std::vector<std::pair<std::string, u64> > langs(lang_bytes.begin(), lang_bytes.end());
+  std::sort(langs.begin(), langs.end(),
+            [](const std::pair<std::string, u64>& x, const std::pair<std::string, u64>& y)
+            { return x.second > y.second; });
+
+  const char* kColors[] = {"#a794ff", "#f78166", "#79c0ff", "#7ee787", "#ffa657"};
+  std::string langbar, langlegend;
+  u64 lang_total = 0;
+  for (const auto& kv : langs) lang_total += kv.second;
+  for (std::size_t i = 0; i < langs.size() && i < 5; ++i) {
+    const double share = lang_total ? (100.0 * (double)langs[i].second / (double)lang_total) : 0.0;
+    char pct[16];
+    std::snprintf(pct, sizeof(pct), "%.1f", share);
+    langbar += "<span style=\"background:" + std::string(kColors[i]) + ";width:" +
+               std::to_string((int)(share + 0.5)) + "%\"></span>";
+    langlegend += "<span style=\"margin-right:14px\"><span style=\"color:" +
+                  std::string(kColors[i]) + "\">&#9632;</span> " +
+                  html_escape(langs[i].first) + " " + pct + "%</span>";
+  }
+
+  /* Repo header: name, Public badge, Watch/Fork/Star pills. */
+  std::string inner;
+  inner += "<div class=\"repohead\"><span class=\"repotitle\">" + html_escape(a.name()) +
+           "</span><span class=\"badge\">Public</span>";
+  inner += "<div class=\"pills\">";
+  inner += "<span class=\"pill\">Watch <b>0</b></span>";
+  inner += "<span class=\"pill\">Fork <b>" + std::to_string(branches.size() > 1 ? branches.size() - 1 : 0) +
+           "</b></span>";
+  inner += "<span class=\"pill\">Star <b>" + std::to_string(entries.size()) + "</b></span>";
+  inner += "</div></div>";
+
+  /* Repo tab bar: Code active, links into the other published pages. */
+  auto tab = [](const char* href, const char* label, bool on) {
+    return std::string("<a class=\"tab") + (on ? " on\"" : "\"" ) + " href=\"" + href + "\">" + label +
+           "</a>";
+  };
+  inner += "<div class=\"tabs\">";
+  inner += tab("/", "Code", true) + tab("/history", "History", false) +
+           tab("/releases", "Releases", false) + tab("/pull-req", "Pull requests", false) +
+           tab("/api", "API", false);
+  inner += "</div>";
+
+  /* Branch bar. */
+  inner += "<p style=\"margin:14px 0 0\"><span class=\"badge\">" +
+           html_escape(branch_path == "/" ? "main" : branch_path.substr(1)) + "</span> " +
+           std::to_string(branches.size()) + " Branch" + (branches.size() == 1 ? "" : "es") +
+           " &middot; " + std::to_string(hist.size()) + " Commit" + (hist.size() == 1 ? "" : "s") +
+           " &middot; " + human_size(total_bytes) + "</p>";
+
+  /* Latest commit strip. */
+  if (!hist.empty()) {
+    const Snapshot& h = hist.front();
+    inner += "<div class=\"filelist\"><table><tr><td><code class=\"muted\">" +
+             html_escape(h.id.substr(0, 10)) + "</code> &middot; " +
+             html_escape(h.message.empty() ? "(no message)" : h.message) + " <span class=\"muted\">" +
+             html_escape(iso_time(h.time_ms)) + "</span></td></tr></table></div>";
+  }
+
+  /* File browser + About sidebar. */
+  inner += "<div class=\"row\"><div class=\"col-main\"><div class=\"filelist\"><table>";
+  inner += "<tr><td>Name</td><td style=\"width:110px\">Size</td><td style=\"width:90px\">Type</td></tr>";
+  std::vector<const ServeEntry*> dirs, files;
+  for (const ServeEntry& e : entries) (e.dir ? dirs : files).push_back(&e);
+  auto by_name = [](const ServeEntry* x, const ServeEntry* y) { return x->path < y->path; };
+  std::sort(dirs.begin(), dirs.end(), by_name);
+  std::sort(files.begin(), files.end(), by_name);
+  for (const ServeEntry* e : dirs) {
+    inner += "<tr><td><a href=\"/files/" + html_escape(e->path) + "/\">&#128193; " +
+             html_escape(e->path.substr(e->path.rfind('/') + 1)) + "/</a></td><td>-</td><td>dir</td></tr>";
+  }
+  for (const ServeEntry* e : files) {
+    inner += "<tr><td><a href=\"/files/" + html_escape(e->path) + "\">&#128196; " +
+             html_escape(e->path.substr(e->path.rfind('/') + 1)) + "</a></td><td>" +
+             human_size((u64)e->size) + "</td><td>file</td></tr>";
+  }
+  if (entries.empty()) inner += "<tr><td class=\"muted\">(empty snapshot)</td><td></td><td></td></tr>";
+  inner += "</table></div></div>";
+
+  inner += "<div class=\"col-side about\"><h2>About</h2>";
+  inner += "<p class=\"muted\">Served from the inv archive <code>" + html_escape(a.id().substr(0, 12)) +
+           "</code>.</p>";
+  if (!langbar.empty()) {
+    inner += "<h2 style=\"margin-top:18px\">Languages</h2><div class=\"langbar\">" + langbar +
+             "</div><p style=\"font-size:12px\">" + langlegend + "</p>";
+  }
+  inner += "<h2 style=\"margin-top:18px\">Topics</h2>";
+  inner += "<span class=\"topic\">inv</span><span class=\"topic\">version-control</span>";
+  inner += "</div></div>";
   return page_shell(a.name(), "Home", inner);
 }
+
 
 std::string page_history(const Archive& a, const std::string& branch_path) {
   std::string inner = "<h1>History <span class=\"muted\">" + html_escape(branch_path) + "</span></h1>";
