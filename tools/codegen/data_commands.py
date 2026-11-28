@@ -273,4 +273,51 @@ CMD = [
             ("-powershell", "", "Emit PowerShell completion", "输出 PowerShell 补全"),
         ],
     },
-]
+    {
+        "name": "serve", "args": "[path]",
+        "en": "Start an INV web server for the archive",
+        "zh": "启动存档的 INV 网页服务器",
+        "opts": [
+            ("-port", "<n>", "TCP port to listen on (default 8341)", "监听的 TCP 端口（默认 8341）"),
+            ("-branch", "<path>", "Branch to publish (default /)", "发布的分支（默认 /）"),
+        ],
+    },
+    {
+        "name": "update", "args": "",
+        "en": "Check for and install new versions from the release channel",
+        "zh": "检查并安装发布通道中的新版本",
+        "opts": [
+            ("-check", "", "Only check, do not download", "只检查，不下载"),
+            ("-download", "", "Download and verify, do not install", "下载并校验，不安装"),
+            ("-silent", "", "Run the installer silently into the current directory", "静默安装到当前目录"),
+        ],
+    },
+    {
+        "name": "compact", "args": "<path>",
+        "en": "Rewrite archive objects at a chosen compression level",
+        "zh": "以指定压缩等级重写存档对象",
+        "opts": [
+            ("-level", "<n>", "Compression level 0-9 (0 stores verbatim)", "压缩等级 0-9（0 原样存储）"),
+        ],
+    },
+    {
+        "name": "info", "args": "",
+        "en": "Show current version information",
+        "zh": "展示当前版本的信息",
+        "opts": [],
+    },
+    {
+        "name": "add", "args": "<path>",
+        "en": "Register a folder into the archive (alias of reg)",
+        "zh": "将文件夹注册进存档（reg 的别名）",
+        "opts": [
+            ("-type", "<kind>", "Archive type full/nodeonly/least", "存档类型 full/nodeonly/least"),
+        ],
+    },
+    {
+        "name": "min", "args": "<type> <url>",
+        "en": "Remove a remote release or repository (alias of rm)",
+        "zh": "删除远程发布/仓库（rm 的别名）",
+        "opts": [],
+    },
+];

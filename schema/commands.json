@@ -986,7 +986,7 @@
    "summary": {
     "en": "Start an INV web server for the archive",
     "zh-cn": "启动存档的 INV 网页服务器",
-    "tr-cn": "啟動存檔的 INV 網頁服務器",
+    "tr-cn": "啟動存檔的 INV 網頁服务器",
     "am-en": "Start an INV web server for the archive"
    },
    "options": [
@@ -1051,26 +1051,6 @@
       "tr-cn": "靜默安裝到當前目錄",
       "am-en": "Run the installer silently into the current directory"
      }
-    },
-    {
-     "flag": "-path",
-     "arg": "<dir>",
-     "summary": {
-      "en": "Download cache directory",
-      "zh-cn": "下载缓存目录",
-      "tr-cn": "下載快取目錄",
-      "am-en": "Download cache directory"
-     }
-    },
-    {
-     "flag": "-threads",
-     "arg": "<n>",
-     "summary": {
-      "en": "Download threads (alias -thread)",
-      "zh-cn": "下载线程数（别名 -thread）",
-      "tr-cn": "下載執行緒數（別名 -thread）",
-      "am-en": "Download threads (alias -thread)"
-     }
     }
    ]
   },
@@ -1080,7 +1060,7 @@
    "summary": {
     "en": "Rewrite archive objects at a chosen compression level",
     "zh-cn": "以指定压缩等级重写存档对象",
-    "tr-cn": "以指定壓縮等級重寫存檔物件",
+    "tr-cn": "以指定壓縮等級重寫存檔對象",
     "am-en": "Rewrite archive objects at a chosen compression level"
    },
    "options": [
@@ -1090,11 +1070,55 @@
      "summary": {
       "en": "Compression level 0-9 (0 stores verbatim)",
       "zh-cn": "压缩等级 0-9（0 原样存储）",
-      "tr-cn": "壓縮等級 0-9（0 原樣儲存）",
+      "tr-cn": "壓縮等級 0-9（0 原樣存儲）",
       "am-en": "Compression level 0-9 (0 stores verbatim)"
      }
     }
    ]
+  },
+  {
+   "name": "info",
+   "args": "",
+   "summary": {
+    "en": "Show current version information",
+    "zh-cn": "展示当前版本的信息",
+    "tr-cn": "展示當前版本的信息",
+    "am-en": "Show current version information"
+   },
+   "options": []
+  },
+  {
+   "name": "add",
+   "args": "<path>",
+   "summary": {
+    "en": "Register a folder into the archive (alias of reg)",
+    "zh-cn": "将文件夹注册进存档（reg 的别名）",
+    "tr-cn": "將文件夾注冊進存檔（reg 的別名）",
+    "am-en": "Register a folder into the archive (alias of reg)"
+   },
+   "options": [
+    {
+     "flag": "-type",
+     "arg": "<kind>",
+     "summary": {
+      "en": "Archive type full/nodeonly/least",
+      "zh-cn": "存档类型 full/nodeonly/least",
+      "tr-cn": "存檔類型 full/nodeonly/least",
+      "am-en": "Archive type full/nodeonly/least"
+     }
+    }
+   ]
+  },
+  {
+   "name": "min",
+   "args": "<type> <url>",
+   "summary": {
+    "en": "Remove a remote release or repository (alias of rm)",
+    "zh-cn": "删除远程发布/仓库（rm 的别名）",
+    "tr-cn": "刪除遠程發布/倉庫（rm 的別名）",
+    "am-en": "Remove a remote release or repository (alias of rm)"
+   },
+   "options": []
   }
  ]
 }
