@@ -617,14 +617,17 @@ if (-not $step2ok) {
   Show-CliOutput 'inv search -name beta.txt' $sn
   $snm = Invoke-Inv -Arguments 'search -name zzz.txt' -WorkingDirectory $repo
   Show-CliOutput 'inv search -name zzz.txt' $snm
-  $flatRoot = ($l.StdOut -match '(?m)^/\s+@1\s+[0-9a-f]{12}\s+\[system\]')
-  $flatSub = ($l.StdOut -match '(?m)^/sub\s+@1\s+[0-9a-f]{12}')
-  $treeOk = ($t.StdOut -match 'branches/' -and $t.StdOut -match '\|\-\-\s+sub')
+  # 0.5.0 spec form: list defaults to the branch tree (spec L467-490); -line keeps the row form.
+  $flatRoot = ($l.StdOut -match '(?m)^/(（系统分支）|\(system branch\))')
+  $flatSub = ($l.StdOut -match '(?m)^\s+sub(（分支）|\(branch\))')
+  $treeOk = ($t.StdOut -match 'branches/' -and $t.StdOut -match '(?m)^\s{4}sub(（分支）|\(branch\))')
   $filesOk = ($f.StdOut -match 'beta\.txt')
   $diffClean = ($d.StdOut -match 'Nothing to do')
   $shortOk = ($ss.StdOut.Trim() -eq '0 changed, 0 deleted')
   $onelineOk = (($lo.StdOut -match '(?m)^@1 [0-9a-f]{8} register\s*$') -and ($lo.StdOut -notmatch '\d{4}-\d{2}-\d{2}T'))
-  $sysOk = (($lsys.StdOut -match 'branches/') -and ($lsys.StdOut -match 'releases/tag/v1\.0') -and ($lsys.StdOut -match 'releases/rawdata/v1\.0') -and ($l.StdOut -notmatch 'releases/'))
+  # 0.5.0 spec form: default list tree includes the releases/ subtree (spec L497-505);
+  # -sys row form lists system branches (branches/, registry, releases/tag/v1.0, releases/rawdata/v1.0).
+  $sysOk = (($lsys.StdOut -match 'branches 分支节点 /branches/') -and ($lsys.StdOut -match 'releases/tag/v1\.0') -and ($lsys.StdOut -match 'releases/rawdata/v1\.0') -and ($lsys.StdOut -match 'registry'))
   $nameOk = (($sn.StdOut -match '(?m)^/sub\s+beta\.txt\s+\d+B\s*$') -and ($sn.StdOut -match 'Matches found: 2'))
   $nameMissOk = (($snm.ExitCode -eq 0) -and ($snm.StdOut -match 'No matches found'))
   if ($i.ExitCode -eq 0 -and $g.ExitCode -eq 0 -and $s.ExitCode -eq 0 -and $l.ExitCode -eq 0 -and $t.ExitCode -eq 0 -and $f.ExitCode -eq 0 -and $d.ExitCode -eq 0 -and $ss.ExitCode -eq 0 -and $lo.ExitCode -eq 0 -and $lsys.ExitCode -eq 0 -and $sn.ExitCode -eq 0 -and $snm.ExitCode -eq 0 -and $flatRoot -and $flatSub -and $treeOk -and $filesOk -and $diffClean -and $shortOk -and $onelineOk -and $sysOk -and $nameOk -and $nameMissOk) {

@@ -60,7 +60,7 @@ function Write-AdvisoryCheck {
 function Get-Objdump {
   $cmd = Get-Command objdump -ErrorAction SilentlyContinue
   if ($cmd) { return $cmd.Source }
-  foreach ($p in @('C:Program Filesmingw64inobjdump.exe', 'C:msys64mingw64inobjdump.exe')) {
+  foreach ($p in @('C:\Program Files\mingw64\bin\objdump.exe', 'C:\msys64\mingw64\bin\objdump.exe')) {
     if (Test-Path -LiteralPath $p) { return $p }
   }
   return $null

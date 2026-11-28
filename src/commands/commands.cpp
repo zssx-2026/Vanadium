@@ -988,24 +988,50 @@ int cmd_search(App& app, const std::vector<std::string>& args) {
     /* Spec shape "inv search <path> <branch> -name": find a branch by name in the archive.
        Output copy is spec-mandated; the archive path positional may be "." or a real dir. */
     const std::vector<std::string> pos = positionals(args);
-    std::string want = pos.size() > 2 ? pos[2] : (pos.size() > 1 ? pos[1] : std::string());
+    /* 0.4.0 contract: "inv search -name <pattern>" is a file-name search and must
+       not be hijacked by the branch-lookup shape. Branch lookup only applies to
+       the two-positional spec form "inv search <archive> <branch> -name" where
+       the second positional names an existing branch. */
+    std::string want;
+    if (pos.size() > 2) {
+      want = pos[2];
+    } else if (pos.size() > 1 && a.find(pos[1])) {
+      want = pos[1];
+    }
     if (!want.empty()) {
+      const std::string raw_want = want;
       app.ui.status("search.branch", "Searching in archive");
       app.ui.clear_status();
       app.ui.line("Searching in archive.");
-      const std::string needle_b = to_lower(want);
+      const auto canonical = [](std::string s) {
+        const auto trim = [](std::string v) {
+          const std::string ws = " \t";
+          while (!v.empty() && ws.find(v.front()) != std::string::npos) v.erase(v.begin());
+          while (!v.empty() && ws.find(v.back()) != std::string::npos) v.pop_back();
+          return v;
+        };
+        s = trim(s);
+        if (s.empty() || s == "/" || s == ".") return std::string("/");
+        for (auto& c : s) if (c == '\\') c = '/';
+        while (!s.empty() && s.front() == '/') s.erase(s.begin());
+        while (!s.empty() && s.back() == '/') s.pop_back();
+        return s.empty() ? std::string("/") : "/" + s;
+      };
+      const std::string want_c = canonical(want);
+      const std::string needle_b = to_lower(want_c);
       const BranchInfo* hit = nullptr;
       for (const auto& b : a.branches()) {
         std::string leaf = b.path;
         const std::size_t slash = leaf.find_last_of('/');
         if (slash != std::string::npos) leaf = leaf.substr(slash + 1);
-        if (leaf == want || b.path == want ||
-            to_lower(leaf) == needle_b || to_lower(b.path) == needle_b) {
+        const std::string bp = canonical(b.path);
+        if (leaf == want || leaf == want_c || bp == want_c ||
+            to_lower(leaf) == needle_b || to_lower(bp) == needle_b) {
           hit = &b;
           break;
         }
       }
-      if (!hit) fail(3013, msg("store.no_branch"), want);
+      if (!hit) fail(3013, msg("store.no_branch"), raw_want);
       app.ui.line("Found branch.");
       app.ui.line("The branch is in " + hit->path + ".");
       app.ui.line("Founded branch in " + human_duration(now_ms() - started) + ".");
