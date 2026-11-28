@@ -18,6 +18,7 @@ struct App {
   bool json = false;
   bool yes = false;          /* -yes / --yes skip prompts */
   bool quiet = false;
+  bool verbose = false;      /* -verbose extra diagnostics */
   bool no_color = false;
 };
 

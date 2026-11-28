@@ -526,7 +526,15 @@ fn render_progress_line(p: &Phase, now: Instant, utf8: bool) -> String {
     };
     /* Spec: [num]/[all] （done size） [size]/s — fullwidth parens per m02304. */
     /* Spec: merge rows carry no phase name; only thread rows do (thread[num]). */
-    let prefix = if p.name.starts_with("thread") { format!("{} ", p.name) } else { String::new() };
+    /* Spec prefixes: update/download transfers render "Downloading ..." (输入.md 780);
+       verify phases keep their leading words from the kernel status lines. */
+    let prefix = if p.name.starts_with("thread") {
+        format!("{} ", p.name)
+    } else if p.name == "download" {
+        "Downloading ".to_string()
+    } else {
+        String::new()
+    };
     format!(
         "{}[{}] {} {} （{}） {} ETA:{}",
         prefix,

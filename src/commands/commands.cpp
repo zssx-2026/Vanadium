@@ -1394,6 +1394,10 @@ int dispatch(App& app, const std::vector<std::string>& args) {
       app.quiet = true;
       continue;
     }
+    if (a == "-verbose" || a == "--verbose") {
+      app.verbose = true;
+      continue;
+    }
     if (a == "-no-color" || a == "--no-color") {
       app.no_color = true;
       continue;

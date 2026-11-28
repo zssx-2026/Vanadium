@@ -523,44 +523,29 @@ bool download_segmented(const std::string& url, const std::string& out_path, int
     detail::ProbeInfo info;
     bool probed = false;
     for (int attempt = 1;; ++attempt) {
-      unsigned long err = 0;
       try {
         info = detail::probe_remote(url, kProbeTimeoutMs, resolve_ms(), connect_ms());
-        if (info.status >= 500 && info.status <= 599) {
-          err = static_cast<unsigned long>(info.status);
-        } else {
+        if (info.status < 500 || info.status > 599) {
           probed = true;
           t_probe_done = now_ms();
           break;
         }
       } catch (const Failure& f) {
-        err = detail::transport_error_code(f);
         if (!detail::transport_retryable(f) || attempt >= kProbeAttempts) {
           /* The probe only buys size/range knowledge. A dead edge must not kill
              a download that a plain GET could still complete, so fall through
-             to a single stream and let its own retry budget run. */
-          if (ui) {
-            ui->warn("probe failed (" + f.message + "), falling back to a single stream");
-          }
+             to a single stream and let its own retry budget run. Spec 756-810
+             defines no warn output here: fail over silently. */
           probed = false;
           t_probe_done = now_ms();
           break;
         }
       }
       if (attempt >= kProbeAttempts) {
-        if (ui) {
-          ui->warn("probe failed: HTTP " + std::to_string(info.status) +
-                   ", falling back to a single stream");
-        }
         probed = false;
         break;
       }
       const int delay = kProbeBackoffMs[attempt - 1];
-      if (ui) {
-        ui->warn("probe attempt " + std::to_string(attempt + 1) + "/" +
-                 std::to_string(kProbeAttempts) + " after " + std::to_string(delay) +
-                 "ms (error " + std::to_string(err) + ")");
-      }
       std::this_thread::sleep_for(std::chrono::milliseconds(delay));
     }
     job.total = info.total;
