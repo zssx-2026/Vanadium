@@ -17,8 +17,8 @@ use std::sync::{Mutex, OnceLock};
 use std::time::{Duration, Instant};
 
 use crate::ffi::{
-    cstr, VdEvent, VD_EV_ERROR, VD_EV_LINE, VD_EV_PROGRESS, VD_EV_PROMPT, VD_EV_STATUS,
-    VD_EV_STATUS_CLEAR, VD_EV_SUMMARY, VD_EV_TITLE, VD_EV_WARN,
+    cstr, VdEvent, VD_EV_ERROR, VD_EV_LINE, VD_EV_PROGRESS, VD_EV_PROMPT, VD_EV_PROMPT_TEXT,
+    VD_EV_STATUS, VD_EV_STATUS_CLEAR, VD_EV_SUMMARY, VD_EV_TITLE, VD_EV_WARN,
 };
 use crate::term;
 
@@ -154,6 +154,7 @@ impl Renderer {
                 0
             }
             VD_EV_PROMPT => self.prompt(ev),
+            VD_EV_PROMPT_TEXT => self.prompt_text(ev),
             VD_EV_SUMMARY => {
                 let text = cstr(ev.a);
                 self.summary(&text);
@@ -350,6 +351,39 @@ impl Renderer {
         answer
     }
 
+    /// Text prompt: prints the question, reads one line, copies it into the
+    /// caller-provided buffer. EOF/cancel truncates to an empty answer.
+    fn prompt_text(&mut self, ev: &VdEvent) -> i32 {
+        let question = cstr(ev.a);
+        let hint = cstr(ev.b);
+        self.erase_live();
+        let line = if hint.trim().is_empty() {
+            format!("{} ", question)
+        } else {
+            format!("{} ({}) ", question, hint)
+        };
+        term::write_out(&line);
+        let mut text = String::new();
+        {
+            use std::io::BufRead;
+            let _ = std::io::stdin().lock().read_line(&mut text);
+        }
+        let text = text.trim_end_matches(['\r', '\n']).to_string();
+        term::write_out("\n");
+        self.repaint();
+        if ev.resp.is_null() || ev.resp_cap <= 0 {
+            return 0;
+        }
+        let bytes = text.as_bytes();
+        let cap = (ev.resp_cap - 1).max(0) as usize;
+        let n = bytes.len().min(cap);
+        unsafe {
+            std::ptr::copy_nonoverlapping(bytes.as_ptr(), ev.resp as *mut u8, n);
+            *ev.resp.add(n) = 0;
+        }
+        n as i32
+    }
+
     /* ---- animation ----------------------------------------------------- */
 
     /// Driven by the animation thread; never blocks the kernel.
@@ -532,6 +566,18 @@ fn render_progress_line(p: &Phase, now: Instant, utf8: bool) -> String {
         format!("{} ", p.name)
     } else if p.name == "download" {
         "Downloading ".to_string()
+    } else if p.name == "compact.expand" {
+        "Expanding archive ".to_string()
+    } else if p.name == "compact.convert" {
+        "Converting type ".to_string()
+    } else if p.name == "compact.repack" {
+        "Compacting archive ".to_string()
+    } else if p.name == "compact.verify" {
+        "Verifying SHA256 ".to_string()
+    } else if p.name == "compact.verify2" {
+        "Verifying CRC64 ".to_string()
+    } else if p.name == "compact.count" {
+        "Counting archive files and folders".to_string()
     } else {
         String::new()
     };

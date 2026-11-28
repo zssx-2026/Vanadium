@@ -79,6 +79,7 @@ class Archive {
   const std::string& id() const { return archive_id_; }
   i64 created_ms() const { return created_ms_; }
   ArchiveType type() const { return type_; }
+  void set_type(ArchiveType t);
   ObjectStore& objects() { return objects_; }
   const ObjectStore& objects() const { return objects_; }
 

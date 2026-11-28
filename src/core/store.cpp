@@ -636,6 +636,11 @@ std::vector<Entry> Archive::scan_working_tree(const std::string& root,
   return out;
 }
 
+void Archive::set_type(ArchiveType t) {
+  type_ = t;
+  save_meta();
+}
+
 void Archive::save_meta() {
   Json doc = Json::object();
   doc.set("version", Json(1));

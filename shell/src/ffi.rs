@@ -18,6 +18,7 @@ pub const VD_EV_SUMMARY: i32 = 5;
 pub const VD_EV_STATUS_CLEAR: i32 = 6;
 pub const VD_EV_TITLE: i32 = 7;
 pub const VD_EV_WARN: i32 = 8;
+pub const VD_EV_PROMPT_TEXT: i32 = 9;
 
 /// `vd_event` - layout must stay identical to the C struct (i64 fields are 8-byte
 /// aligned after two pointers on x64, hence the implicit padding is zero).
@@ -31,6 +32,8 @@ pub struct VdEvent {
     pub i2: i64,
     pub i3: i64,
     pub i4: i64,
+    pub resp: *mut c_char,
+    pub resp_cap: i64,
 }
 
 /// Return 1 = yes, 0 = no, -1 = cancel.

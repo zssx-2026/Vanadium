@@ -1,5 +1,7 @@
 #include "vanadium/ui.h"
 
+#include <cstring>
+
 namespace vd {
 
 void Emitter::line(const std::string& text) const {
@@ -57,6 +59,23 @@ bool Emitter::prompt(const std::string& question, const std::string& hint) const
   if (r == 1) return true;
   if (r < 0) cancelled_ = true;
   return false;
+}
+
+bool Emitter::prompt_text(const std::string& question, std::string& out, const std::string& hint) const {
+  out.clear();
+  if (!cb_) return false;
+  char buf[512];
+  vd_event ev{};
+  ev.kind = VD_EV_PROMPT_TEXT;
+  ev.a = question.c_str();
+  ev.b = hint.c_str();
+  ev.resp = buf;
+  ev.resp_cap = (long long)sizeof(buf);
+  int r = cb_(user_, &ev);
+  if (r < 0) cancelled_ = true;
+  if (r <= 0) return false;
+  out.assign(buf, strnlen(buf, sizeof(buf)));
+  return !out.empty();
 }
 
 void Emitter::summary(const std::string& json) const {

@@ -1264,6 +1264,7 @@ struct CmdEntry {
    LZ4, mirroring add's -zl range). Reports before/after bytes. */
 int cmd_compact(App& app, const std::vector<std::string>& args) {
   int level = 1;
+  bool auto_mode = false;
   std::vector<std::string> pos;
   for (std::size_t i = 1; i < args.size(); ++i) {
     if (args[i] == "-level") {
@@ -1276,6 +1277,8 @@ int cmd_compact(App& app, const std::vector<std::string>& args) {
         app.ui.error(3104, "Invalid compression level: " + args[i]);
         return 1;
       }
+    } else if (args[i] == "-auto") {
+      auto_mode = true;
     } else {
       pos.push_back(args[i]);
     }
@@ -1286,24 +1289,114 @@ int cmd_compact(App& app, const std::vector<std::string>& args) {
     return 1;
   }
   Archive a = Archive::open(target);
+
+  app.ui.line("Compacting started.");
+  const std::string type_name = archive_type_name(a.type());
+  app.ui.line("Found archive's type is " + type_name + ".");
+
+  /* Phase: Counting archive files and folders (status animation, then Found). */
+  app.ui.status("compact.count", "Counting archive files and folders");
+  const auto branches = a.branches();
+  const std::string branch_path = "/";
+  auto head = a.head(branch_path);
+  std::size_t n_files = 0, n_folders = 0;
+  u64 total_bytes = 0;
+  if (head) {
+    for (const auto& e : head->entries) {
+      if (e.dir) ++n_folders; else { ++n_files; total_bytes += e.size; }
+    }
+  }
+  app.ui.clear_status();
+  app.ui.line("Found " + std::to_string(n_files) + " files and " + std::to_string(n_folders) +
+              " folders in this branch in the archive.");
+
+  /* Phase: Expanding archive into a scratch directory (spec 867). */
+  const std::string scratch = fs::join(fs::temp_dir(), "inv_compact_" + random_hex(6));
+  const i64 t_expand0 = now_ms();
+  app.ui.status("compact.expand", "Expanding archive");
+  a.materialize(branch_path, head ? head->seq : 0, scratch, &app.ui);
+  const i64 t_expand1 = now_ms();
+  app.ui.clear_status();
+  const double expand_rate =
+      t_expand1 > t_expand0 ? (double)total_bytes * 1000.0 / (double)(t_expand1 - t_expand0) : 0.0;
+  app.ui.line("Expand done. " + human_duration(t_expand1 - t_expand0) + " used, " +
+              human_size((u64)expand_rate) + "/s.");
+
+  /* Phases: Verify SHA256 then Verify CRC64 over the expanded files (spec 868-872). */
+  const i64 t_verify0 = now_ms();
+  u64 verified_bytes = 0, errors = 0;
+  for (int pass = 0; pass < 2; ++pass) {
+    app.ui.status(pass == 0 ? "compact.verify" : "compact.verify2",
+                  pass == 0 ? "Verifying SHA256" : "Verifying CRC64");
+    std::size_t done = 0;
+    for (const auto& e : head ? head->entries : std::vector<Entry>()) {
+      if (e.dir) continue;
+      std::string data;
+      if (!fs::read_file_opt(fs::join(scratch, e.path), data) ||
+          (pass == 0 ? Sha256::hex(data.data(), data.size()) != e.sha
+                     : crc64(data.data(), data.size()) != e.crc)) {
+        ++errors;
+      }
+      if (pass == 0) verified_bytes += e.size;
+      ++done;
+      app.ui.progress(pass == 0 ? "compact.verify" : "compact.verify2",
+                      (long long)done, (long long)n_files, 0, 0);
+    }
+  }
+  const i64 t_verify1 = now_ms();
+  app.ui.clear_status();
+  const double verify_rate =
+      t_verify1 > t_verify0 ? (double)verified_bytes * 1000.0 / (double)(t_verify1 - t_verify0) : 0.0;
+  app.ui.line("Verify done. " + human_duration(t_verify1 - t_verify0) + " used, " +
+              human_size((u64)verify_rate) + "/s. " + std::to_string(errors) + " errors.");
+
+  /* Conversion question: full and nodeonly ask; least has nothing to convert to (spec 873/907). */
+  const ArchiveType cur = a.type();
+  bool convert = false;
+  ArchiveType dest = cur;
+  if (cur != ArchiveType::Least && (app.yes || app.ui.prompt("Do you want to convert the archive to another type?", "y/n"))) {
+    if (cur == ArchiveType::Full) {
+      if (app.yes) {
+        convert = true;
+        dest = ArchiveType::NodeOnly;
+      } else {
+        std::string ans;
+        app.ui.prompt_text("Type:", ans, "node/least");
+        if (ans == "node") { convert = true; dest = ArchiveType::NodeOnly; }
+        else if (ans == "least") { convert = true; dest = ArchiveType::Least; }
+      }
+    } else {
+      app.ui.line("The only type is least.");
+      convert = true;
+      dest = ArchiveType::Least;
+    }
+  }
+  if (convert) {
+    const i64 t_conv0 = now_ms();
+    app.ui.status("compact.convert", "Converting type");
+    a.set_type(dest);
+    app.ui.clear_status();
+    app.ui.line("Convert done.");
+    (void)t_conv0;
+  }
+
+  /* Phase: Compacting archive (recompress every object at -level). */
   a.objects().set_compress_level(level);
   const std::vector<std::string> objs = a.objects().all_objects();
   std::size_t rewritten = 0, saved = 0;
-  app.ui.status("compact", "Compressing archive");
+  app.ui.status("compact.repack", "Compacting archive");
   std::size_t visited = 0;
   for (const std::string& sha : objs) {
-    app.ui.progress("compact", static_cast<long long>(visited), static_cast<long long>(objs.size()), -1, 0);
+    app.ui.progress("compact.repack", (long long)visited, (long long)objs.size(), 0, 0);
     std::string data;
     if (!a.objects().get(sha, data)) { ++visited; continue; }
     const u64 old_size = a.objects().stored_size(sha);
-    if (old_size == 0) continue;
-    /* put() with the level knob writes the recompressed blob at the same
-       sha-addressed path (content is identical after decode). */
+    if (old_size == 0) { ++visited; continue; }
     a.objects().set_compress_level(level);
     const std::string new_sha = a.objects().put(data);
     if (new_sha != sha) {
-      /* content-addressed path cannot change; defensive: keep old object. */
       a.objects().set_compress_level(1);
+      ++visited;
       continue;
     }
     const u64 new_size = a.objects().stored_size(sha);
@@ -1314,11 +1407,16 @@ int cmd_compact(App& app, const std::vector<std::string>& args) {
     ++visited;
   }
   app.ui.clear_status();
-  app.ui.line("Compressing archive done. " + std::to_string(rewritten) + " objects rewritten, " +
-              std::to_string(saved) + "B saved.");
   app.ui.line("Compact done.");
+  (void)rewritten;
+  (void)saved;
+
+  /* Scratch cleanup. */
+  fs::remove_all(scratch);
+  (void)auto_mode;
   return 0;
 }
+
 
 const CmdEntry kCommands[] = {
     {"help", cmd_help},

@@ -17,7 +17,10 @@ typedef enum vd_event_kind {
   VD_EV_SUMMARY = 5,       /* a = json summary */
   VD_EV_STATUS_CLEAR = 6,  /* clear the animated status line */
   VD_EV_TITLE = 7,         /* a = window title / phase title */
-  VD_EV_WARN = 8           /* a = warning line */
+  VD_EV_WARN = 8,          /* a = warning line */
+  VD_EV_PROMPT_TEXT = 9    /* a = question, b = hint; shell writes the answer (NUL-terminated,
+                              truncated) into resp (buffer of resp_cap bytes); returns line length
+                              or 0 on EOF/cancel */
 } vd_event_kind;
 
 typedef struct vd_event {
@@ -25,6 +28,9 @@ typedef struct vd_event {
   const char* a;
   const char* b;
   long long i1, i2, i3, i4;
+  /* VD_EV_PROMPT_TEXT response buffer (caller-allocated; may be NULL). */
+  char* resp;
+  long long resp_cap;
 } vd_event;
 
 /* Return 1 = yes / accepted, 0 = no, -1 = cancel (Ctrl+C). */

@@ -17,6 +17,10 @@ class Emitter {
   void progress(const std::string& phase, long long done, long long total,
                 long long bytes, long long flags) const;
   bool prompt(const std::string& question, const std::string& hint = {}) const;
+  /* Text question (VD_EV_PROMPT_TEXT): shell writes the answer into out (truncated).
+     Returns false when no callback or the answer is empty. */
+  bool prompt_text(const std::string& question, std::string& out,
+                   const std::string& hint = {}) const;
   void summary(const std::string& json) const;
   void title(const std::string& text) const;
   void error(int code, const std::string& text) const;
