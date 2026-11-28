@@ -107,7 +107,8 @@ std::string page_shell(const std::string& title, const std::string& active,
   std::string s = "<!doctype html><html><head><meta charset=\"utf-8\">";
   s += "<title>" + html_escape(title) + " - inv</title>";
   s += "<style>";
-  s += "body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:#0d1117;color:#e6edf3}";
+  s += ".btn{background:#21262d;border:1px solid #30363d;border-radius:6px;color:#e6edf3;padding:2px 10px;cursor:pointer}.btn:hover{background:#30363d}";
+s += "body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:#0d1117;color:#e6edf3}";
   s += "header{background:#010409;border-bottom:1px solid #30363d;padding:0 24px;display:flex;align-items:center;gap:20px;height:56px}";
   s += "header .logo{color:#e6edf3;font-weight:700;text-decoration:none;font-size:18px}";
   s += "header a{color:#c9d1d9;text-decoration:none;padding:14px 8px;display:inline-block}";
@@ -203,7 +204,7 @@ std::string page_home(const Archive& a, const std::string& branch_path,
            "</a>";
   };
   inner += "<div class=\"tabs\">";
-  inner += tab("/", "Code", true) + tab("/history", "History", false) +
+  inner += tab("/", "Code", true) + tab("/branches", "Branches", false) + tab("/history", "History", false) +
            tab("/releases", "Releases", false) + tab("/pull-req", "Pull requests", false) +
            tab("/api", "API", false);
   inner += "</div>";
@@ -238,7 +239,9 @@ std::string page_home(const Archive& a, const std::string& branch_path,
   }
   for (const ServeEntry* e : files) {
     inner += "<tr><td><a href=\"/files/" + html_escape(e->path) + "\">&#128196; " +
-             html_escape(e->path.substr(e->path.rfind('/') + 1)) + "</a></td><td>" +
+             html_escape(e->path.substr(e->path.rfind('/') + 1)) + "</a> " +
+             "<a class=\"muted\" style=\"font-size:12px\" href=\"/assets/" +
+             html_escape(e->sha) + "\">raw</a></td><td>" +
              human_size((u64)e->size) + "</td><td>file</td></tr>";
   }
   if (entries.empty()) inner += "<tr><td class=\"muted\">(empty snapshot)</td><td></td><td></td></tr>";
@@ -270,6 +273,37 @@ std::string page_history(const Archive& a, const std::string& branch_path) {
   }
   inner += "</table>";
   return page_shell("History", "History", inner);
+}
+
+std::string page_branches(const Archive& a) {
+  const auto bs = a.branches();
+  std::string inner = "<h1>Branches <span class=\"muted\">" +
+                      std::to_string(bs.size()) + "</span></h1>";
+  inner += "<table><tr><th>Branch</th><th>Head</th><th>Created</th><th></th></tr>";
+  for (const BranchInfo& b : bs) {
+    inner += "<tr><td>" + html_escape(b.path) + "</td>";
+    inner += "<td class=\"muted\">" + std::to_string(b.head_seq) + "</td>";
+    inner += "<td class=\"muted\">" + html_escape(iso_time(b.created_ms)) + "</td>";
+    if (b.system || b.path == "/" || b.path == "/branches" ||
+        b.path.size() <= std::string("/branches/").size()) {
+      inner += "<td></td>";
+    } else {
+      const std::string nm = b.path.substr(std::string("/branches/").size());
+      inner += "<td><button class=\"btn\" onclick=\"delBranch('" + html_escape(nm) +
+               "')\">Delete</button></td>";
+    }
+    inner += "</tr>";
+  }
+  inner += "</table>";
+  inner += "<h2 style=\"margin-top:18px\">New branch</h2>";
+  inner += "<p><input id=\"nb\" placeholder=\"branch name\"> <button class=\"btn\" "
+           "onclick=\"mkBranch()\">Create</button></p>";
+  inner += "<script>"
+    "async function post(u,j){await fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(j)});location.reload();}"
+    "function mkBranch(){const v=document.getElementById('nb').value.trim();if(v)post('/api/create-branch',{name:v});}"
+    "function delBranch(n){if(confirm('Delete branch '+n+'? This is irreversible.'))post('/api/delete-branch',{name:n});}"
+    "</script>";
+  return page_shell("Branches", "Branches", inner);
 }
 
 std::string page_releases(const Archive& a) {
@@ -490,7 +524,27 @@ int cmd_serve_impl(App& app, const std::vector<std::string>& args) {
     const std::size_t qpos = target.find('?');
     if (qpos != std::string::npos) target = target.substr(0, qpos);
 
+    /* Read the request body when Content-Length is present (POST endpoints). */
     std::string body;
+    {
+      std::istringstream hs(req);
+      std::string hl;
+      std::size_t content_length = 0;
+      while (std::getline(hs, hl) && hl != "\r") {
+        const std::size_t c = hl.find(':');
+        if (c == std::string::npos) continue;
+        std::string key = hl.substr(0, c), val = hl.substr(c + 1);
+        for (char& ch : key) ch = (char)tolower((unsigned char)ch);
+        while (!val.empty() && (val.front() == ' ' || val.front() == '\t')) val.erase(val.begin());
+        while (!val.empty() && (val.back() == '\r' || val.back() == '\n')) val.pop_back();
+        if (key == "content-length") content_length = (std::size_t)_atoi64(val.c_str());
+      }
+      const std::size_t bp = req.find("\r\n\r\n");
+      if (content_length > 0 && content_length <= 65536 && bp != std::string::npos) {
+        body = req.substr(bp + 4);
+        if (body.size() > content_length) body.resize(content_length);
+      }
+    }
     std::string ctype = "text/html; charset=utf-8";
 
     /* Helper lambdas keep the routing linear. */
@@ -514,6 +568,49 @@ int cmd_serve_impl(App& app, const std::vector<std::string>& args) {
       }
     };
 
+    if (method == "POST") {
+      /* Operational endpoints: real archive mutations through the store API. */
+      auto field = [&body](const char* key) {
+        const std::string pat = std::string("\"") + key + "\":";
+        const std::size_t k = body.find(pat);
+        if (k == std::string::npos) return std::string();
+        std::size_t i = k + pat.size();
+        while (i < body.size() && (body[i] == ' ' || body[i] == '"')) ++i;
+        std::string v;
+        while (i < body.size() && body[i] != '"' && body[i] != ',' && body[i] != '}') v += body[i++];
+        return v;
+      };
+      ctype = "application/json";
+      if (target == "/api/create-branch" || target == "/api/delete-branch" ||
+          target == "/api/reload") {
+        std::string out;
+        int code = 200;
+        try {
+          if (target == "/api/create-branch") {
+            const std::string name = field("name");
+            if (name.empty() || name.find('/') != std::string::npos)
+              throw Failure(400, "invalid branch name");
+            const BranchInfo b = a.create_branch("/branches/" + name, name);
+            out = "{\"ok\":true,\"branch\":\"" + html_escape(b.name) + "\"}";
+          } else if (target == "/api/delete-branch") {
+            const std::string name = field("name");
+            if (name.empty()) throw Failure(400, "invalid branch name");
+            a.remove_branch("/branches/" + name, true);
+            out = "{\"ok\":true}";
+          } else {
+            a.reload();
+            out = "{\"ok\":true}";
+          }
+        } catch (const Failure& f) {
+          code = 400;
+          out = "{\"ok\":false,\"error\":\"" + html_escape(f.message) + "\"}";
+        }
+        respond(code, out, ctype);
+        continue;
+      }
+      respond(405, "{\"ok\":false,\"error\":\"unknown endpoint\"}", ctype);
+      continue;
+    }
     if (method != "GET" && method != "HEAD") {
       respond(405, "<h1>405 Method Not Allowed</h1>", ctype);
       continue;
@@ -612,6 +709,8 @@ int cmd_serve_impl(App& app, const std::vector<std::string>& args) {
       respond(200, page_pullreq(), ctype);
     } else if (target == "/history") {
       respond(200, page_history(a, branch_path), ctype);
+    } else if (target == "/branches") {
+      respond(200, page_branches(a), ctype);
     } else if (target == "/api") {
       respond(200, page_api(), ctype);
     } else if (target == "/login") {
