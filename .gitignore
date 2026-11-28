@@ -21,5 +21,6 @@ tools/__pycache__/
 tests/__pycache__/
 *.pyc
 # codegen outputs (regenerable via tools/codegen/gen.py)
+src/gen/CMakeLists.txt
 src/gen/*.cpp
-src/gen/gen_*.h
+src/gen/*.h
