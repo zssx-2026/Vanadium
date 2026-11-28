@@ -423,6 +423,41 @@ int cmd_serve_impl(App& app, const std::vector<std::string>& args) {
   bool lockdata = has_flag(args, "-lockdata");
   bool automd = has_flag(args, "-automd");
   bool autoagree = has_flag(args, "-autoagree");
+  const bool cli_mode = has_flag(args, "-cli");
+  const bool nocommand = has_flag(args, "-nocommand");
+  const bool cli_conflict = cli_mode && (nocommand || nopage);
+  if (cli_conflict) fail(4104, "-cli conflicts with -nocommand/-nopage");
+  const bool no_cmd_conflict = nocommand && nopage;
+  if (no_cmd_conflict) fail(4104, "-nocommand conflicts with -nopage");
+  /* -page{[<path>, <site>], ...}: custom page routes (spec L568). */
+  std::vector<std::pair<std::string, std::string>> custom_pages;
+  for (const std::string& raw : args) {
+    if (raw.rfind("-page{", 0) != 0) continue;
+    std::string inner = raw.substr(6);
+    if (!inner.empty() && inner.back() == '}') inner.pop_back();
+    std::size_t i = 0;
+    while (i < inner.size()) {
+      const std::size_t b1 = inner.find('[', i);
+      if (b1 == std::string::npos) break;
+      const std::size_t b2 = inner.find(']', b1);
+      if (b2 == std::string::npos) break;
+      std::string pair_s = inner.substr(b1 + 1, b2 - b1 - 1);
+      const std::size_t comma = pair_s.find(',');
+      if (comma != std::string::npos) {
+        auto trim = [](std::string s) {
+          const char* ws = " \t";
+          std::size_t a = s.find_first_not_of(ws);
+          if (a == std::string::npos) return std::string();
+          std::size_t z = s.find_last_not_of(ws);
+          return s.substr(a, z - a + 1);
+        };
+        std::string pth = trim(pair_s.substr(0, comma));
+        std::string site = trim(pair_s.substr(comma + 1));
+        if (!pth.empty() && !site.empty()) custom_pages.emplace_back(pth, site);
+      }
+      i = b2 + 1;
+    }
+  }
   long maxm = 0, minm = 0;
   for (std::size_t i = 0; i + 1 < args.size(); ++i) {
     if (args[i] == "-port") port = std::atoi(args[i + 1].c_str());
@@ -492,11 +527,20 @@ int cmd_serve_impl(App& app, const std::vector<std::string>& args) {
   std::sort(entries.begin(), entries.end(),
             [](const ServeEntry& x, const ServeEntry& y) { return x.path < y.path; });
   app.ui.line("Website tree:");
-  app.ui.line("/");
+  app.ui.line("/ redirect");
+  app.ui.line("  /releases redirect");
+  app.ui.line("  /pull-req redirect");
+  app.ui.line("  /history redirect");
+  app.ui.line("  /branches redirect");
+  app.ui.line("  /api redirect");
+  for (const auto& cp : custom_pages) app.ui.line("  " + cp.first + " redirect");
   for (const ServeEntry& e : entries) app.ui.line("  " + e.path + (e.dir ? "/" : ""));
+  app.ui.line("/ > ");
 
   /* Map path -> entry for request routing. */
   std::map<std::string, const ServeEntry*> route;
+  std::map<std::string, std::string> custom_route;
+  for (const auto& cp : custom_pages) custom_route[cp.first] = cp.second;
   for (const ServeEntry& e : entries) route["/" + e.path] = &e;
 
   /* Serve loop. Ctrl+C arrives as the shell's interrupt handler closing the
@@ -703,6 +747,13 @@ int cmd_serve_impl(App& app, const std::vector<std::string>& args) {
     }
     if (target == "/") {
       respond(200, page_home(a, branch_path, entries), ctype);
+    } else if (custom_route.count(target)) {
+      /* custom page: redirect to its site path (spec L568/L700). */
+      std::string resp = "HTTP/1.1 302 Found\r\nLocation: " + custom_route[target] +
+                         "\r\nContent-Length: 0\r\nConnection: close\r\n\r\n";
+      ::send(cs, resp.data(), (int)resp.size(), 0);
+      closesocket(cs);
+      continue;
     } else if (target == "/releases") {
       respond(200, page_releases(a), ctype);
     } else if (target == "/pull-req") {
