@@ -47,6 +47,15 @@ MSG = [
     ("clone.retry", "Clone retry scheduled", "已安排克隆重试"),
     ("clone.cancel", "Clone cancelled", "克隆已取消"),
     ("clone.summary", "Clone summary", "克隆摘要"),
+    # ---- list tree labels -------------------------------------------------
+    ("list.tree.sys", "system branch", "系统分支"),
+    ("list.tree.node", "node", "分支节点"),
+    ("list.tree.branch", "branch", "分支"),
+    ("list.tree.main", "main branch", "主分支"),
+    ("list.tree.record", "record", "记录"),
+    ("list.tree.releases_note",
+     "system branch (branches and nodes under it are not listed)",
+     "系统分支，其下所有分支和节点都不列出"),
     # ---- search -----------------------------------------------------------
     ("search.start", "Searching", "正在搜索"),
     ("search.none", "No matches found", "未找到匹配项"),

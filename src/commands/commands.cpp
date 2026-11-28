@@ -158,11 +158,11 @@ void print_branch_tree(App& app, const Archive& a, bool tree, bool releases, int
       {"releases/rawdata", "rawdata"}, {"releases/rawdata/v1.0", "v1.0"}};
   std::size_t nodes = 0, branches = 0;
   auto kind_of = [](const BranchInfo& b) -> const char* {
-    return b.head_seq == 0 ? "分支节点" : "分支";
+    return b.head_seq == 0 ? msg("list.tree.node") : msg("list.tree.branch");
   };
   if (sys_only) {
     /* System namespaces only: branch store + registry + release channels. */
-    app.ui.line("branches 分支节点 /branches/");
+    app.ui.line(std::string("branches ") + msg("list.tree.node") + " /branches/");
     ++nodes;
     for (const auto& b : all) {
       if (b.path == "/") continue;
@@ -171,21 +171,21 @@ void print_branch_tree(App& app, const Archive& a, bool tree, bool releases, int
     }
     const auto records = list_registry(a.root());
     if (!records.empty()) {
-      app.ui.line("registry 分支节点 /registry/");
+      app.ui.line(std::string("registry ") + msg("list.tree.node") + " /registry/");
       ++nodes;
       for (const auto& r : records) {
-        app.ui.line(std::string(short_sha(r.id)) + kRegistrySuffix + " 记录 /registry/" +
-                    short_sha(r.id) + kRegistrySuffix);
+        app.ui.line(std::string(short_sha(r.id)) + kRegistrySuffix + " " + msg("list.tree.record") +
+                    " /registry/" + short_sha(r.id) + kRegistrySuffix);
       }
     }
     for (const auto& r : kReleases) {
       (void)r;
     }
-    app.ui.line("releases 分支节点 /releases/");
-    app.ui.line("tag 分支节点 /releases/tag/");
-    app.ui.line("v1.0 分支 /releases/tag/v1.0");
-    app.ui.line("rawdata 分支节点 /releases/rawdata/");
-    app.ui.line("v1.0 分支 /releases/rawdata/v1.0");
+    app.ui.line(std::string("releases ") + msg("list.tree.node") + " /releases/");
+    app.ui.line(std::string("tag ") + msg("list.tree.node") + " /releases/tag/");
+    app.ui.line(std::string("v1.0 ") + msg("list.tree.branch") + " /releases/tag/v1.0");
+    app.ui.line(std::string("rawdata ") + msg("list.tree.node") + " /releases/rawdata/");
+    app.ui.line(std::string("v1.0 ") + msg("list.tree.branch") + " /releases/rawdata/v1.0");
     nodes += 3;
     branches += 2;
     app.ui.line("list " + std::to_string(nodes) + " nodes, " + std::to_string(branches) + " branches.");
@@ -216,24 +216,24 @@ void print_branch_tree(App& app, const Archive& a, bool tree, bool releases, int
       w_name = std::max(w_name, name.size());
       w_kind = std::max(w_kind, std::strlen(kind));
     };
-    push_row("/", "主分支", "/");
-    push_row("branches", "分支节点", "/branches/");
+    push_row("/", msg("list.tree.main"), "/");
+    push_row("branches", msg("list.tree.node"), "/branches/");
     for (const auto& b : all) {
       if (b.path == "/") continue;
-      push_row(b.name, b.head_seq == 0 ? "分支节点" : "分支", b.path + (b.head_seq == 0 ? "/" : ""));
+      push_row(b.name, b.head_seq == 0 ? msg("list.tree.node") : msg("list.tree.branch"), b.path + (b.head_seq == 0 ? "/" : ""));
     }
-    push_row("releases", "分支节点", "/releases/");
-    push_row("tag", "分支节点", "/releases/tag/");
-    push_row("v1.0", "分支", "/releases/tag/v1.0");
-    push_row("rawdata", "分支节点", "/releases/rawdata/");
-    push_row("v1.0", "分支", "/releases/rawdata/v1.0");
+    push_row("releases", msg("list.tree.node"), "/releases/");
+    push_row("tag", msg("list.tree.node"), "/releases/tag/");
+    push_row("v1.0", msg("list.tree.branch"), "/releases/tag/v1.0");
+    push_row("rawdata", msg("list.tree.node"), "/releases/rawdata/");
+    push_row("v1.0", msg("list.tree.branch"), "/releases/rawdata/v1.0");
     for (const auto& r : rows) {
       std::string name = r[0];
       std::string kind = r[1];
       name.resize(w_name + 2, ' ');
       kind.resize(w_kind + 2, ' ');
       app.ui.line(name + kind + r[2]);
-      if (kind.find("节点") != std::string::npos || r[1] == std::string("主分支")) ++nodes;
+      if (kind == msg("list.tree.node") || kind == msg("list.tree.main")) ++nodes;
       else ++branches;
     }
     nodes = rows.size() ? nodes : 0;
@@ -241,8 +241,8 @@ void print_branch_tree(App& app, const Archive& a, bool tree, bool releases, int
     return;
   }
   /* Tree form: (系统分支) markers, releases namespaces unfolded. */
-  app.ui.line("/（系统分支）");
-  app.ui.line("  branches/（系统分支）");
+  app.ui.line("/（" + std::string(msg("list.tree.sys")) + "）");
+  app.ui.line("  branches/（" + std::string(msg("list.tree.sys")) + "）");
   for (const auto& b : all) {
     if (b.path == "/") continue;
     const std::string rel = b.path.substr(1);
@@ -252,11 +252,11 @@ void print_branch_tree(App& app, const Archive& a, bool tree, bool releases, int
     for (std::size_t i = 0; i < depth; ++i) line += "    ";
     line += b.name;
     if (b.head_seq == 0) line += "/";
-    line += "（" + std::string(b.head_seq == 0 ? "分支节点" : "分支") + "）";
+    line += "（" + std::string(b.head_seq == 0 ? msg("list.tree.node") : msg("list.tree.branch")) + "）";
     app.ui.line(line);
     if (b.head_seq == 0) ++nodes; else ++branches;
   }
-  app.ui.line("  releases/（系统分支，其下所有分支和节点都不列出）");
+  app.ui.line("  releases/（" + std::string(msg("list.tree.releases_note")) + "）");
   app.ui.line("    tag/");
   app.ui.line("      v1.0");
   app.ui.line("    rawdata/");
